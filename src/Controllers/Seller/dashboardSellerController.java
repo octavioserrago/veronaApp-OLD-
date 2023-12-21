@@ -1,8 +1,14 @@
 package Controllers.Seller;
+
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+
+import Controllers.SceneController;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.stage.Stage;
 
 public class dashboardSellerController {
 
@@ -25,29 +31,46 @@ public class dashboardSellerController {
     private Label fechaLabel;
 
     @FXML
-    void btnBachasClickeado(ActionEvent event) {
-
+    public void initialize() {
+        
+        mostrarFechaActual();
     }
 
     @FXML
-    void btnCajaClickeado(ActionEvent event) {
-
+    void btnBachasClicked(ActionEvent event) {
+        
     }
 
     @FXML
-    void btnCerrarSesionClickeado(ActionEvent event) {
-
+    void btnCajaClicked(ActionEvent event) {
+        
     }
 
     @FXML
-    void btnPedidosClickeado(ActionEvent event) {
-
+    void btnCerrarSesionClicked(ActionEvent event) {
+        SceneController sceneController = new SceneController((Stage) btnCerrarSesion.getScene().getWindow());
+        sceneController.switchToLogin();
     }
 
     @FXML
-    void btnVentasClickeado(ActionEvent event) {
-
+    void btnPedidosClicked(ActionEvent event) {
+        
     }
 
+    @FXML
+    void btnVentasClicked(ActionEvent event) {
+        
+    }
+
+    private void mostrarFechaActual() {
+        
+        LocalDate fechaActual = LocalDate.now();
+
+        
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        String fechaFormateada = fechaActual.format(formatter);
+
+        
+        fechaLabel.setText(fechaFormateada);
+    }
 }
-

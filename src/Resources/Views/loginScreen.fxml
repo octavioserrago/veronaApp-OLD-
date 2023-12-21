@@ -48,5 +48,10 @@
             <Glow level="0.22" />
          </effect>
       </Label>
+      <Label fx:id="errorLoginLabel" layoutX="367.0" layoutY="325.0" prefHeight="17.0" prefWidth="282.0" text="Error al intentar Iniciar Sesion. Intente Nuevamente" textFill="RED" visible="false">
+         <font>
+            <Font name="System Bold" size="13.0" />
+         </font>
+      </Label>
    </children>
 </AnchorPane>
