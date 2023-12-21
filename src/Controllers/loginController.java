@@ -1,0 +1,47 @@
+package Controllers;
+
+
+
+import javax.swing.JOptionPane;
+
+import Data.User;
+import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
+import javafx.scene.control.Button;
+import javafx.scene.control.PasswordField;
+import javafx.scene.control.TextField;
+
+
+public class loginController {
+
+    @FXML
+    private Button btnLogin;
+
+    @FXML
+    private TextField loginField;
+
+    @FXML
+    private PasswordField passwordField;
+
+      @FXML
+    void btnLoginClick(ActionEvent event) {
+        String userName = loginField.getText();
+        String password = passwordField.getText();
+
+        User user = new User(userName,password);
+
+        if (user.login(userName, password)) {
+           System.out.println("Exito al iniciar Sesion!");
+
+           int roleID = user.getRoleID();
+
+           JOptionPane.showMessageDialog(null, roleID);
+           
+      } else {
+          System.out.println("Error en el inicio de sesión. Usuario o contraseña incorrectos.");
+      }
+    }
+
+  
+
+}

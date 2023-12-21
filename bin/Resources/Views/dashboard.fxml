@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.gluonhq.charm.glisten.control.AppBar?>
+<?import javafx.scene.chart.BarChart?>
+<?import javafx.scene.chart.CategoryAxis?>
+<?import javafx.scene.chart.NumberAxis?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.AnchorPane?>
+
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="472.0" prefWidth="857.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <AppBar prefHeight="54.0" prefWidth="857.0" style="-fx-background-color: FFAA00;" titleText="" />
+      <Button fx:id="btnCaja" contentDisplay="CENTER" layoutX="20.0" layoutY="12.0" mnemonicParsing="false" onAction="#btnCajaClickeado" style="-fx-background-color: Black;" text="Caja" />
+      <Button fx:id="btnBachas" layoutX="294.0" layoutY="12.0" mnemonicParsing="false" onAction="#btnBachasClickeado" style="-fx-background-color: Black;" text="Bachas" />
+      <Button fx:id="btnPedidos" layoutX="103.0" layoutY="12.0" mnemonicParsing="false" onAction="#btnPedidosClickeado" style="-fx-background-color: Black;" text="Pedidos" />
+      <Button fx:id="btnVentas" layoutX="203.0" layoutY="12.0" mnemonicParsing="false" onAction="#btnVentasClickeado" style="-fx-background-color: black;" text="Ventas" />
+      <Button fx:id="btnCerrarSesion" layoutX="748.0" layoutY="12.0" mnemonicParsing="false" onAction="#btnCerrarSesionClickeado" style="-fx-background-color: black;" text="Cerrar Sesion" />
+      <Label layoutX="14.0" layoutY="65.0" text="Fecha:" />
+      <Label fx:id="fechaLabel" layoutX="65.0" layoutY="66.0" />
+      <BarChart layoutX="47.0" layoutY="201.0" prefHeight="243.0" prefWidth="755.0">
+        <xAxis>
+          <CategoryAxis label="Fechas" prefHeight="31.0" prefWidth="696.0" side="BOTTOM" />
+        </xAxis>
+        <yAxis>
+          <NumberAxis side="LEFT" />
+        </yAxis>
+      </BarChart>
+      <Label id="userName" layoutX="542.0" layoutY="19.0" />
+      <Label layoutX="65.0" layoutY="160.0" text="Ventas por Fecha:" />
+   </children>
+</AnchorPane>

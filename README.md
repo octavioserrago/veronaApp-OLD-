@@ -19,7 +19,6 @@ This JavaFX desktop application is designed for the management of a marble indus
 - Java Development Kit (JDK)
 - JavaFX
 - Scene Builder
-- [Your preferred relational database system]
 
 ### Installation
 
