@@ -23,6 +23,11 @@ public class SceneController {
         switchScene("/Resources/Views/dashboard.fxml");
     }
 
+    public void switchToCotizaciones() {
+        switchScene("/Resources/Views/cotizaciones.fxml");
+    }
+
+
     private void switchScene(String fxmlPath) {
         try {
             Parent root = FXMLLoader.load(getClass().getResource(fxmlPath));

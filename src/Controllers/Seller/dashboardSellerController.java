@@ -66,14 +66,27 @@ public class dashboardSellerController {
     private Label fechaLabel;
 
     @FXML
+    private Label cotizacionDolarCLL;
+
+    @FXML
     private Label nombreEmpleado;
+
+    @FXML
+    private Label fechaUltimaBNA;
+
+    @FXML
+    private Label ultimaCotizacionBlue;
+
+    @FXML
+    private Label ultimaCotizacionCCL;
 
     @FXML
     private TableView<?> tablaVentasResumen;
 
     @FXML
     void BtnCotizacionesClicked(ActionEvent event) {
-
+        SceneController sceneController = new SceneController((Stage) BtnCotizaciones.getScene().getWindow());
+        sceneController.switchToCotizaciones();
     }
 
     @FXML

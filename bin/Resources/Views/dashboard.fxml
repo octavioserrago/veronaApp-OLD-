@@ -22,13 +22,13 @@
         </buttons>
       </ButtonBar>
       <Label layoutX="11.0" layoutY="75.0" text="Gracias" />
-      <Label fx:id="nombreEmpleado" layoutX="65.0" layoutY="75.0" prefHeight="17.0" prefWidth="65.0" />
+      <Label fx:id="nombreEmpleado" layoutX="76.0" layoutY="75.0" prefHeight="17.0" prefWidth="65.0" />
       <Label layoutX="173.0" layoutY="75.0" text="Por trabajar con Nosotros" />
-      <Label layoutX="16.0" layoutY="165.0" text="Ultima Cotizacion del dolar BNA:" />
-      <Label layoutX="13.0" layoutY="195.0" text="Ultima Cotizacion del dolar BLUE:" />
-      <Label fx:id="cotizacionDolarBNA" layoutX="195.0" layoutY="165.0" prefHeight="17.0" prefWidth="122.0" />
-      <Label fx:id="cotizacionDolarBlue" layoutX="205.0" layoutY="186.0" />
-      <Button fx:id="BtnCotizaciones" layoutX="367.0" layoutY="182.0" mnemonicParsing="false" onAction="#BtnCotizacionesClicked" style="-fx-background-color: FFAA00;" text="Actualizar Cotizacion" />
+      <Label layoutX="16.0" layoutY="174.0" text="Ultima Cotizacion del dolar BNA:" />
+      <Label layoutX="14.0" layoutY="195.0" text="Ultima Cotizacion del dolar BLUE:" />
+      <Label fx:id="cotizacionDolarBNA" layoutX="205.0" layoutY="174.0" prefHeight="17.0" prefWidth="122.0" />
+      <Label fx:id="cotizacionDolarBlue" layoutX="205.0" layoutY="195.0" prefHeight="17.0" prefWidth="89.0" />
+      <Button fx:id="BtnCotizaciones" layoutX="715.0" layoutY="182.0" mnemonicParsing="false" onAction="#BtnCotizacionesClicked" style="-fx-background-color: FFAA00;" text="Actualizar Cotizacion" />
       <Separator layoutX="4.0" layoutY="97.0" prefHeight="10.0" prefWidth="857.0" />
       <Separator layoutY="155.0" prefHeight="10.0" prefWidth="857.0" />
       <Separator layoutX="4.0" layoutY="241.0" prefHeight="0.0" prefWidth="857.0" />
@@ -44,5 +44,10 @@
             <TableColumn fx:id="colEstado" prefWidth="131.0" text="Estado" />
         </columns>
       </TableView>
+      <Label layoutX="26.0" layoutY="219.0" text="Ultima Cotizacion dolar CCL:" />
+      <Label fx:id="cotizacionDolarCLL" layoutX="190.0" layoutY="219.0" prefHeight="17.0" prefWidth="89.0" />
+      <Label fx:id="fechaUltimaBNA" layoutX="339.0" layoutY="174.0" />
+      <Label fx:id="ultimaCotizacionBlue" layoutX="339.0" layoutY="195.0" />
+      <Label fx:id="ultimaCotizacionCCL" layoutX="339.0" layoutY="219.0" />
    </children>
 </AnchorPane>
