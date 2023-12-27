@@ -8,7 +8,6 @@ import javafx.stage.Stage;
 import java.io.IOException;
 
 public class SceneController {
-
     private final Stage stage;
 
     public SceneController(Stage stage) {

@@ -77,7 +77,7 @@ public class User {
                 
                 int roleID = resultSet.getInt("roleID");
     
-              
+                this.setUserName(enteredUserName);
                 this.setRoleID(roleID);
                 System.out.println(roleID);
                 

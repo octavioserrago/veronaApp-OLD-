@@ -1,6 +1,7 @@
 package Data;
 
 public class Cotizacion {
+    private String fecha;
     private int cotizacionID;
     private int monedasID;
     private Double importe;
@@ -9,11 +10,17 @@ public class Cotizacion {
 
 
     
-    public Cotizacion(int monedasID, Double importe, int monedasIDtasaCambio, double tasaCambio) {
-        this.monedasID = monedasID;
-        this.importe = importe;
-        this.monedasIDtasaCambio = monedasIDtasaCambio;
+    public Cotizacion(String fecha, double tasaCambio) {
+        this.fecha = fecha;
         this.tasaCambio = tasaCambio;
+    }
+
+    public String getFecha() {
+        return fecha;
+    }
+
+    public void setFecha(String fecha) {
+        this.fecha = fecha;
     }
 
     public int getCotizacionID() {
@@ -50,6 +57,9 @@ public class Cotizacion {
     public String toString(){
         return "Cotizacion ID: " + cotizacionID + ", Moneda ID: " + monedasID + ", Importe: " + importe +
                 ", Moneda ID Tasa de Cambio: " + monedasIDtasaCambio + ", Tasa de Cambio: " + tasaCambio;
+    }
+
+    public void setText(Object object) {
     }
     
 }

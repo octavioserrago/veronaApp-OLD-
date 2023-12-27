@@ -7,11 +7,12 @@
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="472.0" prefWidth="861.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controllers.Seller.dashboardSellerController">
    <children>
-      <Label layoutX="13.0" layoutY="121.0" text="Fecha:" />
-      <Label fx:id="fechaLabel" layoutX="68.0" layoutY="75.0" prefHeight="17.0" prefWidth="73.0" />
+      <Label layoutX="16.0" layoutY="93.0" text="Fecha:" />
+      <Label fx:id="fechaLabel" layoutX="68.0" layoutY="93.0" prefHeight="17.0" prefWidth="73.0" />
       <ButtonBar layoutX="-3.0" layoutY="-1.0" prefHeight="49.0" prefWidth="857.0">
         <buttons>
             <Button fx:id="btnBachas" mnemonicParsing="false" onAction="#btnBachasClicked" style="-fx-background-color: ffaa00;" text="Bachas" />
@@ -21,33 +22,32 @@
           <Button fx:id="btnCerrarSesion" mnemonicParsing="false" onAction="#btnCerrarSesionClicked" prefHeight="26.0" style="-fx-background-color: Grey;" text="Cerrar Sesion" textFill="WHITE" />
         </buttons>
       </ButtonBar>
-      <Label layoutX="11.0" layoutY="75.0" text="Gracias" />
-      <Label fx:id="nombreEmpleado" layoutX="76.0" layoutY="75.0" prefHeight="17.0" prefWidth="65.0" />
-      <Label layoutX="173.0" layoutY="75.0" text="Por trabajar con Nosotros" />
-      <Label layoutX="16.0" layoutY="174.0" text="Ultima Cotizacion del dolar BNA:" />
-      <Label layoutX="14.0" layoutY="195.0" text="Ultima Cotizacion del dolar BLUE:" />
-      <Label fx:id="cotizacionDolarBNA" layoutX="205.0" layoutY="174.0" prefHeight="17.0" prefWidth="122.0" />
-      <Label fx:id="cotizacionDolarBlue" layoutX="205.0" layoutY="195.0" prefHeight="17.0" prefWidth="89.0" />
+      <Label layoutX="12.0" layoutY="141.0" text="Ultima Cotizacion del dolar Oficial:" />
+      <Label layoutX="14.0" layoutY="183.0" text="Ultima Cotizacion del dolar BLUE:" />
+      <Label fx:id="cotizacionDolarOficial" layoutX="211.0" layoutY="141.0" prefHeight="17.0" prefWidth="122.0" textFill="#007c46">
+         <font>
+            <Font name="System Bold" size="13.0" />
+         </font></Label>
+      <Label fx:id="cotizacionDolarBlue" layoutX="211.0" layoutY="183.0" prefHeight="17.0" prefWidth="89.0" textFill="#007c46" />
       <Button fx:id="BtnCotizaciones" layoutX="715.0" layoutY="182.0" mnemonicParsing="false" onAction="#BtnCotizacionesClicked" style="-fx-background-color: FFAA00;" text="Actualizar Cotizacion" />
-      <Separator layoutX="4.0" layoutY="97.0" prefHeight="10.0" prefWidth="857.0" />
-      <Separator layoutY="155.0" prefHeight="10.0" prefWidth="857.0" />
-      <Separator layoutX="4.0" layoutY="241.0" prefHeight="0.0" prefWidth="857.0" />
+      <Separator layoutX="2.0" layoutY="55.0" prefHeight="10.0" prefWidth="857.0" />
+      <Separator layoutX="-3.0" layoutY="121.0" prefHeight="10.0" prefWidth="857.0" />
       <TableView fx:id="tablaVentasResumen" layoutX="1.0" layoutY="241.0" prefHeight="230.0" prefWidth="861.0">
         <columns>
           <TableColumn fx:id="colID" prefWidth="45.0" text="ID" />
           <TableColumn fx:id="colNombre" prefWidth="104.0" text="Nombre" />
-            <TableColumn fx:id="colDetalle" prefWidth="108.0" text="Detalle" />
-            <TableColumn fx:id="colColor" prefWidth="119.0" text="Color" />
-            <TableColumn fx:id="colFechaIngreso" prefWidth="113.0" text="Fecha de Ingerso" />
-            <TableColumn fx:id="colFechaTerminacion" prefWidth="126.0" text="Fecha de Terminacion" />
-            <TableColumn fx:id="colTelefono" prefWidth="114.0" text="Telefono" />
-            <TableColumn fx:id="colEstado" prefWidth="131.0" text="Estado" />
+          <TableColumn fx:id="colDetalle" prefWidth="108.0" text="Detalle" />
+          <TableColumn fx:id="colColor" prefWidth="119.0" text="Color" />
+          <TableColumn fx:id="colFechaIngreso" prefWidth="113.0" text="Fecha de Ingerso" />
+          <TableColumn fx:id="colFechaTerminacion" prefWidth="126.0" text="Fecha de Terminacion" />
+          <TableColumn fx:id="colTelefono" prefWidth="114.0" text="Telefono" />
+          <TableColumn fx:id="colEstado" prefWidth="131.0" text="Estado" />
         </columns>
       </TableView>
       <Label layoutX="26.0" layoutY="219.0" text="Ultima Cotizacion dolar CCL:" />
-      <Label fx:id="cotizacionDolarCLL" layoutX="190.0" layoutY="219.0" prefHeight="17.0" prefWidth="89.0" />
-      <Label fx:id="fechaUltimaBNA" layoutX="339.0" layoutY="174.0" />
-      <Label fx:id="ultimaCotizacionBlue" layoutX="339.0" layoutY="195.0" />
-      <Label fx:id="ultimaCotizacionCCL" layoutX="339.0" layoutY="219.0" />
+      <Label fx:id="cotizacionDolarCLL" layoutX="190.0" layoutY="219.0" prefHeight="17.0" prefWidth="89.0" textFill="#007c46" />
+      <Label fx:id="fechaUltimaOficial" layoutX="326.0" layoutY="141.0" prefHeight="17.0" prefWidth="213.0" />
+      <Label fx:id="fechaUltimaBlue" layoutX="333.0" layoutY="183.0" prefHeight="17.0" prefWidth="248.0" />
+      <Label fx:id="fechaUltimaCCL" layoutX="300.0" layoutY="219.0" prefHeight="17.0" prefWidth="272.0" />
    </children>
 </AnchorPane>

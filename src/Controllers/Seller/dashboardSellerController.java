@@ -1,9 +1,12 @@
 package Controllers.Seller;
 
+
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
 import Controllers.SceneController;
+import Controllers.Common.cotizacionesController;
+import Data.Cotizacion;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -57,7 +60,7 @@ public class dashboardSellerController {
     private TableColumn<?, ?> colTelefono;
 
     @FXML
-    private Label cotizacionDolarBNA;
+    private Label cotizacionDolarOficial;
 
     @FXML
     private Label cotizacionDolarBlue;
@@ -72,13 +75,13 @@ public class dashboardSellerController {
     private Label nombreEmpleado;
 
     @FXML
-    private Label fechaUltimaBNA;
+    private Label fechaUltimaOficial;
 
     @FXML
-    private Label ultimaCotizacionBlue;
+    private Label fechaUltimaBlue;
 
     @FXML
-    private Label ultimaCotizacionCCL;
+    private Label fechaUltimaCCL;
 
     @FXML
     private TableView<?> tablaVentasResumen;
@@ -91,8 +94,9 @@ public class dashboardSellerController {
 
     @FXML
     public void initialize() {
-        
+       
         mostrarFechaActual();
+        cargarUltimasCotizaciones();
     }
 
     @FXML
@@ -132,8 +136,38 @@ public class dashboardSellerController {
         
         fechaLabel.setText(fechaFormateada);
     }
-    
-    
 
-    
+    cotizacionesController cotizacionesController = new cotizacionesController();
+
+    private void cargarUltimasCotizaciones() {
+        Cotizacion ultimaCotizacionOficial = cotizacionesController.obtenerUltimaCotizacionOficial();
+        Cotizacion ultimaCotizacionBlue = cotizacionesController.obtenerUltimaCotizacionBlue();
+        Cotizacion ultimaCotizacionCCL = cotizacionesController.obtenerUltimaCotizacionCCL();
+
+        if (ultimaCotizacionOficial != null) {
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+            String fechaUltimaFormateada = ultimaCotizacionOficial.getFecha().formatted(formatter);
+
+            fechaUltimaOficial.setText(fechaUltimaFormateada);
+            cotizacionDolarOficial.setText(String.valueOf(ultimaCotizacionOficial.getTasaCambio()));
+        }
+
+        if (ultimaCotizacionBlue != null) {
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+            String fechaUltimaFormateada = ultimaCotizacionBlue.getFecha().formatted(formatter);
+
+            fechaUltimaBlue.setText(fechaUltimaFormateada);
+            cotizacionDolarBlue.setText(String.valueOf(ultimaCotizacionBlue.getTasaCambio()));
+        }
+
+        if (ultimaCotizacionCCL != null) {
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+            String fechaUltimaFormateada = ultimaCotizacionCCL.getFecha().formatted(formatter);
+
+            fechaUltimaCCL.setText(fechaUltimaFormateada);
+            cotizacionDolarCLL.setText(String.valueOf(ultimaCotizacionCCL.getTasaCambio()));
+        }
+    }
+
+
 }

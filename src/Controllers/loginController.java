@@ -28,6 +28,7 @@ public class loginController {
     private SceneController sceneController;
 
     
+    
     public void setSceneController(SceneController sceneController) {
         this.sceneController = sceneController;
     }
@@ -42,19 +43,24 @@ public class loginController {
         User user = new User(userName, password);
 
         if (user.login(userName, password)) {
+            
             System.out.println("Exito al iniciar Sesion!");
 
+            
             int roleID = user.getRoleID();
+            
 
             
             switch (roleID) {
                 case 1:
                     System.out.println("Pagina de administrador");
+                    
                     break;
 
                 case 2:
                     
                 if (sceneController != null) {
+                
                   sceneController.switchToDashboardSeller();
               }
               break;
