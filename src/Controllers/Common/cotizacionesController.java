@@ -27,19 +27,7 @@ public class cotizacionesController implements Initializable {
     private TableView<Cotizacion> tablaDolarBlue;
 
     @FXML
-    private TableView<Cotizacion> tablaDolarCCL;
-
-    @FXML
-    private TableView<Cotizacion> tablaDolarOficial;
-
-    @FXML
     private Button btnNCB;
-
-    @FXML
-    private Button btnNCCCL;
-
-    @FXML
-    private Button btnNCOficial;
 
     @FXML
     private Button btnVolver;
@@ -48,40 +36,17 @@ public class cotizacionesController implements Initializable {
     private Label fecha;
 
     @FXML
-    private TableColumn<Cotizacion, String> columnaFechaCCL;
-
-    @FXML
     private TableColumn<Cotizacion, String> columnaFechaDB;
-
-    @FXML
-    private TableColumn<Cotizacion, Double> columnaImporteCCLARS;
 
     @FXML
     private TableColumn<Cotizacion, Double> columnaImporteDBARS;
 
     @FXML
-    private TableColumn<Cotizacion, Double> columnaImporteDOARS;
-
-    @FXML
-    private TableColumn<Cotizacion, String> fechaColumnaDO;
-
-    @FXML
-    private Label fechaUltimaOficial;
-
-    @FXML
     private Label fechaUltimaBlue;
 
-    @FXML
-    private Label fechaUltimaCCL;
-
-    @FXML
-    private Label cotizacionDolarOficial;
 
     @FXML
     private Label cotizacionDolarBlue;
-
-    @FXML
-    private Label cotizacionDolarCCL;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -126,26 +91,6 @@ public class cotizacionesController implements Initializable {
     DatabaseConnection con = new DatabaseConnection();
     Connection conexion = con.conectar();
 
-    public Cotizacion obtenerUltimaCotizacionOficial() {
-        String sql = "SELECT fecha, tasaCambio FROM Cotizaciones WHERE monedasID = 2 ORDER BY fecha DESC LIMIT 1";
-
-        try (PreparedStatement preparedStatement = conexion.prepareStatement(sql);
-             ResultSet resultSet = preparedStatement.executeQuery()) {
-
-            if (resultSet.next()) {
-                String fechaCotizacion = resultSet.getString("fecha");
-                double tasaCambio = resultSet.getDouble("tasaCambio");
-
-                return new Cotizacion(fechaCotizacion, tasaCambio);
-            }
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-        return null;
-    }
-
     public Cotizacion obtenerUltimaCotizacionBlue() {
         String sql = "SELECT fecha, tasaCambio FROM Cotizaciones WHERE monedasID = 3 ORDER BY fecha DESC LIMIT 1";
 
@@ -166,29 +111,9 @@ public class cotizacionesController implements Initializable {
         return null;
     }
 
-    public Cotizacion obtenerUltimaCotizacionCCL() {
-        String sql = "SELECT fecha, tasaCambio FROM Cotizaciones WHERE monedasID = 4 ORDER BY fecha DESC LIMIT 1";
-
-        try (PreparedStatement preparedStatement = conexion.prepareStatement(sql);
-             ResultSet resultSet = preparedStatement.executeQuery()) {
-
-            if (resultSet.next()) {
-                String fechaCotizacion = resultSet.getString("fecha");
-                double tasaCambio = resultSet.getDouble("tasaCambio");
-
-                return new Cotizacion(fechaCotizacion, tasaCambio);
-            }
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
 
     private void configurarTablas() {
-        configurarTablaDolar(tablaDolarOficial, "SELECT fecha, tasaCambio FROM Cotizaciones WHERE monedasID = 2 ORDER BY fecha DESC LIMIT 1");
         configurarTablaDolar(tablaDolarBlue, "SELECT fecha, tasaCambio FROM Cotizaciones WHERE monedasID = 3 ORDER BY fecha DESC LIMIT 1");
-        configurarTablaDolar(tablaDolarCCL, "SELECT fecha, tasaCambio FROM Cotizaciones WHERE monedasID = 4 ORDER BY fecha DESC LIMIT 1");
     }
 
     private void configurarTablaDolar(TableView<Cotizacion> tabla, String sqlQuery) {

@@ -30,6 +30,10 @@ public class SceneController {
         switchScene("/Resources/Views/bachas.fxml");
     }
 
+    public void switchToVentas() {
+        switchScene("/Resources/Views/cargarVentas.fxml");
+    }
+
 
     private void switchScene(String fxmlPath) {
         try {

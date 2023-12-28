@@ -1,12 +1,18 @@
 package Controllers.Seller;
 
-
+import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.Arrays;
+import java.util.List;
 
 import Controllers.SceneController;
 import Controllers.Common.cotizacionesController;
+import Data.Bachas;
 import Data.Cotizacion;
+import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -36,55 +42,19 @@ public class dashboardSellerController {
     private Button btnVentas;
 
     @FXML
-    private TableColumn<?, ?> colColor;
-
-    @FXML
-    private TableColumn<?, ?> colDetalle;
-
-    @FXML
-    private TableColumn<?, ?> colEstado;
-
-    @FXML
-    private TableColumn<?, ?> colFechaIngreso;
-
-    @FXML
-    private TableColumn<?, ?> colFechaTerminacion;
-
-    @FXML
-    private TableColumn<?, ?> colID;
-
-    @FXML
-    private TableColumn<?, ?> colNombre;
-
-    @FXML
-    private TableColumn<?, ?> colTelefono;
-
-    @FXML
-    private Label cotizacionDolarOficial;
-
-    @FXML
     private Label cotizacionDolarBlue;
 
     @FXML
     private Label fechaLabel;
 
     @FXML
-    private Label cotizacionDolarCLL;
-
-    @FXML
     private Label nombreEmpleado;
-
-    @FXML
-    private Label fechaUltimaOficial;
 
     @FXML
     private Label fechaUltimaBlue;
 
     @FXML
-    private Label fechaUltimaCCL;
-
-    @FXML
-    private TableView<?> tablaVentasResumen;
+    private TableView<Bachas> bachasTablaPreview; // Cambiado el tipo de TableView
 
     @FXML
     void BtnCotizacionesClicked(ActionEvent event) {
@@ -94,20 +64,24 @@ public class dashboardSellerController {
 
     @FXML
     public void initialize() {
-       
         mostrarFechaActual();
         cargarUltimasCotizaciones();
+        try {
+            cargarBachas();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     @FXML
     void btnBachasClicked(ActionEvent event) {
-        SceneController sceneController = new SceneController((Stage) BtnCotizaciones.getScene().getWindow());
+        SceneController sceneController = new SceneController((Stage) btnBachas.getScene().getWindow());
         sceneController.switchToBachas();
     }
 
     @FXML
     void btnCajaClicked(ActionEvent event) {
-        
+
     }
 
     @FXML
@@ -118,40 +92,29 @@ public class dashboardSellerController {
 
     @FXML
     void btnPedidosClicked(ActionEvent event) {
-        
+
     }
 
     @FXML
     void btnVentasClicked(ActionEvent event) {
-        
+        SceneController sceneController = new SceneController((Stage) btnVentas.getScene().getWindow());
+        sceneController.switchToVentas();
     }
 
     private void mostrarFechaActual() {
-        
+
         LocalDate fechaActual = LocalDate.now();
 
-        
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         String fechaFormateada = fechaActual.format(formatter);
 
-        
         fechaLabel.setText(fechaFormateada);
     }
 
     cotizacionesController cotizacionesController = new cotizacionesController();
 
     private void cargarUltimasCotizaciones() {
-        Cotizacion ultimaCotizacionOficial = cotizacionesController.obtenerUltimaCotizacionOficial();
         Cotizacion ultimaCotizacionBlue = cotizacionesController.obtenerUltimaCotizacionBlue();
-        Cotizacion ultimaCotizacionCCL = cotizacionesController.obtenerUltimaCotizacionCCL();
-
-        if (ultimaCotizacionOficial != null) {
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-            String fechaUltimaFormateada = ultimaCotizacionOficial.getFecha().formatted(formatter);
-
-            fechaUltimaOficial.setText(fechaUltimaFormateada);
-            cotizacionDolarOficial.setText(String.valueOf(ultimaCotizacionOficial.getTasaCambio()));
-        }
 
         if (ultimaCotizacionBlue != null) {
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
@@ -160,15 +123,53 @@ public class dashboardSellerController {
             fechaUltimaBlue.setText(fechaUltimaFormateada);
             cotizacionDolarBlue.setText(String.valueOf(ultimaCotizacionBlue.getTasaCambio()));
         }
-
-        if (ultimaCotizacionCCL != null) {
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-            String fechaUltimaFormateada = ultimaCotizacionCCL.getFecha().formatted(formatter);
-
-            fechaUltimaCCL.setText(fechaUltimaFormateada);
-            cotizacionDolarCLL.setText(String.valueOf(ultimaCotizacionCCL.getTasaCambio()));
-        }
     }
 
+    private List<Bachas> obtenerBachasStock() throws SQLException {
+        Bachas bachas = new Bachas(0, null, null, 0);
+        bachas.setMarcasBachasID(2); // Establece el valor de marcasBachasID según tus necesidades
+        return bachas.obtenerBachasStock();
+    }
 
+    private void cargarBachas() throws SQLException {
+        List<Bachas> listaBachas = obtenerBachasStock();
+    
+        bachasTablaPreview.getItems().clear();
+        bachasTablaPreview.getColumns().clear();
+    
+        if (listaBachas != null && !listaBachas.isEmpty()) {
+    
+            TableColumn<Bachas, String> marcasBachasColumn = new TableColumn<>("Marca Bachas");
+            TableColumn<Bachas, String> nombreModeloColumn = new TableColumn<>("Nombre Modelo");
+            TableColumn<Bachas, String> medidasColumn = new TableColumn<>("Medidas");
+            TableColumn<Bachas, Integer> cantidadColumn = new TableColumn<>("Cantidad");
+    
+            marcasBachasColumn.setCellValueFactory(cellData -> new SimpleStringProperty(obtenerNombreMarcaBachas(cellData.getValue().getMarcasBachasID())));
+            nombreModeloColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getNombreModelo()));
+            medidasColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getMedidas()));
+            cantidadColumn.setCellValueFactory(cellData -> new SimpleIntegerProperty(cellData.getValue().getCantidad()).asObject());
+    
+            marcasBachasColumn.setMaxWidth(1f * Integer.MAX_VALUE * 25);
+            nombreModeloColumn.setMaxWidth(1f * Integer.MAX_VALUE * 25);
+            medidasColumn.setMaxWidth(1f * Integer.MAX_VALUE * 25);
+            cantidadColumn.setMaxWidth(1f * Integer.MAX_VALUE * 25);
+    
+            bachasTablaPreview.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+    
+            List<TableColumn<Bachas, ?>> columnList = Arrays.asList(marcasBachasColumn, nombreModeloColumn, medidasColumn, cantidadColumn);
+    
+            bachasTablaPreview.getColumns().addAll(columnList);
+            bachasTablaPreview.getItems().addAll(listaBachas);
+            bachasTablaPreview.setItems(FXCollections.observableList(listaBachas));
+        }
+    }
+    
+    private String obtenerNombreMarcaBachas(int marcasBachasID) {
+        
+        if (marcasBachasID == 2) {
+            return "Mi Pileta";
+        }
+        return "Desconocido";
+    }
+    
 }
