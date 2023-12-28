@@ -9,7 +9,6 @@ import java.time.DateTimeException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ResourceBundle;
-
 import Controllers.SceneController;
 import Data.Cotizacion;
 import Data.DatabaseConnection;
@@ -65,7 +64,7 @@ public class cotizacionesController implements Initializable {
 
     @FXML
     private TableColumn<Cotizacion, String> fechaColumnaDO;
-    
+
     @FXML
     private Label fechaUltimaOficial;
 
@@ -88,22 +87,21 @@ public class cotizacionesController implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         mostrarFechaActual();
         configurarTablas();
-        cargarUltimasCotizaciones();
     }
 
     @FXML
     void btnNCBClicked(ActionEvent event) {
-
+        // Lógica para el botón NCB
     }
 
     @FXML
     void btnNCCCLClicked(ActionEvent event) {
-
+        // Lógica para el botón NCCCL
     }
 
     @FXML
     void btnNCOficialClicked(ActionEvent event) {
-
+        // Lógica para el botón NCOficial
     }
 
     @FXML
@@ -188,12 +186,12 @@ public class cotizacionesController implements Initializable {
     }
 
     private void configurarTablas() {
-        configurarTablaDolar(tablaDolarOficial);
-        configurarTablaDolar(tablaDolarBlue);
-        configurarTablaDolar(tablaDolarCCL);
+        configurarTablaDolar(tablaDolarOficial, "SELECT fecha, tasaCambio FROM Cotizaciones WHERE monedasID = 2 ORDER BY fecha DESC LIMIT 1");
+        configurarTablaDolar(tablaDolarBlue, "SELECT fecha, tasaCambio FROM Cotizaciones WHERE monedasID = 3 ORDER BY fecha DESC LIMIT 1");
+        configurarTablaDolar(tablaDolarCCL, "SELECT fecha, tasaCambio FROM Cotizaciones WHERE monedasID = 4 ORDER BY fecha DESC LIMIT 1");
     }
 
-    private void configurarTablaDolar(TableView<Cotizacion> tabla) {
+    private void configurarTablaDolar(TableView<Cotizacion> tabla, String sqlQuery) {
         TableColumn<Cotizacion, String> fechaColumna = new TableColumn<>("Fecha");
         TableColumn<Cotizacion, Double> importeColumna = new TableColumn<>("Tasa Cambio");
 
@@ -207,36 +205,24 @@ public class cotizacionesController implements Initializable {
 
         tabla.getColumns().add(fechaColumna);
         tabla.getColumns().add(importeColumna);
+
+        cargarUltimasCotizaciones(tabla, sqlQuery);
     }
 
-    private void cargarUltimasCotizaciones() {
-        Cotizacion ultimaCotizacionOficial = obtenerUltimaCotizacionOficial();
-        Cotizacion ultimaCotizacionBlue = obtenerUltimaCotizacionBlue();
-        Cotizacion ultimaCotizacionCCL = obtenerUltimaCotizacionCCL();
+    private void cargarUltimasCotizaciones(TableView<Cotizacion> tabla, String sqlQuery) {
+        try (PreparedStatement preparedStatement = conexion.prepareStatement(sqlQuery);
+             ResultSet resultSet = preparedStatement.executeQuery()) {
 
-        if (ultimaCotizacionOficial != null) {
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-            String fechaUltimaFormateada = ultimaCotizacionOficial.getFecha().formatted(formatter);
+            if (resultSet.next()) {
+                String fechaCotizacion = resultSet.getString("fecha");
+                double tasaCambio = resultSet.getDouble("tasaCambio");
 
-            fechaUltimaOficial.setText(fechaUltimaFormateada);
-            cotizacionDolarOficial.setText(String.valueOf(ultimaCotizacionOficial.getTasaCambio()));
-        }
+                Cotizacion cotizacion = new Cotizacion(fechaCotizacion, tasaCambio);
+                tabla.getItems().add(cotizacion);
+            }
 
-        if (ultimaCotizacionBlue != null) {
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-            String fechaUltimaFormateada = ultimaCotizacionBlue.getFecha().formatted(formatter);
-
-            fechaUltimaBlue.setText(fechaUltimaFormateada);
-            cotizacionDolarBlue.setText(String.valueOf(ultimaCotizacionBlue.getTasaCambio()));
-        }
-
-        if (ultimaCotizacionCCL != null) {
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-            String fechaUltimaFormateada = ultimaCotizacionCCL.getFecha().formatted(formatter);
-
-            fechaUltimaCCL.setText(fechaUltimaFormateada);
-            cotizacionDolarCCL.setText(String.valueOf(ultimaCotizacionCCL.getTasaCambio()));
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
     }
-
 }

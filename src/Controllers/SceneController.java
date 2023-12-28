@@ -26,6 +26,10 @@ public class SceneController {
         switchScene("/Resources/Views/cotizaciones.fxml");
     }
 
+    public void switchToBachas() {
+        switchScene("/Resources/Views/bachas.fxml");
+    }
+
 
     private void switchScene(String fxmlPath) {
         try {

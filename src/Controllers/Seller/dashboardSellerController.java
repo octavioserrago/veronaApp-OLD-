@@ -101,7 +101,8 @@ public class dashboardSellerController {
 
     @FXML
     void btnBachasClicked(ActionEvent event) {
-        
+        SceneController sceneController = new SceneController((Stage) BtnCotizaciones.getScene().getWindow());
+        sceneController.switchToBachas();
     }
 
     @FXML
