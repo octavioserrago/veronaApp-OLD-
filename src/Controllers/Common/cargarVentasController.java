@@ -92,7 +92,28 @@ public class cargarVentasController {
 
     @FXML
     void btnCargarVentaClicked(ActionEvent event) {
-        // Tu lógica para el botón Cargar Venta
+        String nombreCliente = nombreClienteTextField.getText();
+        String descripcion = descripcionTextFIeld.getText();
+        String material = materialTextField.getText();
+        String color = colorTextField.getText();
+        //Bachas bacha = bachasOption.getSelectionModel().getSelectedItem();
+        //String nombreModelo = bacha.getNombreModelo();
+        String fechaEstimadaTerminacion = fechaTerminacionSelect.getValue().toString();
+        //int colocadoresID = colocadorOptions.getSelectionModel().getSelectedItem();
+        try {
+            String importeStr = importeTextField.getText();
+            double importe = Double.parseDouble(importeStr);
+        } catch (NumberFormatException e) {
+            System.err.println("Error al convertir la cadena a double: " + e.getMessage());
+        }
+        String estado = "En Espera";
+        String telefono1 = telefonoTextField.getText();
+        String telefono2 = telefonoSecundarioTextField.getText();
+        String email = emailTextField.getText();
+        
+
+
+    
     }
 
     @FXML

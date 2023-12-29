@@ -1,6 +1,9 @@
 package Data;
 
 import java.io.File;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 
 public class Venta {
     private int ventasID;
@@ -11,6 +14,7 @@ public class Venta {
     private int bachasID;
     private String fechaEstimadaTerminacion;
     private int colocadoresID;
+    private double precioColocacion;
     private int monedasID;
     private Double importe;
     private File fotoPlano;
@@ -20,9 +24,10 @@ public class Venta {
     private String telefono2;
     private String email;
 
+    
     public Venta(String nombreCliente, String descripcion, String material, String color, int bachasID,
-            String fechaEstimadaTerminacion, int colocadoresID, int monedasID, Double importe, File fotoPlano,
-            String estado, int token, String telefono1, String telefono2, String email) {
+            String fechaEstimadaTerminacion, int colocadoresID, double precioColocacion, int monedasID, Double importe,
+            File fotoPlano, String estado, int token, String telefono1, String telefono2, String email) {
         this.nombreCliente = nombreCliente;
         this.descripcion = descripcion;
         this.material = material;
@@ -30,6 +35,7 @@ public class Venta {
         this.bachasID = bachasID;
         this.fechaEstimadaTerminacion = fechaEstimadaTerminacion;
         this.colocadoresID = colocadoresID;
+        this.precioColocacion = precioColocacion;
         this.monedasID = monedasID;
         this.importe = importe;
         this.fotoPlano = fotoPlano;
@@ -39,8 +45,6 @@ public class Venta {
         this.telefono2 = telefono2;
         this.email = email;
     }
-
-
     public int getVentasID() {
         return ventasID;
     }
@@ -88,6 +92,12 @@ public class Venta {
     }
     public void setColocadoresID(int colocadoresID) {
         this.colocadoresID = colocadoresID;
+    }
+    public double getPrecioColocacion() {
+        return precioColocacion;
+    }
+    public void setPrecioColocacion(double precioColocacion) {
+        this.precioColocacion = precioColocacion;
     }
     public int getMonedasID() {
         return monedasID;
@@ -137,7 +147,44 @@ public class Venta {
     public void setEmail(String email) {
         this.email = email;
     }
-    
+
+    DatabaseConnection con = new DatabaseConnection();
+
+    Connection conexion = con.conectar();
+	
+	PreparedStatement stmt;
+
+    public void insertarVenta() throws SQLException {
+        String sql = "INSERT INTO Ventas (nombreCliente, descripcion, material, color, bachasID, " +
+                "fechaEstimadaTerminacion, colocadoresID, precioColocacion, monedasID, importe, " +
+                "estado, token, telefono1, telefono2, email) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+
+        try (PreparedStatement preparedStatement = conexion.prepareStatement(sql)) {
+
+            preparedStatement.setString(1, nombreCliente);
+            preparedStatement.setString(2, descripcion);
+            preparedStatement.setString(3, material);
+            preparedStatement.setString(4, color);
+            preparedStatement.setInt(5, bachasID);
+            preparedStatement.setString(6, fechaEstimadaTerminacion);
+            preparedStatement.setInt(7, colocadoresID);
+            preparedStatement.setDouble(8, precioColocacion);
+            preparedStatement.setInt(9, 1);
+            preparedStatement.setDouble(10, importe);
+            preparedStatement.setString(11, estado);
+            preparedStatement.setInt(12, tokenGenerator());
+            preparedStatement.setString(13, telefono1);
+            preparedStatement.setString(14, telefono2);
+            preparedStatement.setString(15, email);
+
+            preparedStatement.executeUpdate();
+        }
+    }
+
+    public int tokenGenerator(){
+        int tokenGenerated = (int)(Math.random()*4);
+        return tokenGenerated;
+    }
     
 
 }
