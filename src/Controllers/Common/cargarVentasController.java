@@ -1,6 +1,12 @@
 package Controllers.Common;
 
+
+import java.sql.SQLException;
+import java.util.List;
+
 import Controllers.SceneController;
+import Data.Bachas;
+import Data.Colocador;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -18,7 +24,7 @@ public class cargarVentasController {
     private CheckBox bachaASK;
 
     @FXML
-    private ComboBox<?> bachasOption;
+    private ComboBox<Bachas> bachasOption;
 
     @FXML
     private Button btnCargarVenta;
@@ -30,7 +36,7 @@ public class cargarVentasController {
     private CheckBox colocadorASK;
 
     @FXML
-    private ComboBox<?> colocadorOptions;
+    private ComboBox<String> colocadorOptions; // Cambiado a String
 
     @FXML
     private TextField colorTextField;
@@ -62,41 +68,75 @@ public class cargarVentasController {
     @FXML
     private TextField telefonoTextField;
 
-    
+    @FXML
+    private Label precioColocacionLabel;
+
+    @FXML
+    private TextField precioColocacionTextField;
+
     @FXML
     void initialize() {
-       colocadorOptions.setVisible(false);
+        noVisibles();
+
         colocadorASK.setOnAction(event -> {
-            if (colocadorASK.isSelected()) {
-                colocadorOptions.setVisible(true);
-            } else {
-                if (!colocadorASK.isSelected()) {
-                    colocadorOptions.setVisible(false);
-                }
-            }
+            colocadorOptions.setVisible(colocadorASK.isSelected());
+            precioColocacionLabel.setVisible(colocadorASK.isSelected());
+            precioColocacionTextField.setVisible(colocadorASK.isSelected());
         });
+        llenarComboBoxColocadores();
+        llenarComboBoxBachas();
+
         bachasOption.setVisible(false);
-        bachaASK.setOnAction(event -> {
-            if (bachaASK.isSelected()) {
-                bachasOption.setVisible(true);
-            } else {
-                if (!bachaASK.isSelected()) {
-                    bachasOption.setVisible(false);
-                }
-            }
-        });
+        bachaASK.setOnAction(event -> bachasOption.setVisible(bachaASK.isSelected()));
     }
 
     @FXML
     void btnCargarVentaClicked(ActionEvent event) {
-
+        // Tu lógica para el botón Cargar Venta
     }
 
     @FXML
     void btnVolverClicked(ActionEvent event) {
-    SceneController sceneController = new SceneController((Stage) btnVolver.getScene().getWindow());
+        SceneController sceneController = new SceneController((Stage) btnVolver.getScene().getWindow());
         sceneController.switchToDashboardSeller();
     }
 
-}
+    public void noVisibles() {
+        colocadorOptions.setVisible(false);
+        bachasOption.setVisible(false);
+        precioColocacionLabel.setVisible(false);
+        precioColocacionTextField.setVisible(false);
+    }
 
+    private void llenarComboBoxBachas() {
+        Bachas bacha = new Bachas(0, null, null, 0);
+        try {
+            List<Bachas> bachasList = bacha.obtenerBachas();
+
+            bachasOption.getItems().clear();
+            bachasOption.getItems().addAll(bachasList);
+
+            if (!bachasList.isEmpty()) {
+                bachasOption.setValue(bachasList.get(0));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void llenarComboBoxColocadores() {
+        Colocador colocador = new Colocador(null, null, null, null);
+        try {
+            List<String> nombresColocadores = colocador.obtenerNombresColocadores();
+
+            colocadorOptions.getItems().clear(); // Cambiado a colocadorOptions
+            colocadorOptions.getItems().addAll(nombresColocadores);
+
+            if (!nombresColocadores.isEmpty()) {
+                colocadorOptions.setValue(nombresColocadores.get(0));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+}

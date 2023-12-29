@@ -1,5 +1,12 @@
 package Data;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+
 public class Colocador {
 
     private int colocadoresID;
@@ -7,7 +14,7 @@ public class Colocador {
     private String telefono;
     private String cbuAlias;
     private String fechaNacimiento;
-    
+
     
 
     public Colocador(String nombreApellido, String telefono, String cbuAlias, String fechaNacimiento) {
@@ -24,7 +31,7 @@ public class Colocador {
     public void setColocadoresID(int colocadoresID) {
         this.colocadoresID = colocadoresID;
     }
-    
+
     public String getNombreApellido() {
         return nombreApellido;
     }
@@ -57,16 +64,33 @@ public class Colocador {
         this.fechaNacimiento = fechaNacimiento;
     }
 
-
     @Override
     public String toString() {
-            return "Colocador{" +
-            "Nombre y Apellido='" + nombreApellido + '\'' +
-            ", Teléfono='" + telefono + '\'' +
-            ", CBU o Alias='" + cbuAlias + '\'' +
-            ", Fecha de Nacimiento='" + fechaNacimiento + '\'' +
-            '}';
+        return nombreApellido;
     }
 
+    DatabaseConnection con = new DatabaseConnection();
+    Connection conexion = con.conectar();
+    PreparedStatement stmt;
 
+    public List<String> obtenerNombresColocadores() throws SQLException {
+        String sql = "SELECT nombreApellido FROM Colocadores";
+        List<String> nombresColocadores = new ArrayList<>();
+    
+        try {
+            stmt = conexion.prepareStatement(sql);
+            ResultSet resultSet = stmt.executeQuery();
+    
+            while (resultSet.next()) {
+                String nombreApellido = resultSet.getString("nombreApellido");
+                nombresColocadores.add(nombreApellido);
+            }
+    
+        } catch (Exception e) {
+            throw new SQLException("Error al buscar colocadores: " + e.getMessage(), e);
+        }
+    
+        return nombresColocadores;
+    }
+    
 }

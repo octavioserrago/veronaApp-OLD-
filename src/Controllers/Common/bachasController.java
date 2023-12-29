@@ -10,6 +10,9 @@ import javafx.stage.Stage;
 public class bachasController {
 
     @FXML
+    private Button BtnActualizarCantidad;
+
+    @FXML
     private Button btnIngresarBachas;
 
     @FXML
@@ -17,6 +20,11 @@ public class bachasController {
 
     @FXML
     private TableView<?> tablaBachasStock;
+
+    @FXML
+    void btnActualizarCantidadClicked(ActionEvent event) {
+
+    }
 
     @FXML
     void btnIngresarBachasClicked(ActionEvent event) {

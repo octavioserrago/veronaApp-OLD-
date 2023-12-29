@@ -10,6 +10,7 @@ import java.util.List;
 public class Bachas {
     
     private int bachasID;
+    private String nombreMarca;
     private int marcasBachasID;
     private String nombreModelo;
     private String medidas;
@@ -20,6 +21,13 @@ public class Bachas {
         this.nombreModelo = nombreModelo;
         this.medidas = medidas;
         this.cantidad = cantidad;
+    }
+    public String getNombreMarca() {
+        return nombreMarca;
+    }
+
+    public void setNombreMarca(String nombreMarca) {
+        this.nombreMarca = nombreMarca;
     }
 
     public int getBachasID() {
@@ -62,6 +70,11 @@ public class Bachas {
         this.cantidad = cantidad;
     }
 
+    @Override
+    public String toString() {
+        return nombreMarca + " - " + nombreModelo + " - " + medidas;
+    }
+
     DatabaseConnection con = new DatabaseConnection();
 
     Connection conexion = con.conectar();
@@ -92,6 +105,36 @@ public class Bachas {
     
         return bachasList;
     }
+
+    public List<Bachas> obtenerBachas() throws SQLException {
+        String sql = "SELECT b.marcasBachasID, b.nombreModelo, b.medidas, b.cantidad, m.nombreMarca " +
+                     "FROM Bachas b " +
+                     "JOIN MarcasBachas m ON b.marcasBachasID = m.marcasBachasID";
+        List<Bachas> bachasList = new ArrayList<>();
+    
+        try {
+            stmt = conexion.prepareStatement(sql);
+            ResultSet resultSet = stmt.executeQuery();
+    
+            while (resultSet.next()) {
+                int marcasBachasID = resultSet.getInt("marcasBachasID");
+                String nombreModelo = resultSet.getString("nombreModelo");
+                String medidas = resultSet.getString("medidas");
+                int cantidad = resultSet.getInt("cantidad");
+                String nombreMarca = resultSet.getString("nombreMarca");
+    
+                Bachas bacha = new Bachas(marcasBachasID, nombreModelo, medidas, cantidad);
+                bacha.setNombreMarca(nombreMarca); 
+                bachasList.add(bacha);
+            }
+    
+        } catch (Exception e) {
+            throw new SQLException("Error al buscar bachas: " + e.getMessage(), e);
+        }
+    
+        return bachasList;
+    }
+    
     
     
 }

@@ -13,52 +13,52 @@
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="675.0" prefWidth="636.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controllers.Common.cargarVentasController">
    <children>
-        <Label layoutX="13.0" layoutY="124.0" text="Descripcion del Trabajo:">
+        <Label layoutX="25.0" layoutY="138.0" text="Descripcion del Trabajo:">
             <font>
                 <Font name="System Bold" size="13.0" />
             </font>
         </Label>
-        <TextArea fx:id="descripcionTextFIeld" layoutX="15.0" layoutY="150.0" prefHeight="81.0" prefWidth="607.0" />
-        <Label layoutX="386.0" layoutY="244.0" text="Color:">
+        <TextArea fx:id="descripcionTextFIeld" layoutX="15.0" layoutY="169.0" prefHeight="81.0" prefWidth="607.0" />
+        <Label layoutX="372.0" layoutY="265.0" text="Color:">
             <font>
                 <Font name="System Bold" size="13.0" />
             </font>
         </Label>
-        <Label layoutX="55.0" layoutY="244.0" text="Material:">
+        <Label layoutX="67.0" layoutY="265.0" text="Material:">
             <font>
                 <Font name="System Bold" size="13.0" />
             </font>
         </Label>
-        <TextField fx:id="materialTextField" layoutX="118.0" layoutY="239.0" />
-        <TextField fx:id="colorTextField" layoutX="440.0" layoutY="239.0" />
-        <CheckBox fx:id="bachaASK" layoutX="125.0" layoutY="293.0" mnemonicParsing="false" text="Lleva Bacha?" />
-        <ComboBox fx:id="bachasOption" layoutX="249.0" layoutY="289.0" prefHeight="26.0" prefWidth="160.0" />
-        <CheckBox fx:id="colocadorASK" layoutX="340.0" layoutY="81.0" mnemonicParsing="false" text="Es con Colocador?" />
-        <ComboBox fx:id="colocadorOptions" layoutX="472.0" layoutY="77.0" prefWidth="150.0" />
-        <DatePicker fx:id="fechaTerminacionSelect" layoutX="249.0" layoutY="356.0" prefHeight="26.0" prefWidth="139.0" />
-        <Label layoutX="91.0" layoutY="361.0" text="Fecha de Terminacion:">
+        <TextField fx:id="materialTextField" layoutX="126.0" layoutY="261.0" />
+        <TextField fx:id="colorTextField" layoutX="416.0" layoutY="261.0" />
+        <CheckBox fx:id="bachaASK" layoutX="116.0" layoutY="311.0" mnemonicParsing="false" text="Lleva Bacha?" />
+        <ComboBox fx:id="bachasOption" layoutX="250.0" layoutY="307.0" prefHeight="26.0" prefWidth="209.0" />
+        <CheckBox fx:id="colocadorASK" layoutX="341.0" layoutY="103.0" mnemonicParsing="false" text="Es con Colocador?" />
+        <ComboBox fx:id="colocadorOptions" layoutX="472.0" layoutY="99.0" prefWidth="150.0" />
+        <DatePicker fx:id="fechaTerminacionSelect" layoutX="249.0" layoutY="349.0" prefHeight="26.0" prefWidth="139.0" />
+        <Label layoutX="90.0" layoutY="353.0" text="Fecha de Terminacion:">
             <font>
                 <Font name="System Bold" size="13.0" />
             </font>
         </Label>
-        <Label layoutX="75.0" layoutY="404.0" text="Importe Total del Trabajo:">
+        <Label layoutX="80.0" layoutY="396.0" text="Importe Total del Trabajo:">
             <font>
                 <Font name="System Bold" size="13.0" />
             </font>
         </Label>
-        <TextField fx:id="importeTextField" layoutX="247.0" layoutY="400.0" prefHeight="26.0" prefWidth="186.0" />
-        <Label layoutX="25.0" layoutY="82.0" text="Nombre del Cliente:">
+        <TextField fx:id="importeTextField" layoutX="247.0" layoutY="391.0" prefHeight="26.0" prefWidth="186.0" />
+        <Label layoutX="26.0" layoutY="103.0" text="Nombre del Cliente:">
             <font>
                 <Font name="System Bold" size="13.0" />
             </font>
         </Label>
-        <TextField fx:id="nombreClienteTextField" layoutX="141.0" layoutY="77.0" />
-        <Label layoutX="164.0" layoutY="449.0" text="Telefono:">
+        <TextField fx:id="nombreClienteTextField" layoutX="139.0" layoutY="99.0" />
+        <Label layoutX="164.0" layoutY="441.0" text="Telefono:">
             <font>
                 <Font name="System Bold" size="13.0" />
             </font>
         </Label>
-        <TextField fx:id="telefonoTextField" layoutX="249.0" layoutY="444.0" />
+        <TextField fx:id="telefonoTextField" layoutX="249.0" layoutY="436.0" />
         <Label layoutX="93.0" layoutY="485.0" text="Telefono Secundario: ">
             <font>
                 <Font name="System Bold" size="13.0" />
@@ -71,7 +71,7 @@
                 <Font name="System Bold" size="13.0" />
             </font>
         </Label>
-        <Label layoutX="211.0" layoutY="14.0" prefHeight="40.0" prefWidth="215.0" text="Cargar Nueva Venta">
+        <Label layoutX="221.0" layoutY="33.0" prefHeight="40.0" prefWidth="215.0" text="Cargar Nueva Venta">
             <font>
                 <Font name="System Bold" size="24.0" />
             </font>
@@ -79,8 +79,10 @@
                 <Glow level="0.34" />
             </effect>
         </Label>
-        <Button fx:id="btnCargarVenta" layoutX="284.0" layoutY="567.0" mnemonicParsing="false" onAction="#btnCargarVentaClicked" style="-fx-background-color: FFAA00;" text="Cargar Venta" />
+        <Button fx:id="btnCargarVenta" layoutX="284.0" layoutY="575.0" mnemonicParsing="false" onAction="#btnCargarVentaClicked" style="-fx-background-color: FFAA00;" text="Cargar Venta" />
         <Label fx:id="msjErrorLogro" layoutX="44.0" layoutY="601.0" prefHeight="17.0" prefWidth="549.0" />
         <Button fx:id="btnVolver" layoutX="302.0" layoutY="636.0" mnemonicParsing="false" onAction="#btnVolverClicked" style="-fx-background-color: ffaa00;" text="Volver" />
+      <Label fx:id="precioColocacionLabel" layoutX="344.0" layoutY="138.0" text="Precio de Colocacion:" />
+      <TextField fx:id="precioColocacionTextField" layoutX="472.0" layoutY="134.0" prefHeight="26.0" prefWidth="150.0" />
     </children>
 </AnchorPane>
