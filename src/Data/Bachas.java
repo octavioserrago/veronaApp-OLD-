@@ -135,6 +135,30 @@ public class Bachas {
         return bachasList;
     }
     
+    public int obtenerIDBachaPorNombre(String nombreBacha) throws SQLException {
+        int bachaID = -1;
+        String sql = "SELECT marcasBachasID FROM Bachas WHERE nombreModelo = ?";
+    
+        try {
+            stmt = conexion.prepareStatement(sql);
+            stmt.setString(1, nombreBacha);
+            ResultSet resultSet = stmt.executeQuery();
+    
+            while (resultSet.next()) {
+                bachaID = resultSet.getInt("marcasBachasID");
+            }
+        } catch (Exception e) {
+            throw new SQLException("Error al buscar la Bacha: " + e.getMessage(), e);
+        } finally {
+            if (stmt != null) {
+                stmt.close();
+            }
+        }
+    
+        return bachaID;
+    }
+    
+    
     
     
 }

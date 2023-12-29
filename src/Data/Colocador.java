@@ -92,5 +92,24 @@ public class Colocador {
     
         return nombresColocadores;
     }
+
+    public int obtenerIDPorNombre(String nombreColocador) throws SQLException {
+        int colocadorID = -1;
+        String sql = "SELECT colocadoresID FROM Colocadores WHERE nombreApellido = ?";
+
+        try {
+            stmt = conexion.prepareStatement(sql);
+            stmt.setString(1, nombreColocador);
+            ResultSet resultSet = stmt.executeQuery();
+
+            while (resultSet.next()) {
+                colocadorID = resultSet.getInt("colocadoresID");
+            }
+        } catch (Exception e) {
+            throw new SQLException("Error al buscar colocadores: " + e.getMessage(), e);
+        }
+
+        return colocadorID;
+    }
     
 }

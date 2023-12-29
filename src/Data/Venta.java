@@ -182,7 +182,7 @@ public class Venta {
     }
 
     public int tokenGenerator(){
-        int tokenGenerated = (int)(Math.random()*4);
+        int tokenGenerated = (int)(Math.random()* 9000)+1000;
         return tokenGenerated;
     }
     

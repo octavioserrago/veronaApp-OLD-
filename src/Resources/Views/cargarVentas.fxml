@@ -31,7 +31,7 @@
         </Label>
         <TextField fx:id="materialTextField" layoutX="126.0" layoutY="261.0" />
         <TextField fx:id="colorTextField" layoutX="416.0" layoutY="261.0" />
-        <CheckBox fx:id="bachaASK" layoutX="116.0" layoutY="311.0" mnemonicParsing="false" text="Lleva Bacha?" />
+        <CheckBox fx:id="bachasASK" layoutX="116.0" layoutY="311.0" mnemonicParsing="false" text="Lleva Bacha?" />
         <ComboBox fx:id="bachasOption" layoutX="250.0" layoutY="307.0" prefHeight="26.0" prefWidth="209.0" />
         <CheckBox fx:id="colocadorASK" layoutX="341.0" layoutY="103.0" mnemonicParsing="false" text="Es con Colocador?" />
         <ComboBox fx:id="colocadorOptions" layoutX="472.0" layoutY="99.0" prefWidth="150.0" />
@@ -84,5 +84,6 @@
         <Button fx:id="btnVolver" layoutX="302.0" layoutY="636.0" mnemonicParsing="false" onAction="#btnVolverClicked" style="-fx-background-color: ffaa00;" text="Volver" />
       <Label fx:id="precioColocacionLabel" layoutX="344.0" layoutY="138.0" text="Precio de Colocacion:" />
       <TextField fx:id="precioColocacionTextField" layoutX="472.0" layoutY="134.0" prefHeight="26.0" prefWidth="150.0" />
+      <Label fx:id="alertLabel" alignment="CENTER" layoutX="97.0" layoutY="610.0" prefHeight="17.0" prefWidth="462.0" />
     </children>
 </AnchorPane>
