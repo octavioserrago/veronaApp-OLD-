@@ -111,11 +111,9 @@ void btnCargarVentaClicked(ActionEvent event) throws SQLException {
 
     String colocadorSelected = colocadorOptions.getSelectionModel().getSelectedItem();
 
-    if (!colocadorASK.isSelected()) {
-        colocadoresID = 0;
-    } else {
-        colocadoresID = obtenerIDPorNombre(colocadorSelected);
-    }
+    
+    colocadoresID = obtenerIDPorNombre(colocadorSelected);
+    
 
     String telefono1 = telefonoTextField.getText();
     String telefono2 = telefonoSecundarioTextField.getText();
