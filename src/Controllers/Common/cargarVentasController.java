@@ -7,7 +7,6 @@ import java.sql.SQLException;
 import java.util.List;
 
 import Controllers.SceneController;
-import Data.Bachas;
 import Data.Colocador;
 import Data.DatabaseConnection;
 import Data.Validador;
@@ -28,11 +27,6 @@ public class cargarVentasController {
     @FXML
     private Label alertLabel;
 
-    @FXML
-    private CheckBox bachasASK;
-
-    @FXML
-    private ComboBox<Bachas> bachasOption;
 
     @FXML
     private Button btnCargarVenta;
@@ -48,6 +42,10 @@ public class cargarVentasController {
 
     @FXML
     private TextField colorTextField;
+
+    @FXML
+    private Label cantidadBachasLabel;
+
 
     @FXML
     private TextArea descripcionTextFIeld;
@@ -95,10 +93,9 @@ public class cargarVentasController {
             precioColocacionTextField.setVisible(colocadorASK.isSelected());
         });
 
-        bachasASK.setOnAction(event -> bachasOption.setVisible(bachasASK.isSelected()));
 
         llenarComboBoxColocadores();
-        llenarComboBoxBachas();
+        
     }
 
     @FXML
@@ -108,28 +105,39 @@ void btnCargarVentaClicked(ActionEvent event) throws SQLException {
     String descripcion = descripcionTextFIeld.getText();
     String material = materialTextField.getText();
     String color = colorTextField.getText();
-    Bachas bacha = bachasOption.getSelectionModel().getSelectedItem();
 
     String fechaEstimadaTerminacion = (fechaTerminacionSelect.getValue() != null) ?
             fechaTerminacionSelect.getValue().toString() : null;
 
     String colocadorSelected = colocadorOptions.getSelectionModel().getSelectedItem();
-    colocadoresID = obtenerIDPorNombre(colocadorSelected);
+
+    if (!colocadorASK.isSelected()) {
+        colocadoresID = 0;
+    } else {
+        colocadoresID = obtenerIDPorNombre(colocadorSelected);
+    }
 
     String telefono1 = telefonoTextField.getText();
     String telefono2 = telefonoSecundarioTextField.getText();
     String email = emailTextField.getText();
 
-    int bachasID = bacha.getBachasID();
+    Double precioColocacion = colocadorASK.isSelected() ?
+            0.0 : 0.0; 
 
-    Double precioColocacion = 0.0;
-    String precioColocacionText = precioColocacionTextField.getText();
-    
-    if (colocadorASK.isSelected() && !precioColocacionText.isEmpty()) {
-        precioColocacion = Double.parseDouble(precioColocacionText);
+    if (colocadorASK.isSelected()) {
+        String precioColocacionText = precioColocacionTextField.getText();
+
+        
+        if (!precioColocacionText.isEmpty() && precioColocacionText.matches("\\d+(\\.\\d+)?")) {
+            precioColocacion = Double.parseDouble(precioColocacionText);
+        } else {
+            
+            mostrarMensaje("Error: El precio de colocación no es un número válido", false);
+            return; 
+        }
     }
 
-    Venta venta = new Venta(nombreCliente, descripcion, material, color, bachasID,
+    Venta venta = new Venta(nombreCliente, descripcion, material, color,
             fechaEstimadaTerminacion, colocadoresID, precioColocacion,
             1, Double.parseDouble(importeTextField.getText()), null, estado, 0,
             telefono1, telefono2, email);
@@ -153,6 +161,7 @@ void btnCargarVentaClicked(ActionEvent event) throws SQLException {
 
 
 
+
     @FXML
     void btnVolverClicked(ActionEvent event) {
         SceneController sceneController = new SceneController((Stage) btnVolver.getScene().getWindow());
@@ -161,26 +170,12 @@ void btnCargarVentaClicked(ActionEvent event) throws SQLException {
 
     public void noVisibles() {
         colocadorOptions.setVisible(false);
-        bachasOption.setVisible(false);
         precioColocacionLabel.setVisible(false);
         precioColocacionTextField.setVisible(false);
+        
     }
 
-    private void llenarComboBoxBachas() {
-        Bachas bacha = new Bachas(0, null, null, 0);
-        try {
-            List<Bachas> bachasList = bacha.obtenerBachas();
-
-            bachasOption.getItems().clear();
-            bachasOption.getItems().addAll(bachasList);
-
-            if (!bachasList.isEmpty()) {
-                bachasOption.setValue(bachasList.get(0));
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
+    
 
     private void llenarComboBoxColocadores() {
         Colocador colocador = new Colocador(null, null, null, null);

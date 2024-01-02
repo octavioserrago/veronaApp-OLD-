@@ -11,7 +11,6 @@ public class Venta {
     private String descripcion;
     private String material;
     private String color;
-    private int bachasID;
     private String fechaEstimadaTerminacion;
     private int colocadoresID;
     private double precioColocacion;
@@ -25,14 +24,13 @@ public class Venta {
     private String email;
 
     
-    public Venta(String nombreCliente, String descripcion, String material, String color, int bachasID,
+    public Venta(String nombreCliente, String descripcion, String material, String color,
             String fechaEstimadaTerminacion, int colocadoresID, double precioColocacion, int monedasID, Double importe,
             File fotoPlano, String estado, int token, String telefono1, String telefono2, String email) {
         this.nombreCliente = nombreCliente;
         this.descripcion = descripcion;
         this.material = material;
         this.color = color;
-        this.bachasID = bachasID;
         this.fechaEstimadaTerminacion = fechaEstimadaTerminacion;
         this.colocadoresID = colocadoresID;
         this.precioColocacion = precioColocacion;
@@ -75,12 +73,6 @@ public class Venta {
     public void setColor(String color) {
         this.color = color;
     }
-    public int getBachasID() {
-        return bachasID;
-    }
-    public void setBachasID(int bachasID) {
-        this.bachasID = bachasID;
-    }
     public String getFechaEstimadaTerminacion() {
         return fechaEstimadaTerminacion;
     }
@@ -111,6 +103,7 @@ public class Venta {
     public void setImporte(Double importe) {
         this.importe = importe;
     }
+    
     public File getFotoPlano() {
         return fotoPlano;
     }
@@ -155,9 +148,9 @@ public class Venta {
 	PreparedStatement stmt;
 
     public void insertarVenta() throws SQLException {
-        String sql = "INSERT INTO Ventas (nombreCliente, descripcion, material, color, bachasID, " +
+        String sql = "INSERT INTO Ventas (nombreCliente, descripcion, material, color," +
                 "fechaEstimadaTerminacion, colocadoresID, precioColocacion, monedasID, importe, " +
-                "estado, token, telefono1, telefono2, email) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                "estado, token, telefono1, telefono2, email) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
         try (PreparedStatement preparedStatement = conexion.prepareStatement(sql)) {
 
@@ -165,17 +158,16 @@ public class Venta {
             preparedStatement.setString(2, descripcion);
             preparedStatement.setString(3, material);
             preparedStatement.setString(4, color);
-            preparedStatement.setInt(5, bachasID);
-            preparedStatement.setString(6, fechaEstimadaTerminacion);
-            preparedStatement.setInt(7, colocadoresID);
-            preparedStatement.setDouble(8, precioColocacion);
-            preparedStatement.setInt(9, 1);
-            preparedStatement.setDouble(10, importe);
-            preparedStatement.setString(11, estado);
-            preparedStatement.setInt(12, tokenGenerator());
-            preparedStatement.setString(13, telefono1);
-            preparedStatement.setString(14, telefono2);
-            preparedStatement.setString(15, email);
+            preparedStatement.setString(5, fechaEstimadaTerminacion);
+            preparedStatement.setInt(6, colocadoresID);
+            preparedStatement.setDouble(7, precioColocacion);
+            preparedStatement.setInt(8, 1);
+            preparedStatement.setDouble(9, importe);
+            preparedStatement.setString(10, estado);
+            preparedStatement.setInt(11, tokenGenerator());
+            preparedStatement.setString(12, telefono1);
+            preparedStatement.setString(13, telefono2);
+            preparedStatement.setString(14, email);
 
             preparedStatement.executeUpdate();
         }
