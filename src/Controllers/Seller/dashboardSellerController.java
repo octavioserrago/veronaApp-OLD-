@@ -10,6 +10,8 @@ import Controllers.SceneController;
 import Controllers.Common.cotizacionesController;
 import Data.Bachas;
 import Data.Cotizacion;
+import Data.Venta;
+import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
@@ -54,7 +56,10 @@ public class dashboardSellerController {
     private Label fechaUltimaBlue;
 
     @FXML
-    private TableView<Bachas> bachasTablaPreview; // Cambiado el tipo de TableView
+    private TableView<Bachas> bachasTablaPreview; 
+
+    @FXML
+    private TableView<Venta> tablaVentasResumen;
 
     @FXML
     void BtnCotizacionesClicked(ActionEvent event) {
@@ -67,6 +72,7 @@ public class dashboardSellerController {
         mostrarFechaActual();
         cargarUltimasCotizaciones();
         try {
+            cargarVentas();
             cargarBachas();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -127,7 +133,7 @@ public class dashboardSellerController {
 
     private List<Bachas> obtenerBachasStock() throws SQLException {
         Bachas bachas = new Bachas(0, null, null, 0);
-        bachas.setMarcasBachasID(2); // Establece el valor de marcasBachasID según tus necesidades
+        bachas.setMarcasBachasID(2); 
         return bachas.obtenerBachasStock();
     }
 
@@ -172,4 +178,74 @@ public class dashboardSellerController {
         return "Desconocido";
     }
     
+    private List<Venta> obtenerTodasLasVentas() throws SQLException {
+        Venta venta = new Venta(0,null, null, null, null, null, 0, 0.0, 0, 0.0, null, null, 0, null, null, null);
+        return venta.allVentas();
+    }
+
+    
+    private void cargarVentas() {
+        try {
+            List<Venta> listaVentas = obtenerTodasLasVentas();
+            tablaVentasResumen.getItems().clear();
+            tablaVentasResumen.getColumns().clear();
+            if (listaVentas != null && !listaVentas.isEmpty()) {
+                TableColumn<Venta, Integer> ventasIDColumn = new TableColumn<>("ID");
+                TableColumn<Venta, String> nombreClienteColumn = new TableColumn<>("Nombre Cliente");
+                TableColumn<Venta, String> descripcionColumn = new TableColumn<>("Descripción");
+                TableColumn<Venta, String> materialColumn = new TableColumn<>("Material");
+                TableColumn<Venta, String> colorColumn = new TableColumn<>("Color");
+                TableColumn<Venta, String> fechaTerminacionColumn = new TableColumn<>("Fecha de Terminacion");
+                TableColumn<Venta, Integer> colocadorColumn = new TableColumn<>("Colocador");
+                TableColumn<Venta, Double> precioColocacionColumn = new TableColumn<>("Precio Colocacion");
+                TableColumn<Venta, Double> importeColumn = new TableColumn<>("Importe");
+                TableColumn<Venta, String> estadoColumn = new TableColumn<>("Estado");
+                TableColumn<Venta, Integer> tokenColumn = new TableColumn<>("Token");
+                TableColumn<Venta, String> telefono1Column = new TableColumn<>("Telefono");
+                TableColumn<Venta, String> telefono2Column = new TableColumn<>("Telefono Secundario");
+                TableColumn<Venta, String> emailColumn = new TableColumn<>("Email");
+    
+                ventasIDColumn.setCellValueFactory(cellData -> new SimpleIntegerProperty(cellData.getValue().getVentasID()).asObject());
+                nombreClienteColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getNombreCliente()));
+                descripcionColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getDescripcion()));
+                materialColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getMaterial()));
+                colorColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getColor()));
+                fechaTerminacionColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getFechaEstimadaTerminacion()));
+                colocadorColumn.setCellValueFactory(cellData -> new SimpleIntegerProperty(cellData.getValue().getColocadoresID()).asObject());
+                precioColocacionColumn.setCellValueFactory(cellData -> new SimpleDoubleProperty(cellData.getValue().getPrecioColocacion()).asObject());
+                importeColumn.setCellValueFactory(cellData -> new SimpleDoubleProperty(cellData.getValue().getImporte()).asObject());
+                estadoColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getEstado()));
+                tokenColumn.setCellValueFactory(cellData -> new SimpleIntegerProperty(cellData.getValue().getToken()).asObject());
+                telefono1Column.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getTelefono1()));
+                telefono2Column.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getTelefono2()));
+                emailColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getEmail()));
+
+                ventasIDColumn.setMaxWidth(1f * Integer.MAX_VALUE * 10);
+                nombreClienteColumn.setMaxWidth(1f * Integer.MAX_VALUE * 25);
+                descripcionColumn.setMaxWidth(1f * Integer.MAX_VALUE * 50);
+                materialColumn.setMaxWidth(1f * Integer.MAX_VALUE * 25);
+                colorColumn.setMaxWidth(1f * Integer.MAX_VALUE * 25);
+                fechaTerminacionColumn.setMaxWidth(1f * Integer.MAX_VALUE * 25);
+                colocadorColumn.setMaxWidth(1f * Integer.MAX_VALUE * 25);
+                precioColocacionColumn.setMaxWidth(1f * Integer.MAX_VALUE * 25);
+                importeColumn.setMaxWidth(1f * Integer.MAX_VALUE * 25);
+                estadoColumn.setMaxWidth(1f * Integer.MAX_VALUE * 25);
+                tokenColumn.setMaxWidth(1f * Integer.MAX_VALUE * 10);
+                telefono1Column.setMaxWidth(1f * Integer.MAX_VALUE * 25);
+                telefono2Column.setMaxWidth(1f * Integer.MAX_VALUE * 25);
+                emailColumn.setMaxWidth(1f * Integer.MAX_VALUE * 25);
+                
+    
+                tablaVentasResumen.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+    
+                List<TableColumn<Venta, ?>> columnList = Arrays.asList(ventasIDColumn,nombreClienteColumn, descripcionColumn, materialColumn, colorColumn, fechaTerminacionColumn, colocadorColumn, precioColocacionColumn,importeColumn, estadoColumn,tokenColumn, telefono1Column, telefono2Column, emailColumn);
+    
+                tablaVentasResumen.getColumns().addAll(columnList);
+                tablaVentasResumen.getItems().addAll(listaVentas);
+                tablaVentasResumen.setItems(FXCollections.observableList(listaVentas));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 }

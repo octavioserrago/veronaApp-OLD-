@@ -135,7 +135,7 @@ void btnCargarVentaClicked(ActionEvent event) throws SQLException {
         }
     }
 
-    Venta venta = new Venta(nombreCliente, descripcion, material, color,
+    Venta venta = new Venta(0,nombreCliente, descripcion, material, color,
             fechaEstimadaTerminacion, colocadoresID, precioColocacion,
             1, Double.parseDouble(importeTextField.getText()), null, estado, 0,
             telefono1, telefono2, email);

@@ -1,9 +1,11 @@
 package Data;
 
-import java.io.File;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Venta {
     private int ventasID;
@@ -16,7 +18,7 @@ public class Venta {
     private double precioColocacion;
     private int monedasID;
     private Double importe;
-    private File fotoPlano;
+    private String fotoPlano;
     private String estado;
     private int token;
     private String telefono1;
@@ -24,9 +26,10 @@ public class Venta {
     private String email;
 
     
-    public Venta(String nombreCliente, String descripcion, String material, String color,
-            String fechaEstimadaTerminacion, int colocadoresID, double precioColocacion, int monedasID, Double importe,
-            File fotoPlano, String estado, int token, String telefono1, String telefono2, String email) {
+    public Venta(int ventasID,String nombreCliente, String descripcion, String material, String color,
+                 String fechaEstimadaTerminacion, int colocadoresID, double precioColocacion, int monedasID, Double importe,
+                 String fotoPlano, String estado, int token, String telefono1, String telefono2, String email) {
+        this.ventasID = ventasID;
         this.nombreCliente = nombreCliente;
         this.descripcion = descripcion;
         this.material = material;
@@ -43,6 +46,7 @@ public class Venta {
         this.telefono2 = telefono2;
         this.email = email;
     }
+
     public int getVentasID() {
         return ventasID;
     }
@@ -104,12 +108,14 @@ public class Venta {
         this.importe = importe;
     }
     
-    public File getFotoPlano() {
+    public String getFotoPlano() {
         return fotoPlano;
     }
-    public void setFotoPlano(File fotoPlano) {
+
+    public void setFotoPlano(String fotoPlano) {
         this.fotoPlano = fotoPlano;
     }
+    
     public String getEstado() {
         return estado;
     }
@@ -172,6 +178,41 @@ public class Venta {
             preparedStatement.executeUpdate();
         }
     }
+
+    public List<Venta> allVentas() throws SQLException {
+        List<Venta> ventas = new ArrayList<>();
+        String sql = "SELECT * FROM Ventas";
+
+        try (PreparedStatement preparedStatement = conexion.prepareStatement(sql);
+             ResultSet resultSet = preparedStatement.executeQuery()) {
+
+            while (resultSet.next()) {
+                Venta venta = new Venta(
+                        resultSet.getInt("ventasID"),
+                        resultSet.getString("nombreCliente"),
+                        resultSet.getString("descripcion"),
+                        resultSet.getString("material"),
+                        resultSet.getString("color"),
+                        resultSet.getString("fechaEstimadaTerminacion"),
+                        resultSet.getInt("colocadoresID"),
+                        resultSet.getDouble("precioColocacion"),
+                        resultSet.getInt("monedasID"),
+                        resultSet.getDouble("importe"),
+                        resultSet.getString("fotoPlano"),
+                        resultSet.getString("estado"),
+                        resultSet.getInt("token"),
+                        resultSet.getString("telefono1"),
+                        resultSet.getString("telefono2"),
+                        resultSet.getString("email")
+                );
+
+                ventas.add(venta);
+            }
+        }
+
+        return ventas;
+    }
+
 
     public int tokenGenerator(){
         int tokenGenerated = (int)(Math.random()* 9000)+1000;
