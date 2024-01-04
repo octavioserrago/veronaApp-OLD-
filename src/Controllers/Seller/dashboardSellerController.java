@@ -1,11 +1,11 @@
 package Controllers.Seller;
 
+import java.io.IOException;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import java.util.List;
-
 import Controllers.SceneController;
 import Controllers.Common.cotizacionesController;
 import Data.Bachas;
@@ -17,10 +17,14 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.MenuButton;
+import javafx.scene.control.MenuItem;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 
 public class dashboardSellerController {
@@ -41,7 +45,13 @@ public class dashboardSellerController {
     private Button btnPedidos;
 
     @FXML
-    private Button btnVentas;
+    private MenuItem btnVentas;
+
+    @FXML
+    private MenuItem btnVentasBuscar;
+
+    @FXML
+    private MenuButton btnVentasMenu;
 
     @FXML
     private Label cotizacionDolarBlue;
@@ -100,12 +110,45 @@ public class dashboardSellerController {
     void btnPedidosClicked(ActionEvent event) {
 
     }
-
+    
     @FXML
     void btnVentasClicked(ActionEvent event) {
-        SceneController sceneController = new SceneController((Stage) btnVentas.getScene().getWindow());
-        sceneController.switchToVentas();
+        try {
+            MenuItem menuItem = (MenuItem) event.getSource();
+            MenuButton menuButton = (MenuButton) menuItem.getParentPopup().getOwnerNode();
+            Stage stage = (Stage) menuButton.getScene().getWindow();
+
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/Resources/Views/cargarVentas.fxml"));
+            AnchorPane rootPane = loader.load();
+
+            SceneController sceneController = new SceneController(stage);
+            sceneController.switchToVentas(rootPane);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
+
+
+    @FXML
+    void btnVentasBuscarClicked(ActionEvent event) {
+        try {
+            MenuItem menuItem = (MenuItem) event.getSource();
+            MenuButton menuButton = (MenuButton) menuItem.getParentPopup().getOwnerNode();
+            Stage stage = (Stage) menuButton.getScene().getWindow();
+
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/Resources/Views/buscarVentas.fxml"));
+            AnchorPane rootPane = loader.load();
+
+            SceneController sceneController = new SceneController(stage);
+            sceneController.switchToVentas(rootPane);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    
+
+    
 
     private void mostrarFechaActual() {
 

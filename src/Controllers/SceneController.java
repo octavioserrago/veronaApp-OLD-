@@ -3,6 +3,7 @@ package Controllers;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -30,9 +31,16 @@ public class SceneController {
         switchScene("/Resources/Views/bachas.fxml");
     }
 
-    public void switchToVentas() {
-        switchScene("/Resources/Views/cargarVentas.fxml");
+    public void switchToVentas(AnchorPane rootPane) {
+    try {
+        Scene scene = new Scene(rootPane);
+        stage.setScene(scene);
+        stage.show();
+    } catch (Exception e) {
+        e.printStackTrace();
     }
+}
+
 
 
     private void switchScene(String fxmlPath) {
