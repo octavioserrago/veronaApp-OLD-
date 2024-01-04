@@ -1,6 +1,7 @@
 package Controllers.Common;
 
 import Controllers.SceneController;
+import Data.Venta;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -119,9 +120,79 @@ public class buscarVentasController {
     @FXML
     private Label telefonoLabelToComplete;
 
+    String idString;
+    int id;
+    String nombreCliente;
+
+    private Venta ventaModel;
+
+    @FXML
+    void initialize() {
+        noVisibles();
+        // Inicializa las variables aquí si es necesario hacerlo al inicio
+        idString = "";
+        id = 0;
+        nombreCliente = "";
+        ventaModel = new Venta(id, nombreCliente, "", "", "", "", 0, 0, 0, null, "", "", 0, "", "", "");
+    }
+
     @FXML
     void btnBuscarClicked(ActionEvent event) {
+        // Mueve la inicialización de las variables aquí, ya que se necesita en este método
+        idString = idClienteTextField.getText();
+        nombreCliente = nombreClienteTextField.getText();
 
+        if (!idString.isEmpty() || !nombreCliente.isEmpty()) {
+            try {
+                if (!idString.isEmpty()) {
+                    id = Integer.parseInt(idString);
+                    Venta venta = ventaModel.findVentaById(id);
+
+                    if (venta != null) {
+                        mostrarDetallesVenta(venta);
+                        resultadoLabel.setText("Venta encontrada");
+                    } else {
+                        resultadoLabel.setText("No se encontró ninguna venta con el ID proporcionado");
+                    }
+                } else if (!nombreCliente.isEmpty()) {
+
+                    Venta venta = ventaModel.findVentaByName(nombreCliente);
+
+                    if (venta != null) {
+                        mostrarDetallesVenta(venta);
+                        resultadoLabel.setText("Venta encontrada");
+                    } else {
+                        resultadoLabel.setText("No se encontró ninguna venta con el nombre proporcionado");
+                    }
+                }
+            } finally {
+
+            }
+        } else {
+            resultadoLabel.setText("Ingrese al menos un criterio de búsqueda (ID o Nombre Cliente)");
+        }
+    }
+
+
+    public void noVisibles(){
+        colocadorLabel.setVisible(false);
+        colorLabel.setVisible(false);
+        descripcionLabel.setVisible(false);
+        emailLabel.setVisible(false);
+        estadoLabel.setVisible(false);
+        fechaCreacionLabel.setVisible(false);
+        fechaTerminacionLabel.setVisible(false);
+        idLabel.setVisible(false);
+        importeTotalLabel.setVisible(false);
+        materialLabel.setVisible(false);
+        nombreLabel.setVisible(false);
+        precioColocacionLabel.setVisible(false);
+        resultadoLabel.setVisible(false);
+        saldoLabel.setVisible(false);
+        tablaCobros.setVisible(false);
+        telefono2Label.setVisible(false);
+        telefonoLabel.setVisible(false);
+        descripcionTextFieldToComplete.setVisible(false);
     }
 
     @FXML
@@ -129,6 +200,44 @@ public class buscarVentasController {
         SceneController sceneController = new SceneController((Stage) btnVolver.getScene().getWindow());
         sceneController.switchToDashboardSeller();
     }
+
+    public void mostrarDetallesVenta(Venta venta) {
+        colocadorLabelToComplete.setText(String.valueOf(venta.getColocadoresID()));
+        colorLabelToComplete.setText(venta.getColor());
+        descripcionTextFieldToComplete.setText(venta.getDescripcion());
+        emailLabelToComplete.setText(venta.getEmail());
+        estadoLabelToComplete.setText(venta.getEstado());
+        fechaCreacionLabelToComplete.setText(venta.getFechaEstimadaTerminacion());
+        fechaTerminacionLabelToComplete.setText(venta.getFechaEstimadaTerminacion());
+        idLabelToComplete.setText(String.valueOf(venta.getVentasID()));
+        importeTotalLabelToComplete.setText(String.valueOf(venta.getImporte()));
+        materialLabelToComplete.setText(venta.getMaterial());
+        nombreLabelToComplete.setText(venta.getNombreCliente());
+        precioColocacionLabelToComplete.setText(String.valueOf(venta.getPrecioColocacion()));
+        telefono2LabelToComplete.setText(venta.getTelefono2());
+        telefonoLabelToComplete.setText(venta.getTelefono1());
+    
+        colocadorLabel.setVisible(true);
+        colorLabel.setVisible(true);
+        descripcionLabel.setVisible(true);
+        emailLabel.setVisible(true);
+        estadoLabel.setVisible(true);
+        fechaCreacionLabel.setVisible(true);
+        fechaTerminacionLabel.setVisible(true);
+        idLabel.setVisible(true);
+        importeTotalLabel.setVisible(true);
+        materialLabel.setVisible(true);
+        nombreLabel.setVisible(true);
+        precioColocacionLabel.setVisible(true);
+        resultadoLabel.setVisible(true);
+        saldoLabel.setVisible(true);
+        tablaCobros.setVisible(true);
+        telefono2Label.setVisible(true);
+        telefonoLabel.setVisible(true);
+        descripcionTextFieldToComplete.setVisible(true);
+    }
+    
+
 
 }
 

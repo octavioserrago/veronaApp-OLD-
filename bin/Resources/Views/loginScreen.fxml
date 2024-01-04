@@ -26,23 +26,29 @@
       </Label>
       <Label layoutX="67.0" layoutY="303.0" text="VERONA">
          <font>
-            <Font name="System Bold" size="48.0" />
+            <Font name="Arial Bold" size="48.0" />
          </font>
          <effect>
             <Glow level="0.25" />
          </effect>
       </Label>
-      <Label layoutX="384.0" layoutY="242.0" text="Usuario:" />
-      <Label layoutX="374.0" layoutY="290.0" text="Contraseña:" />
+      <Label layoutX="384.0" layoutY="242.0" text="Usuario:">
+         <font>
+            <Font name="Arial Bold" size="13.0" />
+         </font></Label>
+      <Label layoutX="374.0" layoutY="290.0" text="Contraseña:">
+         <font>
+            <Font name="Arial Bold" size="13.0" />
+         </font></Label>
       <TextField fx:id="loginField" layoutX="454.0" layoutY="238.0" />
       <PasswordField fx:id="passwordField" layoutX="454.0" layoutY="286.0" />
       <Button fx:id="btnLogin" layoutX="470.0" layoutY="375.0" mnemonicParsing="false" onAction="#btnLoginClick" text="Iniciar Sesion">
          <effect>
             <InnerShadow height="0.0" radius="0.0" width="0.0" />
          </effect></Button>
-      <Label alignment="TOP_CENTER" contentDisplay="CENTER" layoutX="429.0" layoutY="116.0" prefHeight="36.0" prefWidth="171.0" text="Inicio de Sesion" textAlignment="CENTER">
+      <Label alignment="TOP_CENTER" contentDisplay="CENTER" layoutX="424.0" layoutY="147.0" prefHeight="36.0" prefWidth="219.0" text="Inicio de Sesion" textAlignment="CENTER">
          <font>
-            <Font name="System Bold" size="25.0" />
+            <Font name="Arial Bold" size="25.0" />
          </font>
          <effect>
             <Glow level="0.22" />

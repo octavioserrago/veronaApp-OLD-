@@ -26,7 +26,7 @@ public class Venta {
     private String email;
 
     
-    public Venta(int ventasID,String nombreCliente, String descripcion, String material, String color,
+    public Venta(int ventasID,String nombreCliente,String descripcion, String material, String color,
                  String fechaEstimadaTerminacion, int colocadoresID, double precioColocacion, int monedasID, Double importe,
                  String fotoPlano, String estado, int token, String telefono1, String telefono2, String email) {
         this.ventasID = ventasID;
@@ -218,6 +218,77 @@ public class Venta {
         int tokenGenerated = (int)(Math.random()* 9000)+1000;
         return tokenGenerated;
     }
+    
+    public Venta findVentaById(int ventaID) {
+        String sql = "SELECT * FROM Ventas WHERE ventasID = ?";
+        try (PreparedStatement preparedStatement = conexion.prepareStatement(sql)) {
+            preparedStatement.setInt(1, ventaID);
+    
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                if (resultSet.next()) {
+                    return new Venta(
+                            resultSet.getInt("ventasID"),
+                            resultSet.getString("nombreCliente"),
+                            resultSet.getString("descripcion"),
+                            resultSet.getString("material"),
+                            resultSet.getString("color"),
+                            resultSet.getString("fechaEstimadaTerminacion"),
+                            resultSet.getInt("colocadoresID"),
+                            resultSet.getDouble("precioColocacion"),
+                            resultSet.getInt("monedasID"),
+                            resultSet.getDouble("importe"),
+                            resultSet.getString("fotoPlano"),
+                            resultSet.getString("estado"),
+                            resultSet.getInt("token"),
+                            resultSet.getString("telefono1"),
+                            resultSet.getString("telefono2"),
+                            resultSet.getString("email")
+                    );
+                } else {
+                    System.err.println("No se encontró ninguna venta con el ID: " + ventaID);
+                }
+            }
+        } catch (SQLException e) {
+            System.err.println("Error al buscar la venta con ID: " + ventaID);
+            e.printStackTrace();
+        }
+        return null;
+    }
+    
+    public Venta findVentaByName(String nombreCliente) {
+        String sql = "SELECT * FROM Ventas WHERE nombreCliente LIKE ?";
+        try (PreparedStatement preparedStatement = conexion.prepareStatement(sql)) {
+            preparedStatement.setString(1, "%" + nombreCliente + "%");
+    
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                if (resultSet.next()) {
+                    return new Venta(
+                            resultSet.getInt("ventasID"),
+                            resultSet.getString("nombreCliente"),
+                            resultSet.getString("descripcion"),
+                            resultSet.getString("material"),
+                            resultSet.getString("color"),
+                            resultSet.getString("fechaEstimadaTerminacion"),
+                            resultSet.getInt("colocadoresID"),
+                            resultSet.getDouble("precioColocacion"),
+                            resultSet.getInt("monedasID"),
+                            resultSet.getDouble("importe"),
+                            resultSet.getString("fotoPlano"),
+                            resultSet.getString("estado"),
+                            resultSet.getInt("token"),
+                            resultSet.getString("telefono1"),
+                            resultSet.getString("telefono2"),
+                            resultSet.getString("email")
+                    );
+                }
+            }
+        } catch (SQLException e) {
+            System.err.println("Error al buscar venta por nombre: " + nombreCliente);
+            e.printStackTrace();
+        }
+        return null;
+    }
+    
     
 
 }
