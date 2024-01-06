@@ -238,6 +238,7 @@ public class dashboardSellerController {
                 TableColumn<Venta, String> descripcionColumn = new TableColumn<>("Descripción");
                 TableColumn<Venta, String> materialColumn = new TableColumn<>("Material");
                 TableColumn<Venta, String> colorColumn = new TableColumn<>("Color");
+                TableColumn<Venta, String> fechaColumn = new TableColumn<>("Fecha");
                 TableColumn<Venta, String> fechaTerminacionColumn = new TableColumn<>("Fecha de Terminacion");
                 TableColumn<Venta, Integer> colocadorColumn = new TableColumn<>("Colocador");
                 TableColumn<Venta, Double> precioColocacionColumn = new TableColumn<>("Precio Colocacion");
@@ -253,6 +254,7 @@ public class dashboardSellerController {
                 descripcionColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getDescripcion()));
                 materialColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getMaterial()));
                 colorColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getColor()));
+                fechaColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getFecha()));
                 fechaTerminacionColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getFechaEstimadaTerminacion()));
                 colocadorColumn.setCellValueFactory(cellData -> new SimpleIntegerProperty(cellData.getValue().getColocadoresID()).asObject());
                 precioColocacionColumn.setCellValueFactory(cellData -> new SimpleDoubleProperty(cellData.getValue().getPrecioColocacion()).asObject());
@@ -268,6 +270,7 @@ public class dashboardSellerController {
                 descripcionColumn.setMaxWidth(1f * Integer.MAX_VALUE * 50);
                 materialColumn.setMaxWidth(1f * Integer.MAX_VALUE * 25);
                 colorColumn.setMaxWidth(1f * Integer.MAX_VALUE * 25);
+                fechaColumn.setMaxWidth(1f * Integer.MAX_VALUE * 25);
                 fechaTerminacionColumn.setMaxWidth(1f * Integer.MAX_VALUE * 25);
                 colocadorColumn.setMaxWidth(1f * Integer.MAX_VALUE * 25);
                 precioColocacionColumn.setMaxWidth(1f * Integer.MAX_VALUE * 25);
@@ -281,7 +284,7 @@ public class dashboardSellerController {
     
                 tablaVentasResumen.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
     
-                List<TableColumn<Venta, ?>> columnList = Arrays.asList(ventasIDColumn,nombreClienteColumn, descripcionColumn, materialColumn, colorColumn, fechaTerminacionColumn, colocadorColumn, precioColocacionColumn,importeColumn, estadoColumn,tokenColumn, telefono1Column, telefono2Column, emailColumn);
+                List<TableColumn<Venta, ?>> columnList = Arrays.asList(ventasIDColumn,nombreClienteColumn, descripcionColumn, materialColumn, colorColumn, fechaColumn,fechaTerminacionColumn, colocadorColumn, precioColocacionColumn,importeColumn, estadoColumn,tokenColumn, telefono1Column, telefono2Column, emailColumn);
     
                 tablaVentasResumen.getColumns().addAll(columnList);
                 tablaVentasResumen.getItems().addAll(listaVentas);

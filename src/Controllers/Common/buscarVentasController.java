@@ -1,6 +1,9 @@
 package Controllers.Common;
 
+import java.sql.SQLException;
+
 import Controllers.SceneController;
+import Data.Colocador;
 import Data.Venta;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -34,7 +37,7 @@ public class buscarVentasController {
     private Label descripcionLabel;
 
     @FXML
-    private TextField descripcionTextFieldToComplete;
+    private Label descripcionLabelToComplete;
 
     @FXML
     private Label emailLabel;
@@ -129,16 +132,17 @@ public class buscarVentasController {
     @FXML
     void initialize() {
         noVisibles();
-        // Inicializa las variables aquí si es necesario hacerlo al inicio
+        
         idString = "";
         id = 0;
         nombreCliente = "";
         ventaModel = new Venta(id, nombreCliente, "", "", "", "", 0, 0, 0, null, "", "", 0, "", "", "");
+        
     }
 
     @FXML
     void btnBuscarClicked(ActionEvent event) {
-        // Mueve la inicialización de las variables aquí, ya que se necesita en este método
+      
         idString = idClienteTextField.getText();
         nombreCliente = nombreClienteTextField.getText();
 
@@ -192,7 +196,7 @@ public class buscarVentasController {
         tablaCobros.setVisible(false);
         telefono2Label.setVisible(false);
         telefonoLabel.setVisible(false);
-        descripcionTextFieldToComplete.setVisible(false);
+        descripcionLabelToComplete.setVisible(false);
     }
 
     @FXML
@@ -202,12 +206,31 @@ public class buscarVentasController {
     }
 
     public void mostrarDetallesVenta(Venta venta) {
-        colocadorLabelToComplete.setText(String.valueOf(venta.getColocadoresID()));
+        int colocadorid = venta.getColocadoresID();
+        Colocador colocador = new Colocador("", "", "", "");
+        String nombreApellido = "";
+
+        try {
+            nombreApellido = colocador.obtenerNombresPorID(colocadorid);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        colocadorLabelToComplete.setText(nombreApellido);
+
         colorLabelToComplete.setText(venta.getColor());
-        descripcionTextFieldToComplete.setText(venta.getDescripcion());
+        descripcionLabelToComplete.setText(venta.getDescripcion());
         emailLabelToComplete.setText(venta.getEmail());
         estadoLabelToComplete.setText(venta.getEstado());
-        fechaCreacionLabelToComplete.setText(venta.getFechaEstimadaTerminacion());
+
+        int ventasID = venta.getVentasID();
+        String fecha = null;
+        try {
+            fecha = venta.obtenerFechaCreacion(ventasID);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        fechaCreacionLabelToComplete.setText(fecha);
+
         fechaTerminacionLabelToComplete.setText(venta.getFechaEstimadaTerminacion());
         idLabelToComplete.setText(String.valueOf(venta.getVentasID()));
         importeTotalLabelToComplete.setText(String.valueOf(venta.getImporte()));
@@ -234,7 +257,7 @@ public class buscarVentasController {
         tablaCobros.setVisible(true);
         telefono2Label.setVisible(true);
         telefonoLabel.setVisible(true);
-        descripcionTextFieldToComplete.setVisible(true);
+        descripcionLabelToComplete.setVisible(true);
     }
     
 

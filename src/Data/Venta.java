@@ -5,7 +5,10 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 
 public class Venta {
     private int ventasID;
@@ -13,6 +16,7 @@ public class Venta {
     private String descripcion;
     private String material;
     private String color;
+    private String fecha;
     private String fechaEstimadaTerminacion;
     private int colocadoresID;
     private double precioColocacion;
@@ -76,6 +80,13 @@ public class Venta {
     }
     public void setColor(String color) {
         this.color = color;
+    }
+    public String getFecha() {
+        return fecha;
+    }
+
+    public void setFecha(String fecha) {
+        this.fecha = fecha;
     }
     public String getFechaEstimadaTerminacion() {
         return fechaEstimadaTerminacion;
@@ -182,10 +193,10 @@ public class Venta {
     public List<Venta> allVentas() throws SQLException {
         List<Venta> ventas = new ArrayList<>();
         String sql = "SELECT * FROM Ventas";
-
+    
         try (PreparedStatement preparedStatement = conexion.prepareStatement(sql);
              ResultSet resultSet = preparedStatement.executeQuery()) {
-
+    
             while (resultSet.next()) {
                 Venta venta = new Venta(
                         resultSet.getInt("ventasID"),
@@ -193,7 +204,7 @@ public class Venta {
                         resultSet.getString("descripcion"),
                         resultSet.getString("material"),
                         resultSet.getString("color"),
-                        resultSet.getString("fechaEstimadaTerminacion"),
+                        formatFecha(resultSet.getString("fechaEstimadaTerminacion")), 
                         resultSet.getInt("colocadoresID"),
                         resultSet.getDouble("precioColocacion"),
                         resultSet.getInt("monedasID"),
@@ -205,13 +216,29 @@ public class Venta {
                         resultSet.getString("telefono2"),
                         resultSet.getString("email")
                 );
-
+    
+                venta.setFecha(formatFecha(resultSet.getString("fecha"), "fecha"));
+    
                 ventas.add(venta);
             }
         }
-
+    
         return ventas;
     }
+    
+    private String formatFecha(String fecha, String tipoFecha) {
+        SimpleDateFormat originalFormat = new SimpleDateFormat("yyyy-MM-dd");
+        SimpleDateFormat targetFormat = new SimpleDateFormat("dd-MM-yyyy");
+    
+        try {
+            Date date = originalFormat.parse(fecha);
+            return targetFormat.format(date);
+        } catch (ParseException e) {
+            e.printStackTrace();
+            return fecha;
+        }
+    }
+    
 
 
     public int tokenGenerator(){
@@ -219,6 +246,7 @@ public class Venta {
         return tokenGenerated;
     }
     
+
     public Venta findVentaById(int ventaID) {
         String sql = "SELECT * FROM Ventas WHERE ventasID = ?";
         try (PreparedStatement preparedStatement = conexion.prepareStatement(sql)) {
@@ -226,13 +254,18 @@ public class Venta {
     
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
                 if (resultSet.next()) {
+                    java.sql.Date fechaEstimadaTerminacionSQL = resultSet.getDate("fechaEstimadaTerminacion");
+                    java.util.Date fechaEstimadaTerminacionUtil = new java.util.Date(fechaEstimadaTerminacionSQL.getTime());
+                    SimpleDateFormat formato = new SimpleDateFormat("dd-MM-yyyy");
+                    String fechaEstimadaTerminacionFormateada = formato.format(fechaEstimadaTerminacionUtil);
+    
                     return new Venta(
                             resultSet.getInt("ventasID"),
                             resultSet.getString("nombreCliente"),
                             resultSet.getString("descripcion"),
                             resultSet.getString("material"),
                             resultSet.getString("color"),
-                            resultSet.getString("fechaEstimadaTerminacion"),
+                            fechaEstimadaTerminacionFormateada, 
                             resultSet.getInt("colocadoresID"),
                             resultSet.getDouble("precioColocacion"),
                             resultSet.getInt("monedasID"),
@@ -252,33 +285,42 @@ public class Venta {
             System.err.println("Error al buscar la venta con ID: " + ventaID);
             e.printStackTrace();
         }
+    
         return null;
     }
     
+    
+
     public Venta findVentaByName(String nombreCliente) {
         String sql = "SELECT * FROM Ventas WHERE nombreCliente LIKE ?";
+    
         try (PreparedStatement preparedStatement = conexion.prepareStatement(sql)) {
             preparedStatement.setString(1, "%" + nombreCliente + "%");
-    
+
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
                 if (resultSet.next()) {
+                    java.sql.Date fechaEstimadaTerminacionSQL = resultSet.getDate("fechaEstimadaTerminacion");
+                    java.util.Date fechaEstimadaTerminacionUtil = new java.util.Date(fechaEstimadaTerminacionSQL.getTime());
+                    SimpleDateFormat formato = new SimpleDateFormat("dd-MM-yyyy");
+                    String fechaEstimadaTerminacionFormateada = formato.format(fechaEstimadaTerminacionUtil);
+
                     return new Venta(
-                            resultSet.getInt("ventasID"),
-                            resultSet.getString("nombreCliente"),
-                            resultSet.getString("descripcion"),
-                            resultSet.getString("material"),
-                            resultSet.getString("color"),
-                            resultSet.getString("fechaEstimadaTerminacion"),
-                            resultSet.getInt("colocadoresID"),
-                            resultSet.getDouble("precioColocacion"),
-                            resultSet.getInt("monedasID"),
-                            resultSet.getDouble("importe"),
-                            resultSet.getString("fotoPlano"),
-                            resultSet.getString("estado"),
-                            resultSet.getInt("token"),
-                            resultSet.getString("telefono1"),
-                            resultSet.getString("telefono2"),
-                            resultSet.getString("email")
+                        resultSet.getInt("ventasID"),
+                        resultSet.getString("nombreCliente"),
+                        resultSet.getString("descripcion"),
+                        resultSet.getString("material"),
+                        resultSet.getString("color"),
+                        fechaEstimadaTerminacionFormateada,
+                        resultSet.getInt("colocadoresID"),
+                        resultSet.getDouble("precioColocacion"),
+                        resultSet.getInt("monedasID"),
+                        resultSet.getDouble("importe"),
+                        resultSet.getString("fotoPlano"),
+                        resultSet.getString("estado"),
+                        resultSet.getInt("token"),
+                        resultSet.getString("telefono1"),
+                        resultSet.getString("telefono2"),
+                        resultSet.getString("email")
                     );
                 }
             }
@@ -286,8 +328,40 @@ public class Venta {
             System.err.println("Error al buscar venta por nombre: " + nombreCliente);
             e.printStackTrace();
         }
+    
         return null;
     }
+
+
+
+    public String obtenerFechaCreacion(int ventasID) throws SQLException {
+        String sql = "SELECT fecha FROM Ventas WHERE ventasID = ?";
+        String fechaFormateada = null;
+
+        try {
+            stmt = conexion.prepareStatement(sql);
+            stmt.setInt(1, ventasID);
+            ResultSet resultSet = stmt.executeQuery();
+
+            while (resultSet.next()) {
+           
+                java.sql.Date fechaSQL = resultSet.getDate("fecha");
+
+            
+                java.util.Date fechaUtil = new java.util.Date(fechaSQL.getTime());
+
+                
+                SimpleDateFormat formato = new SimpleDateFormat("dd-MM-yyyy");
+                fechaFormateada = formato.format(fechaUtil);
+            }
+
+        } catch (Exception e) {
+            throw new SQLException("Error al buscar fecha de creación: " + e.getMessage(), e);
+        }
+
+        return fechaFormateada;
+    }
+
     
     
 

@@ -73,6 +73,27 @@ public class Colocador {
     Connection conexion = con.conectar();
     PreparedStatement stmt;
 
+    public String obtenerNombresPorID(int colocadorid) throws SQLException {
+        String sql = "SELECT nombreApellido FROM Colocadores WHERE colocadoresID = ?";
+        String nombreApellido = null;
+    
+        try {
+            stmt = conexion.prepareStatement(sql);
+            stmt.setInt(1, colocadorid);
+            ResultSet resultSet = stmt.executeQuery();
+    
+            while (resultSet.next()) {
+                nombreApellido = resultSet.getString("nombreApellido");
+            }
+    
+        } catch (Exception e) {
+            throw new SQLException("Error al buscar colocadores: " + e.getMessage(), e);
+        }
+    
+        return nombreApellido;
+    }
+    
+
     public List<String> obtenerNombresColocadores() throws SQLException {
         String sql = "SELECT nombreApellido FROM Colocadores";
         List<String> nombresColocadores = new ArrayList<>();
