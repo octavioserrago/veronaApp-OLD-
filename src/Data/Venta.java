@@ -28,8 +28,8 @@ public class Venta {
     private String telefono1;
     private String telefono2;
     private String email;
+    private String nombreApellidoColocador;
 
-    
     public Venta(int ventasID,String nombreCliente,String descripcion, String material, String color,
                  String fechaEstimadaTerminacion, int colocadoresID, double precioColocacion, int monedasID, Double importe,
                  String fotoPlano, String estado, int token, String telefono1, String telefono2, String email) {
@@ -50,7 +50,12 @@ public class Venta {
         this.telefono2 = telefono2;
         this.email = email;
     }
-
+    public void setNombreApellidoColocador(String nombreApellidoColocador) {
+        this.nombreApellidoColocador = nombreApellidoColocador;
+    }
+    public String getNombreApellidoColocador() {
+        return nombreApellidoColocador;
+    }
     public int getVentasID() {
         return ventasID;
     }
@@ -198,14 +203,16 @@ public class Venta {
              ResultSet resultSet = preparedStatement.executeQuery()) {
     
             while (resultSet.next()) {
+                int colocadorID = resultSet.getInt("colocadoresID");
+    
                 Venta venta = new Venta(
                         resultSet.getInt("ventasID"),
                         resultSet.getString("nombreCliente"),
                         resultSet.getString("descripcion"),
                         resultSet.getString("material"),
                         resultSet.getString("color"),
-                        formatFecha(resultSet.getString("fechaEstimadaTerminacion")), 
-                        resultSet.getInt("colocadoresID"),
+                        resultSet.getString("fechaEstimadaTerminacion"),
+                        colocadorID,
                         resultSet.getDouble("precioColocacion"),
                         resultSet.getInt("monedasID"),
                         resultSet.getDouble("importe"),
@@ -218,6 +225,9 @@ public class Venta {
                 );
     
                 venta.setFecha(formatFecha(resultSet.getString("fecha"), "fecha"));
+                venta.setFechaEstimadaTerminacion(formatFechaTerminacion(resultSet.getString("fechaEstimadaTerminacion"), "fechaEstimadaTerminacion"));
+                String nombreApellidoColocador = getNombreApellidoPorColocadorID(colocadorID);
+                venta.setNombreApellidoColocador(nombreApellidoColocador);
     
                 ventas.add(venta);
             }
@@ -225,6 +235,7 @@ public class Venta {
     
         return ventas;
     }
+    
     
     private String formatFecha(String fecha, String tipoFecha) {
         SimpleDateFormat originalFormat = new SimpleDateFormat("yyyy-MM-dd");
@@ -238,6 +249,38 @@ public class Venta {
             return fecha;
         }
     }
+
+    private String formatFechaTerminacion(String fecha, String tipoFecha) {
+        SimpleDateFormat originalFormat = new SimpleDateFormat("yyyy-MM-dd");
+        SimpleDateFormat targetFormat = new SimpleDateFormat("dd-MM-yyyy");
+    
+        try {
+            Date date = originalFormat.parse(fecha);
+            return targetFormat.format(date);
+        } catch (ParseException e) {
+            e.printStackTrace();
+            return fecha;
+        }
+    }
+
+    public String getNombreApellidoPorColocadorID(int colocadorID) {
+        String nombreApellido = null;
+        String sql = "SELECT nombreApellido FROM colocadores WHERE colocadoresID = ?";
+
+        try (PreparedStatement preparedStatement = conexion.prepareStatement(sql)) {
+            preparedStatement.setInt(1, colocadorID);
+
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                if (resultSet.next()) {
+                    nombreApellido = resultSet.getString("nombreApellido");
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return nombreApellido;
+    }
+
     
 
 

@@ -6,6 +6,9 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import java.util.List;
+
+
+
 import Controllers.SceneController;
 import Controllers.Common.cotizacionesController;
 import Data.Bachas;
@@ -49,6 +52,9 @@ public class dashboardSellerController {
 
     @FXML
     private MenuItem btnVentasBuscar;
+
+    @FXML
+    private MenuItem btnVentasModificarEstado;
 
     @FXML
     private MenuButton btnVentasMenu;
@@ -97,6 +103,10 @@ public class dashboardSellerController {
 
     @FXML
     void btnCajaClicked(ActionEvent event) {
+
+    }
+    @FXML
+    void btnVentasModificarEstadoClicked(ActionEvent event){
 
     }
 
@@ -240,7 +250,7 @@ public class dashboardSellerController {
                 TableColumn<Venta, String> colorColumn = new TableColumn<>("Color");
                 TableColumn<Venta, String> fechaColumn = new TableColumn<>("Fecha");
                 TableColumn<Venta, String> fechaTerminacionColumn = new TableColumn<>("Fecha de Terminacion");
-                TableColumn<Venta, Integer> colocadorColumn = new TableColumn<>("Colocador");
+                TableColumn<Venta, String> colocadorColumn = new TableColumn<>("Colocador");
                 TableColumn<Venta, Double> precioColocacionColumn = new TableColumn<>("Precio Colocacion");
                 TableColumn<Venta, Double> importeColumn = new TableColumn<>("Importe");
                 TableColumn<Venta, String> estadoColumn = new TableColumn<>("Estado");
@@ -256,7 +266,7 @@ public class dashboardSellerController {
                 colorColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getColor()));
                 fechaColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getFecha()));
                 fechaTerminacionColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getFechaEstimadaTerminacion()));
-                colocadorColumn.setCellValueFactory(cellData -> new SimpleIntegerProperty(cellData.getValue().getColocadoresID()).asObject());
+                colocadorColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getNombreApellidoColocador()));
                 precioColocacionColumn.setCellValueFactory(cellData -> new SimpleDoubleProperty(cellData.getValue().getPrecioColocacion()).asObject());
                 importeColumn.setCellValueFactory(cellData -> new SimpleDoubleProperty(cellData.getValue().getImporte()).asObject());
                 estadoColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getEstado()));

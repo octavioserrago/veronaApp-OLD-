@@ -217,9 +217,11 @@ public class buscarVentasController {
         }
         colocadorLabelToComplete.setText(nombreApellido);
 
+       
         colorLabelToComplete.setText(venta.getColor());
         descripcionLabelToComplete.setText(venta.getDescripcion());
         emailLabelToComplete.setText(venta.getEmail());
+        
         estadoLabelToComplete.setText(venta.getEstado());
 
         int ventasID = venta.getVentasID();
@@ -237,10 +239,23 @@ public class buscarVentasController {
         materialLabelToComplete.setText(venta.getMaterial());
         nombreLabelToComplete.setText(venta.getNombreCliente());
         precioColocacionLabelToComplete.setText(String.valueOf(venta.getPrecioColocacion()));
-        telefono2LabelToComplete.setText(venta.getTelefono2());
-        telefonoLabelToComplete.setText(venta.getTelefono1());
-    
-        colocadorLabel.setVisible(true);
+
+         if (venta.getPrecioColocacion()==0) {
+            precioColocacionLabel.setVisible(false);
+            precioColocacionLabelToComplete.setVisible(false);
+            
+        } else {
+            precioColocacionLabel.setVisible(true);
+            precioColocacionLabelToComplete.setVisible(true);
+            colocadorLabel.setVisible(true);
+        }
+        if (colocadorLabelToComplete.getText().equals("Ninguno")) {
+            colocadorLabel.setVisible(false);
+            colocadorLabelToComplete.setVisible(false);
+        } else {
+            colocadorLabel.setVisible(true);
+            colocadorLabelToComplete.setVisible(true);
+        }
         colorLabel.setVisible(true);
         descripcionLabel.setVisible(true);
         emailLabel.setVisible(true);
@@ -251,13 +266,31 @@ public class buscarVentasController {
         importeTotalLabel.setVisible(true);
         materialLabel.setVisible(true);
         nombreLabel.setVisible(true);
-        precioColocacionLabel.setVisible(true);
         resultadoLabel.setVisible(true);
         saldoLabel.setVisible(true);
         tablaCobros.setVisible(true);
         telefono2Label.setVisible(true);
         telefonoLabel.setVisible(true);
         descripcionLabelToComplete.setVisible(true);
+
+        if (venta.getTelefono2()==null) {
+            telefono2Label.setVisible(false);
+        } else {
+            telefono2LabelToComplete.setText(venta.getTelefono2());
+        }
+
+        if (venta.getTelefono2()==null) {
+            telefono2Label.setVisible(false);
+        }
+        telefonoLabelToComplete.setText(venta.getTelefono1());
+
+        if (nombreApellido.equals("")) {
+            colocadorLabel.setVisible(false);
+        }
+        if (venta.getEmail().equals("")) {
+            emailLabel.setVisible(false);
+        }
+
     }
     
 

@@ -22,6 +22,7 @@
               <items>
                 <MenuItem fx:id="btnVentas" mnemonicParsing="false" onAction="#btnVentasClicked" text="Crear Venta" />
                 <MenuItem fx:id="btnVentasBuscar" mnemonicParsing="false" onAction="#btnVentasBuscarClicked" text="Buscar Venta" />
+                <MenuItem fx:id="btnVentasModificarEstado" mnemonicParsing="false" onAction="#btnVentasModificarEstadoClicked" text="Modificar Estado de Venta" />
               </items>
             </MenuButton>
             <Button fx:id="btnCaja" contentDisplay="CENTER" mnemonicParsing="false" onAction="#btnCajaClicked" style="-fx-background-color: FFAA00;" text="Caja" />
