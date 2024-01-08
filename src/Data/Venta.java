@@ -301,10 +301,12 @@ public class Venta {
                     java.util.Date fechaEstimadaTerminacionUtil = new java.util.Date(fechaEstimadaTerminacionSQL.getTime());
                     SimpleDateFormat formato = new SimpleDateFormat("dd-MM-yyyy");
                     String fechaEstimadaTerminacionFormateada = formato.format(fechaEstimadaTerminacionUtil);
+                    String nombreCliente = resultSet.getString("nombreCliente");
+                    setNombreCliente(nombreCliente);
     
                     return new Venta(
                             resultSet.getInt("ventasID"),
-                            resultSet.getString("nombreCliente"),
+                            nombreCliente,
                             resultSet.getString("descripcion"),
                             resultSet.getString("material"),
                             resultSet.getString("color"),
@@ -319,7 +321,11 @@ public class Venta {
                             resultSet.getString("telefono1"),
                             resultSet.getString("telefono2"),
                             resultSet.getString("email")
+
+                            
                     );
+
+                    
                 } else {
                     System.err.println("No se encontró ninguna venta con el ID: " + ventaID);
                 }
@@ -346,10 +352,12 @@ public class Venta {
                     java.util.Date fechaEstimadaTerminacionUtil = new java.util.Date(fechaEstimadaTerminacionSQL.getTime());
                     SimpleDateFormat formato = new SimpleDateFormat("dd-MM-yyyy");
                     String fechaEstimadaTerminacionFormateada = formato.format(fechaEstimadaTerminacionUtil);
+                    String nombreCliente1 = resultSet.getString("nombreCliente");
+                    setNombreCliente(nombreCliente1);
 
                     return new Venta(
                         resultSet.getInt("ventasID"),
-                        resultSet.getString("nombreCliente"),
+                        nombreCliente1,
                         resultSet.getString("descripcion"),
                         resultSet.getString("material"),
                         resultSet.getString("color"),

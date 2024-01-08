@@ -30,16 +30,19 @@ public class SceneController {
     public void switchToBachas() {
         switchScene("/Resources/Views/bachas.fxml");
     }
+    public void switchToCajaSeller() {
+        switchScene("/Resources/Views/cajaSeller.fxml");
+    }
 
     public void switchToVentas(AnchorPane rootPane) {
-    try {
-        Scene scene = new Scene(rootPane);
-        stage.setScene(scene);
-        stage.show();
-    } catch (Exception e) {
-        e.printStackTrace();
+        try {
+            Scene scene = new Scene(rootPane);
+            stage.setScene(scene);
+            stage.show();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
-}
 
 
 

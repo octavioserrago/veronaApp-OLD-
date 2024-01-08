@@ -103,7 +103,8 @@ public class dashboardSellerController {
 
     @FXML
     void btnCajaClicked(ActionEvent event) {
-
+        SceneController sceneController = new SceneController((Stage) btnCaja.getScene().getWindow());
+        sceneController.switchToCajaSeller();
     }
     @FXML
     void btnVentasModificarEstadoClicked(ActionEvent event){
