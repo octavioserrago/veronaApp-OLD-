@@ -354,9 +354,11 @@ public class Venta {
                     String fechaEstimadaTerminacionFormateada = formato.format(fechaEstimadaTerminacionUtil);
                     String nombreCliente1 = resultSet.getString("nombreCliente");
                     setNombreCliente(nombreCliente1);
+                    int ventasID = resultSet.getInt("ventasID");
+                    setVentasID(ventasID);
 
                     return new Venta(
-                        resultSet.getInt("ventasID"),
+                        ventasID,
                         nombreCliente1,
                         resultSet.getString("descripcion"),
                         resultSet.getString("material"),

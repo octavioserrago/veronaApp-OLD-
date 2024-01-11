@@ -1,5 +1,11 @@
 package Data;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
+
 public class Cotizacion {
     private String fecha;
     private int cotizacionID;
@@ -59,7 +65,48 @@ public class Cotizacion {
                 ", Moneda ID Tasa de Cambio: " + monedasIDtasaCambio + ", Tasa de Cambio: " + tasaCambio;
     }
 
-    public void setText(Object object) {
+    DatabaseConnection con = new DatabaseConnection();
+    Connection conexion = con.conectar();
+    PreparedStatement stmt;
+
+    public Object[] getUltimaCotizacion() {
+        String sql = "SELECT cotizacionesID, tasaCambio FROM Cotizaciones WHERE monedasID = 3 ORDER BY cotizacionesID DESC LIMIT 1";
+        int cotizacionesID = 0;
+        double tasaCambio = 0;
+
+        try {
+            stmt = conexion.prepareStatement(sql);
+            ResultSet resultSet = stmt.executeQuery();
+
+            while (resultSet.next()) {
+                cotizacionesID = resultSet.getInt("cotizacionesID");
+                tasaCambio = resultSet.getDouble("tasaCambio");
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+       
+        return new Object[]{cotizacionesID, tasaCambio};
     }
+
+    public boolean insertarCotizacionBlue(int monedasID, double importe, int monedasIDtasaCambio, double tasaCambio) throws SQLException {
+        String sql = "INSERT INTO Cotizaciones (monedasID, importe, monedasIDtasaCambio, tasaCambio) VALUES (?, ?, ?, ?)";
+    
+        try (PreparedStatement preparedStatement = conexion.prepareStatement(sql)) {
+            preparedStatement.setInt(1, monedasID);
+            preparedStatement.setDouble(2, importe);
+            preparedStatement.setInt(3, monedasIDtasaCambio);
+            preparedStatement.setDouble(4, tasaCambio);
+    
+            int filasAfectadas = preparedStatement.executeUpdate();
+    
+            return filasAfectadas > 0;
+        }
+    }
+    
+
+    
     
 }

@@ -18,23 +18,33 @@ public class SceneController {
     public void switchToLogin() {
         switchScene("/Resources/Views/loginScreen.fxml");
     }
-
     public void switchToDashboardSeller() {
         switchScene("/Resources/Views/dashboard.fxml");
     }
-
     public void switchToCotizaciones() {
         switchScene("/Resources/Views/cotizaciones.fxml");
     }
-
     public void switchToBachas() {
         switchScene("/Resources/Views/bachas.fxml");
     }
     public void switchToCajaSeller() {
         switchScene("/Resources/Views/cajaSeller.fxml");
     }
+    public void switchToNuevaCotizacionBlue() {
+        switchScene("/Resources/Views/nuevaCotizacionBlue.fxml");
+    }
 
     public void switchToVentas(AnchorPane rootPane) {
+        try {
+            Scene scene = new Scene(rootPane);
+            stage.setScene(scene);
+            stage.show();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void switchToNuevaCotizacionBlue(AnchorPane rootPane) {
         try {
             Scene scene = new Scene(rootPane);
             stage.setScene(scene);

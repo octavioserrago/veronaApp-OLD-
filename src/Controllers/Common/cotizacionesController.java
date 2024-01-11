@@ -9,6 +9,7 @@ import java.time.DateTimeException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ResourceBundle;
+
 import Controllers.SceneController;
 import Data.Cotizacion;
 import Data.DatabaseConnection;
@@ -23,6 +24,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 
 public class cotizacionesController implements Initializable {
+
     @FXML
     private TableView<Cotizacion> tablaDolarBlue;
 
@@ -44,9 +46,11 @@ public class cotizacionesController implements Initializable {
     @FXML
     private Label fechaUltimaBlue;
 
-
     @FXML
     private Label cotizacionDolarBlue;
+
+    private DatabaseConnection con = new DatabaseConnection();
+    private Connection conexion = con.conectar();
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -56,17 +60,18 @@ public class cotizacionesController implements Initializable {
 
     @FXML
     void btnNCBClicked(ActionEvent event) {
-        // Lógica para el botón NCB
+        SceneController sceneController = new SceneController((Stage) btnNCB.getScene().getWindow());
+        sceneController.switchToNuevaCotizacionBlue();
     }
 
     @FXML
     void btnNCCCLClicked(ActionEvent event) {
-        // Lógica para el botón NCCCL
+        // Implementa tu lógica aquí si es necesario
     }
 
     @FXML
     void btnNCOficialClicked(ActionEvent event) {
-        // Lógica para el botón NCOficial
+        // Implementa tu lógica aquí si es necesario
     }
 
     @FXML
@@ -88,8 +93,27 @@ public class cotizacionesController implements Initializable {
         }
     }
 
-    DatabaseConnection con = new DatabaseConnection();
-    Connection conexion = con.conectar();
+    private void configurarTablas() {
+        configurarTablaDolar(tablaDolarBlue, "SELECT fecha, tasaCambio FROM Cotizaciones WHERE monedasID = 3");
+    }
+
+    private void configurarTablaDolar(TableView<Cotizacion> tabla, String sqlQuery) {
+        TableColumn<Cotizacion, String> fechaColumna = new TableColumn<>("Fecha");
+        TableColumn<Cotizacion, Double> importeColumna = new TableColumn<>("Tasa Cambio");
+
+        fechaColumna.setCellValueFactory(new PropertyValueFactory<>("fecha"));
+        importeColumna.setCellValueFactory(new PropertyValueFactory<>("tasaCambio"));
+
+        fechaColumna.setMaxWidth(1f * Integer.MAX_VALUE * 25);
+        importeColumna.setMaxWidth(1f * Integer.MAX_VALUE * 25);
+
+        tabla.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+
+        tabla.getColumns().add(fechaColumna);
+        tabla.getColumns().add(importeColumna);
+
+        cargarTodasCotizaciones(tabla, sqlQuery);
+    }
 
     public Cotizacion obtenerUltimaCotizacionBlue() {
         String sql = "SELECT fecha, tasaCambio FROM Cotizaciones WHERE monedasID = 3 ORDER BY fecha DESC LIMIT 1";
@@ -111,34 +135,11 @@ public class cotizacionesController implements Initializable {
         return null;
     }
 
-
-    private void configurarTablas() {
-        configurarTablaDolar(tablaDolarBlue, "SELECT fecha, tasaCambio FROM Cotizaciones WHERE monedasID = 3 ORDER BY fecha DESC LIMIT 1");
-    }
-
-    private void configurarTablaDolar(TableView<Cotizacion> tabla, String sqlQuery) {
-        TableColumn<Cotizacion, String> fechaColumna = new TableColumn<>("Fecha");
-        TableColumn<Cotizacion, Double> importeColumna = new TableColumn<>("Tasa Cambio");
-
-        fechaColumna.setCellValueFactory(new PropertyValueFactory<>("fecha"));
-        importeColumna.setCellValueFactory(new PropertyValueFactory<>("tasaCambio"));
-
-        fechaColumna.setMaxWidth(1f * Integer.MAX_VALUE * 25);
-        importeColumna.setMaxWidth(1f * Integer.MAX_VALUE * 25);
-
-        tabla.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
-
-        tabla.getColumns().add(fechaColumna);
-        tabla.getColumns().add(importeColumna);
-
-        cargarUltimasCotizaciones(tabla, sqlQuery);
-    }
-
-    private void cargarUltimasCotizaciones(TableView<Cotizacion> tabla, String sqlQuery) {
+    private void cargarTodasCotizaciones(TableView<Cotizacion> tabla, String sqlQuery) {
         try (PreparedStatement preparedStatement = conexion.prepareStatement(sqlQuery);
              ResultSet resultSet = preparedStatement.executeQuery()) {
 
-            if (resultSet.next()) {
+            while (resultSet.next()) {
                 String fechaCotizacion = resultSet.getString("fecha");
                 double tasaCambio = resultSet.getDouble("tasaCambio");
 
