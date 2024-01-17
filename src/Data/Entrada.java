@@ -2,7 +2,10 @@ package Data;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class Entrada {
@@ -14,8 +17,11 @@ public class Entrada {
     private Integer cotizacionesID;
     private double importeEnPesos;
     private int ventasID;
-
+    private String simboloMoneda;
+    private double tasaCambio;
+    private String nombreCliente;
     
+
 
     public Entrada(String detalle, String metodoPago, int monedasID, Double importe, int cotizacionesID,
             double importeEnPesos, int ventasID) {
@@ -91,6 +97,29 @@ public class Entrada {
     public void setVentasID(int ventasID) {
         this.ventasID = ventasID;
     }
+    public String getSimboloMoneda() {
+        return simboloMoneda;
+    }
+
+    public void setSimboloMoneda(String simboloMoneda) {
+        this.simboloMoneda = simboloMoneda;
+    }
+
+    public double getTasaCambio() {
+        return tasaCambio;
+    }
+
+    public void setTasaCambio(double tasaCambio) {
+        this.tasaCambio = tasaCambio;
+    }
+
+    public String getNombreCliente() {
+        return nombreCliente;
+    }
+
+    public void setNombreCliente(String nombreCliente) {
+        this.nombreCliente = nombreCliente;
+    }
 
     DatabaseConnection con = new DatabaseConnection();
 
@@ -132,4 +161,65 @@ public class Entrada {
             return filasAfectadas > 0;
         }
     }
+
+    public List<Entrada> obtenerEntradaPorCliente(int ventasID) throws SQLException {
+        List<Entrada> entradasPorCliente = new ArrayList<>();
+        String sql = "SELECT e.*, m.simbolo AS monedaSimbolo, c.tasaCambio, v.nombreCliente " +
+                     "FROM Entradas e " +
+                     "INNER JOIN Monedas m ON e.monedasID = m.monedasID " +
+                     "LEFT JOIN Cotizaciones c ON e.cotizacionesID = c.cotizacionesID " +
+                     "INNER JOIN Ventas v ON e.ventasID = v.ventasID " +
+                     "WHERE v.ventasID = ?";
+    
+            try (PreparedStatement preparedStatement = conexion.prepareStatement(sql)) {
+            preparedStatement.setInt(1, ventasID); 
+    
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                while (resultSet.next()) {
+                    Entrada entrada = new Entrada(
+                        resultSet.getString("detalle"),
+                        resultSet.getString("metodoPago"),
+                        resultSet.getInt("monedasID"),
+                        resultSet.getDouble("importe"),
+                        resultSet.getInt("cotizacionesID"),
+                        resultSet.getDouble("importeEnPesos"),
+                        resultSet.getInt("ventasID")
+                    );
+    
+                    entrada.setFecha(resultSet.getString("fecha")); 
+                    entrada.setSimboloMoneda(resultSet.getString("monedaSimbolo")); 
+                    entrada.setTasaCambio(resultSet.getDouble("tasaCambio"));
+                    entrada.setNombreCliente(resultSet.getString("nombreCliente"));
+    
+                    entradasPorCliente.add(entrada);
+                }
+            }
+        }
+    
+        return entradasPorCliente;
+    }
+
+    public double calcularTotalEntradasEnPesos(int ventasID) throws SQLException {
+        double totalEntradasEnPesos = 0;
+        String sql = "SELECT importeEnPesos FROM Entradas WHERE ventasID = ?";
+        
+        try (PreparedStatement preparedStatement = conexion.prepareStatement(sql)) {
+            preparedStatement.setInt(1, ventasID); 
+        
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                while (resultSet.next()) {
+                    double importeEnPesos = resultSet.getDouble("importeEnPesos");
+                    totalEntradasEnPesos += importeEnPesos;
+                    System.out.println("Importe en Pesos: " + importeEnPesos);
+                    System.out.println("-------------------------");
+                }
+            }
+        }
+        
+        System.out.println("Total Importes en Pesos: " + totalEntradasEnPesos);
+        return totalEntradasEnPesos;
+    }
+
+    
 }
+

@@ -105,6 +105,25 @@ public class Cotizacion {
             return filasAfectadas > 0;
         }
     }
+    public double getCotizacion(int cotizacionesID) {
+        String sql = "SELECT tasaCambio FROM Cotizaciones WHERE cotizacionesID = ?";
+        double tasaCambio = 0;
+    
+        try {
+            stmt = conexion.prepareStatement(sql);
+            stmt.setInt(1, cotizacionesID); // Establecer el valor del parámetro
+            ResultSet resultSet = stmt.executeQuery();
+    
+            while (resultSet.next()) {
+                tasaCambio = resultSet.getDouble("tasaCambio");
+            }
+    
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return tasaCambio;
+    }
+    
     
 
     
