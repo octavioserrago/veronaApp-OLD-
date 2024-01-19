@@ -11,6 +11,7 @@
         "/Users/octavioserrago/Downloads/javafx-sdk-18/lib/javafx.media.jar",
         "/Users/octavioserrago/Downloads/javafx-sdk-18/lib/javafx.swing.jar",
         "/Users/octavioserrago/Downloads/javafx-sdk-18/lib/javafx.web.jar",
-        "/Users/octavioserrago/Downloads/mysql-connector-java-5.1.7-bin.jar.jar"
+        "/Users/octavioserrago/Downloads/mysql-connector-java-5.1.7-bin.jar.jar",
+        "/Users/octavioserrago/Downloads/itext5-itextpdf-5.5.12.jar"
     ]
 }

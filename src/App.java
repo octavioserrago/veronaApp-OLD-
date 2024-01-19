@@ -2,7 +2,6 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import Controllers.SceneController;
 import Controllers.loginController;
@@ -32,8 +31,6 @@ public class App extends Application {
 
             
             Scene scene = new Scene(root);
-            Image logo = new Image(getClass().getResourceAsStream("/Resources/img/verona.jpg"));
-            primaryStage.getIcons().add(logo);
             primaryStage.setScene(scene);
             primaryStage.setTitle("Marmoleria Verona");
             primaryStage.show();

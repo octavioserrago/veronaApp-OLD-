@@ -1,11 +1,19 @@
 package Controllers.Common;
 
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import java.util.List;
 import Controllers.SceneController;
 import Data.Colocador;
 import Data.Cotizacion;
+import Data.DatabaseConnection;
 import Data.Entrada;
 import Data.Venta;
 import javafx.beans.property.SimpleDoubleProperty;
@@ -19,7 +27,23 @@ import javafx.scene.control.Separator;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
+
+import com.itextpdf.text.Chunk;
+import com.itextpdf.text.Document;
+import com.itextpdf.text.DocumentException;
+import com.itextpdf.text.Element;
+import com.itextpdf.text.Font;
+import com.itextpdf.text.Image;
+import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.Phrase;
+import com.itextpdf.text.Rectangle;
+import com.itextpdf.text.pdf.PdfPCell;
+import com.itextpdf.text.pdf.PdfPTable;
+import com.itextpdf.text.pdf.PdfWriter;
+import com.itextpdf.text.pdf.draw.LineSeparator;
+
 
 public class buscarVentasController {
 
@@ -29,7 +53,9 @@ public class buscarVentasController {
     @FXML
     private Button btnVolver;
 
-    
+    @FXML
+    private Label labelPdfAlert;
+
     @FXML
     private Label colocadorLabel;
 
@@ -192,8 +218,306 @@ public class buscarVentasController {
    
     @FXML
     void btnGenerarPDFClicked(ActionEvent event) {
-        // Lógica para generar un PDF (por implementar)
+    Document document = new Document();
+
+    try {
+        
+        String route = System.getProperty("user.home");
+
+        
+        String nombrePDF = "/Desktop/Detalle-Venta-" + nombreLabelToComplete.getText() + ".pdf";
+
+        
+        PdfWriter.getInstance(document, new FileOutputStream(route + nombrePDF));
+
+        
+        document.open();
+
+        LocalDate localDate = LocalDate.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        String formattedDate = localDate.format(formatter);
+
+       
+        Paragraph paragraph = new Paragraph(formattedDate);
+        paragraph.setAlignment(Element.ALIGN_RIGHT);
+        document.add(paragraph);
+
+        
+        String logoPath = "src/Resources/img/verona.png";
+
+        
+        Image logo = Image.getInstance(logoPath);
+        logo.scaleAbsolute(115, 100);
+        logo.setAlignment(Element.ALIGN_CENTER);
+        document.add(logo);
+
+      
+        Font fontEncabezado = new Font(Font.FontFamily.TIMES_ROMAN, 16, Font.BOLD);
+        Paragraph encabezado = new Paragraph("Marmoleria Verona", fontEncabezado);
+        encabezado.setAlignment(Element.ALIGN_CENTER);
+        document.add(encabezado);
+
+       
+        Font fontDetalles = new Font(Font.FontFamily.TIMES_ROMAN, 12, Font.ITALIC);
+        Paragraph detallesVenta = new Paragraph("Detalles de la Venta", fontDetalles);
+        detallesVenta.setAlignment(Element.ALIGN_CENTER);
+        document.add(detallesVenta);
+
+        document.add(new Paragraph("\n"));
+        document.add(new Paragraph("\n"));
+
+        
+        Font fontNegrita = new Font(Font.FontFamily.TIMES_ROMAN, 12, Font.BOLD);
+        Font fontNormal = new Font(Font.FontFamily.TIMES_ROMAN, 10, Font.NORMAL);
+        Font fontNormal1 = new Font(Font.FontFamily.TIMES_ROMAN, 6, Font.NORMAL);
+
+        Paragraph paragraph1 = new Paragraph();
+        Paragraph paragraph2 = new Paragraph();
+        Paragraph paragraph3 = new Paragraph();
+        Paragraph paragraph4 = new Paragraph();
+        Paragraph paragraph5 = new Paragraph();
+        Paragraph paragraph7 = new Paragraph();
+        Paragraph paragraph8 = new Paragraph();
+        Paragraph paragraph9 = new Paragraph();
+        Paragraph paragraph10 = new Paragraph();
+        Paragraph paragraph11 = new Paragraph();
+        Paragraph paragraph12 = new Paragraph();
+        Paragraph paragraph13 = new Paragraph();
+        Paragraph paragraph14 = new Paragraph();
+
+        Chunk chunkNegrita = new Chunk("ID Del Pedido: ", fontNegrita);
+        paragraph1.add(chunkNegrita);
+        Chunk chunkNormal = new Chunk(idLabelToComplete.getText(), fontNormal);
+        paragraph1.add(chunkNormal);
+        document.add(paragraph1);
+        document.add(new Paragraph("\n"));
+
+        Chunk chunkNegrita2 = new Chunk("Cliente: ", fontNegrita);
+        paragraph2.add(chunkNegrita2);
+        Chunk chunkNormal2 = new Chunk(nombreLabelToComplete.getText(), fontNormal);
+        paragraph2.add(chunkNormal2);
+        document.add(paragraph2);
+        document.add(new Paragraph("\n"));
+
+        Chunk chunkNegrita12 = new Chunk("Descripción: ", fontNegrita);
+        paragraph12.add(chunkNegrita12);
+        Chunk chunkNormal12 = new Chunk(descripcionLabelToComplete.getText(), fontNormal);
+        paragraph12.add(chunkNormal12);
+        document.add(paragraph12);
+        document.add(new Paragraph("\n"));
+
+        Chunk chunkNegrita3 = new Chunk("Fecha Creación: ", fontNegrita);
+        paragraph3.add(chunkNegrita3);
+        Chunk chunkNormal3 = new Chunk(fechaCreacionLabelToComplete.getText(), fontNormal);
+        paragraph3.add(chunkNormal3);
+        document.add(paragraph3);
+        document.add(new Paragraph("\n"));
+
+        Chunk chunkNegrita4 = new Chunk("Fecha Terminación: ", fontNegrita);
+        paragraph4.add(chunkNegrita4);
+        Chunk chunkNormal4 = new Chunk(fechaTerminacionLabelToComplete.getText(), fontNormal);
+        paragraph4.add(chunkNormal4);
+        document.add(paragraph4);
+        document.add(new Paragraph("\n"));
+
+        Chunk chunkNegrita5 = new Chunk("Material: ", fontNegrita);
+        paragraph5.add(chunkNegrita5);
+        Chunk chunkNormal5 = new Chunk(materialLabelToComplete.getText(), fontNormal);
+        paragraph5.add(chunkNormal5);
+        document.add(paragraph5);
+        document.add(new Paragraph("\n"));
+
+
+        Chunk chunkNegrita7 = new Chunk("Color: ", fontNegrita);
+        paragraph7.add(chunkNegrita7);
+        Chunk chunkNormal7 = new Chunk(colorLabelToComplete.getText(), fontNormal);
+        paragraph7.add(chunkNormal7);
+        document.add(paragraph7);
+        document.add(new Paragraph("\n"));
+        
+        Chunk chunkNegrita8 = new Chunk("Importe Total: ", fontNegrita);
+        paragraph8.add(chunkNegrita8);
+        Chunk chunkNormal8 = new Chunk(importeTotalLabelToComplete.getText(), fontNormal);
+        paragraph8.add(chunkNormal8);
+        document.add(paragraph8);
+        document.add(new Paragraph("\n"));
+
+        Chunk chunkNegrita9 = new Chunk("Saldo: ", fontNegrita);
+        paragraph9.add(chunkNegrita9);
+        Chunk chunkNormal9 = new Chunk(saldoLabelToComplete.getText(), fontNormal);
+        paragraph9.add(chunkNormal9);
+        document.add(paragraph9);
+        document.add(new Paragraph("\n"));
+
+       
+
+        
+        String nombreColocador = colocadorLabelToComplete.getText();
+
+        
+        if (!"Ninguno".equals(nombreColocador)) {
+
+            document.add(new LineSeparator());
+            Chunk chunkNegrita10 = new Chunk("Colocador: ", fontNegrita);
+            paragraph10.add(chunkNegrita10);
+            Chunk chunkNormal10 = new Chunk(colocadorLabelToComplete.getText(), fontNormal);
+            paragraph10.add(chunkNormal10);
+            document.add(paragraph10);
+            document.add(new Paragraph("\n"));
+
+            Chunk chunkNegrita11 = new Chunk("Precio de Flete, Envio y Colocacion: ", fontNegrita);
+            paragraph11.add(chunkNegrita11);
+            Chunk chunkNormal11 = new Chunk(precioColocacionLabelToComplete.getText(), fontNormal);
+            paragraph11.add(chunkNormal11);
+            document.add(paragraph11);
+            document.add(new Paragraph("\n"));
+            document.add(new LineSeparator());
+
+            
+        }
+
+        document.add(new Paragraph("\n"));
+
+   
+        PdfPTable tableEntradas = new PdfPTable(7);
+        tableEntradas.setWidthPercentage(100);
+        float[] columnWidths = {40f, 50f, 30f, 25f, 30f, 30f, 40f};
+        tableEntradas.setWidths(columnWidths);
+        Font fontTitulosTabla = new Font(Font.FontFamily.TIMES_ROMAN, 12, Font.BOLD);
+
+   
+        tableEntradas.addCell(new PdfPCell(new Paragraph("Fecha", fontTitulosTabla)));
+        tableEntradas.addCell(new PdfPCell(new Paragraph("Descripción", fontTitulosTabla)));
+        tableEntradas.addCell(new PdfPCell(new Paragraph("Método de Pago", fontTitulosTabla)));
+        tableEntradas.addCell(new PdfPCell(new Paragraph("Moneda", fontTitulosTabla)));
+        tableEntradas.addCell(new PdfPCell(new Paragraph("Importe", fontTitulosTabla)));
+        tableEntradas.addCell(new PdfPCell(new Paragraph("Cotización USD", fontTitulosTabla)));
+        tableEntradas.addCell(new PdfPCell(new Paragraph("Importe Total en ARS", fontTitulosTabla)));
+
+        try {
+            
+            DatabaseConnection con = new DatabaseConnection();
+            Connection conexion = con.conectar();
+
+            if (conexion != null) {
+                
+                int idVenta = Integer.parseInt(idLabelToComplete.getText());
+
+                
+                PreparedStatement preparedStatement = conexion.prepareStatement(
+                    "SELECT fecha, detalle, metodoPago, monedasID, importe, cotizacionesID FROM Entradas WHERE ventasID = ?"
+                );
+
+                
+                preparedStatement.setInt(1, idVenta);
+
+                
+                ResultSet rs = preparedStatement.executeQuery();
+
+               
+                if (rs.next()) {
+                    do {
+                        Cotizacion cotizacion1 = new Cotizacion("", 0);
+                        int monedaID = rs.getInt(4);
+                        String monedaSimbolo = (monedaID == 1) ? "ARS" : (monedaID == 3) ? "USD" : "";
+                    
+                        int cotizacionesID = rs.getInt(6);
+                        Double tasaCambio = cotizacion1.getCotizacion(cotizacionesID);
+                    
+                        double importe = rs.getDouble(5);
+                        double importeEnPesos = (monedaID == 3) ? importe * tasaCambio : importe;
+
+                        String fechaString = rs.getString(1);
+                        LocalDate fecha = LocalDate.parse(fechaString);
+                        String fechaFormateada = fecha.format(DateTimeFormatter.ofPattern("dd-MM-yyyy"));
+                    
+                        
+                        if (tasaCambio != null) {
+                            tableEntradas.addCell(fechaFormateada);
+                            tableEntradas.addCell(rs.getString(2));
+                            tableEntradas.addCell(rs.getString(3));
+                            tableEntradas.addCell(monedaSimbolo);
+                            tableEntradas.addCell(rs.getString(5));
+                            tableEntradas.addCell(String.valueOf(tasaCambio));  
+                            tableEntradas.addCell(String.valueOf(importeEnPesos));
+                        }
+                       
+                    } while (rs.next());
+                    
+                } else {
+                    System.out.println("No hay datos para la venta con ID: " + idVenta);
+                }
+            } else {
+                System.out.println("No se pudo establecer la conexión a la base de datos.");
+            }
+        } catch (SQLException | NumberFormatException e) {
+            e.printStackTrace();
+        }
+        document.add(tableEntradas);
+        document.add(new Paragraph("\n"));
+        document.add(new Paragraph("\n"));
+
+        
+
+
+        PdfPTable table = new PdfPTable(6);
+        table.setWidthPercentage(100);
+        float[] columnWidths1 = {10f, 90f, 10f, 50f, 10f, 50f};
+        table.setWidths(columnWidths1);
+
+        Image locationImage = Image.getInstance("src/Resources/img/location.png");
+        locationImage.scaleAbsolute(15, 15); 
+        PdfPCell cell1 = new PdfPCell(locationImage);
+        cell1.setBorder(Rectangle.NO_BORDER);
+        table.addCell(cell1);
+
+        PdfPCell cell2Text = new PdfPCell(new Phrase("Juan Bautista Alberdi 3333, CABA"));
+        cell2Text.setBorder(Rectangle.NO_BORDER);
+        table.addCell(cell2Text);
+
+
+        Image phoneImage = Image.getInstance("src/Resources/img/wpp.png");
+        phoneImage.scaleAbsolute(15, 15);
+        PdfPCell cell3 = new PdfPCell(phoneImage);
+        cell3.setBorder(Rectangle.NO_BORDER);
+        table.addCell(cell3);
+
+        PdfPCell cell4Text = new PdfPCell(new Phrase("11-5990-6984"));
+        cell4Text.setBorder(Rectangle.NO_BORDER);
+        table.addCell(cell4Text);
+
+        Image instagramImage = Image.getInstance("src/Resources/img/ig.png");
+        instagramImage.scaleAbsolute(15, 15);
+        PdfPCell cell5 = new PdfPCell(instagramImage);
+        cell5.setBorder(Rectangle.NO_BORDER);
+        table.addCell(cell5);
+
+        PdfPCell cell6Text = new PdfPCell(new Phrase("@marmoleria.verona"));
+        cell6Text.setBorder(Rectangle.NO_BORDER);
+        table.addCell(cell6Text);
+
+        document.add(table);
+
+        
+        Chunk chunkNormal1 = new Chunk("Los materiales son naturales y no son iguales que las muestras", fontNormal1);
+        paragraph13.add(chunkNormal1);
+        document.add(paragraph13);
+        Chunk chunkNorma = new Chunk("Documento no valido como factura", fontNormal1);
+        paragraph14.add(chunkNorma);
+        document.add(paragraph14);
+
+
+
+        document.close();
+        labelPdfAlert.setTextFill(Color.GREEN.darker());
+        labelPdfAlert.setText("PDF Creado correctamente en Escritorio!" );
+        } catch (DocumentException | IOException e) {
+            e.printStackTrace();
+        }
     }
+
+
+
 
    
     @FXML
