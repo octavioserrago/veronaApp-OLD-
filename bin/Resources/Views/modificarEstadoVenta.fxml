@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.effect.Glow?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controllers.Common.modificarEstadoVentaController">
+    <children>
+        <Button fx:id="btnVolver" layoutX="273.0" layoutY="337.0" mnemonicParsing="false" onAction="#btnVolverClicked" style="-fx-background-color: FFAA00;" text="Volver" />
+        <Label alignment="CENTER" layoutX="106.0" layoutY="20.0" text="MODIFICAR ESTADO DE UNA VENTA">
+            <font>
+                <Font name="Arial Bold" size="22.0" />
+            </font>
+            <effect>
+                <Glow level="0.5" />
+            </effect>
+        </Label>
+        <Label layoutX="35.0" layoutY="69.0" text="Ingrese el ID de venta a modificar su estado:" />
+        <TextField fx:id="idTextFieldToComplete" layoutX="287.0" layoutY="65.0" />
+        <Label fx:id="firstAlert" alignment="CENTER" layoutY="109.0" prefHeight="17.0" prefWidth="600.0" textAlignment="CENTER" />
+        <Separator layoutY="133.0" prefHeight="8.0" prefWidth="600.0" />
+        <Label fx:id="labelIndicacion" layoutX="121.0" layoutY="205.0" text="Seleccione el estado Actual:" />
+    
+
+
+        <Label fx:id="secondAlert" layoutY="151.0" prefHeight="17.0" prefWidth="600.0" textAlignment="CENTER" />
+      <ComboBox fx:id="btnComboBox" layoutX="287.0" layoutY="200.0" prefWidth="150.0" />
+      <Button fx:id="btnBuscar" layoutX="465.0" layoutY="65.0" mnemonicParsing="false" onAction="#btnBuscarClicked" text="Buscar" />
+      <Label fx:id="thirdAlert" alignment="CENTER" layoutY="257.0" prefHeight="17.0" prefWidth="600.0" textAlignment="CENTER" />
+    </children>
+</AnchorPane>

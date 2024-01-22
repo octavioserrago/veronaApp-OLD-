@@ -1,32 +1,48 @@
 package Controllers.Common;
 
+import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.NumberFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Locale;
+
 import Controllers.SceneController;
 import Data.Colocador;
 import Data.Cotizacion;
 import Data.DatabaseConnection;
 import Data.Entrada;
 import Data.Venta;
+import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
+import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.control.Separator;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.input.ScrollEvent;
+import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
@@ -52,6 +68,9 @@ public class buscarVentasController {
 
     @FXML
     private Button btnVolver;
+
+    @FXML
+    private Button btnFotoPlano;
 
     @FXML
     private Label labelPdfAlert;
@@ -215,7 +234,83 @@ public class buscarVentasController {
         ventaModel = new Venta(id, nombreCliente, "", "", "", "", 0, 0, 0, null, "", "", 0, "", "", "");
     }
 
-   
+    @FXML
+    void btnFotoPlanoClicked(ActionEvent event) {
+        String idVenta = idLabelToComplete.getText();
+        String rutaFoto = "src/Resources/img/blueprints/" + idVenta + ".png";
+        File fotoFile = new File(rutaFoto);
+
+        if (fotoFile.exists()) {
+            Stage stage = new Stage();
+            ImageView imageView = new ImageView();
+            javafx.scene.image.Image imagen = new javafx.scene.image.Image(fotoFile.toURI().toString());
+            imageView.setImage(imagen);
+
+            ScrollPane scrollPane = new ScrollPane();
+            scrollPane.setContent(imageView);
+
+            DoubleProperty zoomProperty = new SimpleDoubleProperty(1.0);
+            imageView.fitWidthProperty().bind(scrollPane.widthProperty());
+            imageView.fitHeightProperty().bind(scrollPane.heightProperty());
+
+            imageView.preserveRatioProperty().set(true);
+
+            final double MAX_ZOOM = 3.0;
+            final double MIN_ZOOM = 0.1;
+
+            imageView.scaleXProperty().bind(zoomProperty);
+            imageView.scaleYProperty().bind(zoomProperty);
+
+            StackPane stackPane = new StackPane(imageView);
+            stackPane.setOnScroll((ScrollEvent eventScroll) -> {
+            double delta = 1.2;
+
+            if (eventScroll.getDeltaY() < 0) {
+                zoomProperty.set(Math.max(MIN_ZOOM, zoomProperty.get() / delta));
+                } else {
+                    zoomProperty.set(Math.min(MAX_ZOOM, zoomProperty.get() * delta));
+                }
+            });
+
+        
+            final Delta dragDelta = new Delta();
+            stackPane.setOnMousePressed((MouseEvent eventMouse) -> {
+                dragDelta.x = imageView.getTranslateX() - eventMouse.getSceneX();
+                dragDelta.y = imageView.getTranslateY() - eventMouse.getSceneY();
+            });
+
+            stackPane.setOnMouseDragged((MouseEvent eventMouse) -> {
+                imageView.setTranslateX(eventMouse.getSceneX() + dragDelta.x);
+                imageView.setTranslateY(eventMouse.getSceneY() + dragDelta.y);
+            });
+
+            scrollPane.setContent(stackPane);
+
+            VBox vbox = new VBox(scrollPane);
+            vbox.setAlignment(Pos.CENTER);
+            vbox.setPadding(new Insets(10));
+
+            Scene scene = new Scene(vbox);
+
+            stage.setScene(scene);
+            stage.setTitle("Plano de Venta - ID: " + idVenta);
+            stage.show();
+        } else {
+            mostrarAlerta("No se encontró ninguna foto para esta venta.", Alert.AlertType.WARNING);
+        }
+    }
+
+    private static class Delta {
+        double x, y;
+    
+    }
+    private void mostrarAlerta(String mensaje, AlertType tipo) {
+        Alert alert = new Alert(tipo);
+        alert.setHeaderText(null);
+        alert.setContentText(mensaje);
+        alert.showAndWait();
+    }
+
     @FXML
     void btnGenerarPDFClicked(ActionEvent event) {
     Document document = new Document();
@@ -236,44 +331,46 @@ public class buscarVentasController {
         LocalDate localDate = LocalDate.now();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         String formattedDate = localDate.format(formatter);
-
-       
-        Paragraph paragraph = new Paragraph(formattedDate);
-        paragraph.setAlignment(Element.ALIGN_RIGHT);
-        document.add(paragraph);
-
-        
         String logoPath = "src/Resources/img/verona.png";
 
-        
+        PdfPTable tableHeader = new PdfPTable(3);
+        tableHeader.setWidthPercentage(100);
+        float[] columnWidths2 = {20f, 60f, 20f};
+        tableHeader.setWidths(columnWidths2);
+
         Image logo = Image.getInstance(logoPath);
         logo.scaleAbsolute(115, 100);
-        logo.setAlignment(Element.ALIGN_CENTER);
-        document.add(logo);
+        PdfPCell cellLogo = new PdfPCell(logo);
+        cellLogo.setBorder(Rectangle.NO_BORDER);
+        tableHeader.addCell(cellLogo);
 
-      
-        Font fontEncabezado = new Font(Font.FontFamily.TIMES_ROMAN, 16, Font.BOLD);
-        Paragraph encabezado = new Paragraph("Marmoleria Verona", fontEncabezado);
-        encabezado.setAlignment(Element.ALIGN_CENTER);
-        document.add(encabezado);
+        Font fontItalic = new Font(Font.FontFamily.TIMES_ROMAN, 15, Font.ITALIC);
 
-       
-        Font fontDetalles = new Font(Font.FontFamily.TIMES_ROMAN, 12, Font.ITALIC);
-        Paragraph detallesVenta = new Paragraph("Detalles de la Venta", fontDetalles);
-        detallesVenta.setAlignment(Element.ALIGN_CENTER);
-        document.add(detallesVenta);
+        PdfPCell cellTitle = new PdfPCell(new Phrase("Detalle de Venta", fontItalic));
+        cellTitle.setHorizontalAlignment(Element.ALIGN_CENTER);
+        cellTitle.setVerticalAlignment(Element.ALIGN_MIDDLE);
+        cellTitle.setBorder(Rectangle.NO_BORDER);
+        tableHeader.addCell(cellTitle);
 
-        document.add(new Paragraph("\n"));
-        document.add(new Paragraph("\n"));
+
+        PdfPCell cellFechaText = new PdfPCell(new Phrase(formattedDate));
+        cellFechaText.setHorizontalAlignment(Element.ALIGN_RIGHT);
+        cellFechaText.setVerticalAlignment(Element.ALIGN_MIDDLE);
+        cellFechaText.setBorder(Rectangle.NO_BORDER);
+        tableHeader.addCell(cellFechaText);
+
+        document.add(tableHeader);
+
 
         
-        Font fontNegrita = new Font(Font.FontFamily.TIMES_ROMAN, 12, Font.BOLD);
-        Font fontNormal = new Font(Font.FontFamily.TIMES_ROMAN, 10, Font.NORMAL);
-        Font fontNormal1 = new Font(Font.FontFamily.TIMES_ROMAN, 6, Font.NORMAL);
+        Font fontNegrita = new Font(Font.FontFamily.TIMES_ROMAN, 15, Font.BOLD);
+        Font fontNormal = new Font(Font.FontFamily.TIMES_ROMAN, 15, Font.NORMAL);
+        Font fontMini = new Font(Font.FontFamily.TIMES_ROMAN, 10, Font.NORMAL);
+        Font fontMiniSub = new Font(Font.FontFamily.TIMES_ROMAN, 10, Font.UNDERLINE);
+
 
         Paragraph paragraph1 = new Paragraph();
         Paragraph paragraph2 = new Paragraph();
-        Paragraph paragraph3 = new Paragraph();
         Paragraph paragraph4 = new Paragraph();
         Paragraph paragraph5 = new Paragraph();
         Paragraph paragraph7 = new Paragraph();
@@ -284,6 +381,7 @@ public class buscarVentasController {
         Paragraph paragraph12 = new Paragraph();
         Paragraph paragraph13 = new Paragraph();
         Paragraph paragraph14 = new Paragraph();
+        Paragraph paragraph15 = new Paragraph();
 
         Chunk chunkNegrita = new Chunk("ID Del Pedido: ", fontNegrita);
         paragraph1.add(chunkNegrita);
@@ -306,14 +404,7 @@ public class buscarVentasController {
         document.add(paragraph12);
         document.add(new Paragraph("\n"));
 
-        Chunk chunkNegrita3 = new Chunk("Fecha Creación: ", fontNegrita);
-        paragraph3.add(chunkNegrita3);
-        Chunk chunkNormal3 = new Chunk(fechaCreacionLabelToComplete.getText(), fontNormal);
-        paragraph3.add(chunkNormal3);
-        document.add(paragraph3);
-        document.add(new Paragraph("\n"));
-
-        Chunk chunkNegrita4 = new Chunk("Fecha Terminación: ", fontNegrita);
+        Chunk chunkNegrita4 = new Chunk("Fecha Estimada de Terminación: ", fontNegrita);
         paragraph4.add(chunkNegrita4);
         Chunk chunkNormal4 = new Chunk(fechaTerminacionLabelToComplete.getText(), fontNormal);
         paragraph4.add(chunkNormal4);
@@ -335,23 +426,46 @@ public class buscarVentasController {
         document.add(paragraph7);
         document.add(new Paragraph("\n"));
         
-        Chunk chunkNegrita8 = new Chunk("Importe Total: ", fontNegrita);
+        Chunk chunkNegrita8 = new Chunk("Importe Total de la Venta: ", fontNegrita);
         paragraph8.add(chunkNegrita8);
-        Chunk chunkNormal8 = new Chunk(importeTotalLabelToComplete.getText(), fontNormal);
-        paragraph8.add(chunkNormal8);
-        document.add(paragraph8);
-        document.add(new Paragraph("\n"));
-
-        Chunk chunkNegrita9 = new Chunk("Saldo: ", fontNegrita);
-        paragraph9.add(chunkNegrita9);
-        Chunk chunkNormal9 = new Chunk(saldoLabelToComplete.getText(), fontNormal);
-        paragraph9.add(chunkNormal9);
-        document.add(paragraph9);
-        document.add(new Paragraph("\n"));
-
-       
-
         
+        try {
+            String importeTotal = importeTotalLabelToComplete.getText();
+            double importeV = Double.parseDouble(importeTotal);
+            Locale localeArgentina = Locale.forLanguageTag("es-AR");
+            NumberFormat formatoMonedaD = NumberFormat.getCurrencyInstance(localeArgentina);
+
+            String importeFormateado = formatoMonedaD.format(importeV);
+
+            Chunk chunkNormal8 = new Chunk(importeFormateado, fontNormal);
+            paragraph8.add(chunkNormal8);
+            document.add(paragraph8);
+            document.add(new Paragraph("\n"));
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        Chunk chunkNegrita9 = new Chunk("Saldo Restante: ", fontNegrita);
+        paragraph9.add(chunkNegrita9);
+        if (!saldoLabelToComplete.getText().equals("0")) {
+            String importeSaldo = saldoLabelToComplete.getText();
+            double saldo = Double.parseDouble(importeSaldo);
+            Locale localeArgentina = Locale.forLanguageTag("es-AR");
+            NumberFormat formatoSaldo = NumberFormat.getCurrencyInstance(localeArgentina);
+            String importeFormateado1 = formatoSaldo.format(saldo);
+
+            Chunk chunkNormal9 = new Chunk(importeFormateado1, fontNormal);
+            paragraph9.add(chunkNormal9);
+            document.add(paragraph9);
+            document.add(new Paragraph("\n"));
+        } else {
+            
+            Chunk chunkNormal9 = new Chunk("No hay saldo pendiente. El cliente ha abonado la totalidad de la venta.", fontNormal);
+            paragraph9.add(chunkNormal9);
+            document.add(paragraph9);
+            document.add(new Paragraph("\n"));
+        }
         String nombreColocador = colocadorLabelToComplete.getText();
 
         
@@ -376,7 +490,7 @@ public class buscarVentasController {
             
         }
 
-        document.add(new Paragraph("\n"));
+        
 
    
         PdfPTable tableEntradas = new PdfPTable(7);
@@ -455,9 +569,28 @@ public class buscarVentasController {
         }
         document.add(tableEntradas);
         document.add(new Paragraph("\n"));
-        document.add(new Paragraph("\n"));
 
-        
+        Chunk chunkNormal1 = new Chunk("El horario de retiro es de lunes a viernes de 9:00 a 12:00 y de 13:30 a 16:30, sábados de 9:00 a 11:30.", fontMini);
+        paragraph13.add(chunkNormal1);
+        document.add(paragraph13);
+
+        Chunk chunkNorma = new Chunk("Flete y colocación (en caso de ser solicitado) corren por cuenta del cliente.", fontMini);
+        paragraph14.add(chunkNorma);
+        document.add(paragraph14);
+
+        Chunk chunkNorma1 = new Chunk("Tratándose de un producto natural, deberán admitirse pequeñas variaciones en la tonalidad y el vetado de las mercaderías entregadas con respecto a las muestras exhibidas.", fontMini);
+        paragraph15.add(chunkNorma1);
+        document.add(paragraph15);
+
+        Chunk chunkAclaracion1 = new Chunk("La fecha estimada de terminación no es completamente precisa; para retirar, debe esperar a ser contactado/a por nosotros.", fontMiniSub);
+        document.add(new Paragraph(chunkAclaracion1));
+
+        Chunk chunkAclaracion = new Chunk("Este documento no es válido como factura.", fontMini);
+        document.add(new Paragraph(chunkAclaracion));
+
+        Chunk saludo = new Chunk("¡Gracias por elegirnos! Valoramos tu preferencia y estamos comprometidos a ofrecerte el mejor servicio posible.", fontNegrita);
+        document.add(new Paragraph(saludo));
+        document.add(new Paragraph("\n"));
 
 
         PdfPTable table = new PdfPTable(6);
@@ -467,13 +600,13 @@ public class buscarVentasController {
 
         Image locationImage = Image.getInstance("src/Resources/img/location.png");
         locationImage.scaleAbsolute(15, 15); 
-        PdfPCell cell1 = new PdfPCell(locationImage);
-        cell1.setBorder(Rectangle.NO_BORDER);
-        table.addCell(cell1);
+        PdfPCell cell1a = new PdfPCell(locationImage);
+        cell1a.setBorder(Rectangle.NO_BORDER);
+        table.addCell(cell1a);
 
-        PdfPCell cell2Text = new PdfPCell(new Phrase("Juan Bautista Alberdi 3333, CABA"));
-        cell2Text.setBorder(Rectangle.NO_BORDER);
-        table.addCell(cell2Text);
+        PdfPCell cell2TextA = new PdfPCell(new Phrase("Juan Bautista Alberdi 3333, CABA"));
+        cell2TextA.setBorder(Rectangle.NO_BORDER);
+        table.addCell(cell2TextA);
 
 
         Image phoneImage = Image.getInstance("src/Resources/img/wpp.png");
@@ -498,13 +631,7 @@ public class buscarVentasController {
 
         document.add(table);
 
-        
-        Chunk chunkNormal1 = new Chunk("Los materiales son naturales y no son iguales que las muestras", fontNormal1);
-        paragraph13.add(chunkNormal1);
-        document.add(paragraph13);
-        Chunk chunkNorma = new Chunk("Documento no valido como factura", fontNormal1);
-        paragraph14.add(chunkNorma);
-        document.add(paragraph14);
+        document.add(new Paragraph("\n"));
 
 
 
@@ -589,6 +716,7 @@ public class buscarVentasController {
         linea9.setVisible(false);
         linea10.setVisible(false);
         btnGenerarPDF.setVisible(false);
+        btnFotoPlano.setVisible(false);
     }
 
     
@@ -712,6 +840,7 @@ public class buscarVentasController {
         linea9.setVisible(true);
         linea10.setVisible(true);
         btnGenerarPDF.setVisible(true);
+        btnFotoPlano.setVisible(true);
         cargarEntradas();
     }
 

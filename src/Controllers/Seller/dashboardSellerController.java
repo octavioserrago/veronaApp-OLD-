@@ -63,6 +63,9 @@ public class dashboardSellerController {
     private Label cotizacionDolarBlue;
 
     @FXML
+    private Label msjDelDia;
+
+    @FXML
     private Label fechaLabel;
 
     @FXML
@@ -76,6 +79,8 @@ public class dashboardSellerController {
 
     @FXML
     private TableView<Venta> tablaVentasResumen;
+
+    
 
     @FXML
     void BtnCotizacionesClicked(ActionEvent event) {
@@ -106,10 +111,7 @@ public class dashboardSellerController {
         SceneController sceneController = new SceneController((Stage) btnCaja.getScene().getWindow());
         sceneController.switchToCajaSeller();
     }
-    @FXML
-    void btnVentasModificarEstadoClicked(ActionEvent event){
-
-    }
+    
 
     @FXML
     void btnCerrarSesionClicked(ActionEvent event) {
@@ -155,6 +157,29 @@ public class dashboardSellerController {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    @FXML
+    void btnVentasModificarEstadoClicked(ActionEvent event) {
+        try {
+            MenuItem menuItem = (MenuItem) event.getSource();
+            MenuButton menuButton = (MenuButton) menuItem.getParentPopup().getOwnerNode();
+            Stage stage = (Stage) menuButton.getScene().getWindow();
+
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/Resources/Views/modificarEstadoVenta.fxml"));
+            AnchorPane rootPane = loader.load();
+
+            SceneController sceneController = new SceneController(stage);
+            sceneController.switchToVentas(rootPane);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    @FXML
+    void btnBuscarClicked(ActionEvent event) {
+
     }
 
     

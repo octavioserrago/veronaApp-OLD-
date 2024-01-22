@@ -53,7 +53,11 @@ public class loginController {
             
             switch (roleID) {
                 case 1:
-                    System.out.println("Pagina de administrador");
+
+                    if (sceneController != null) {
+                
+                        sceneController.switchToDashboardManager();
+                    }   
                     
                     break;
 
@@ -62,7 +66,7 @@ public class loginController {
                 if (sceneController != null) {
                 
                   sceneController.switchToDashboardSeller();
-              }
+                }
               break;
 
                 default:
