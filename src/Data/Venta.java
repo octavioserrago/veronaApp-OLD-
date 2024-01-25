@@ -29,10 +29,11 @@ public class Venta {
     private String telefono2;
     private String email;
     private String nombreApellidoColocador;
+    private int sucursalID;
 
     public Venta(int ventasID,String nombreCliente,String descripcion, String material, String color,
                  String fechaEstimadaTerminacion, int colocadoresID, double precioColocacion, int monedasID, Double importe,
-                 String fotoPlano, String estado, int token, String telefono1, String telefono2, String email) {
+                 String fotoPlano, String estado, int token, String telefono1, String telefono2, String email, int sucursalID) {
         this.ventasID = ventasID;
         this.nombreCliente = nombreCliente;
         this.descripcion = descripcion;
@@ -49,6 +50,7 @@ public class Venta {
         this.telefono1 = telefono1;
         this.telefono2 = telefono2;
         this.email = email;
+        this.sucursalID = sucursalID;
     }
     public void setNombreApellidoColocador(String nombreApellidoColocador) {
         this.nombreApellidoColocador = nombreApellidoColocador;
@@ -162,6 +164,12 @@ public class Venta {
     public void setEmail(String email) {
         this.email = email;
     }
+    public int getSucursalID() {
+        return sucursalID;
+    }
+    public void setSucursalID(int sucursalID) {
+        this.sucursalID = sucursalID;
+    }
 
     DatabaseConnection con = new DatabaseConnection();
 
@@ -172,7 +180,7 @@ public class Venta {
     public void insertarVenta() throws SQLException {
         String sql = "INSERT INTO Ventas (nombreCliente, descripcion, material, color," +
                 "fechaEstimadaTerminacion, colocadoresID, precioColocacion, monedasID, importe, " +
-                "estado, token, telefono1, telefono2, email) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                "estado, token, telefono1, telefono2, email, sucursalID) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
         try (PreparedStatement preparedStatement = conexion.prepareStatement(sql)) {
 
@@ -190,6 +198,7 @@ public class Venta {
             preparedStatement.setString(12, telefono1);
             preparedStatement.setString(13, telefono2);
             preparedStatement.setString(14, email);
+            preparedStatement.setInt(15, sucursalID);
 
             preparedStatement.executeUpdate();
         }
@@ -221,7 +230,8 @@ public class Venta {
                         resultSet.getInt("token"),
                         resultSet.getString("telefono1"),
                         resultSet.getString("telefono2"),
-                        resultSet.getString("email")
+                        resultSet.getString("email"),
+                        resultSet.getInt("sucursalID")
                 );
     
                 venta.setFecha(formatFecha(resultSet.getString("fecha"), "fecha"));
@@ -320,9 +330,8 @@ public class Venta {
                             resultSet.getInt("token"),
                             resultSet.getString("telefono1"),
                             resultSet.getString("telefono2"),
-                            resultSet.getString("email")
-
-                            
+                            resultSet.getString("email"),
+                            resultSet.getInt("sucursalID")
                     );
 
                     
@@ -373,7 +382,9 @@ public class Venta {
                         resultSet.getInt("token"),
                         resultSet.getString("telefono1"),
                         resultSet.getString("telefono2"),
-                        resultSet.getString("email")
+                        resultSet.getString("email"),
+                        resultSet.getInt("sucursalID")
+
                     );
                 }
             }

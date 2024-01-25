@@ -1,6 +1,8 @@
 package Controllers;
 
 
+import java.sql.SQLException;
+
 import Data.User;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -33,41 +35,43 @@ public class loginController {
         this.sceneController = sceneController;
     }
 
-    
+    public void reinicializarLoginController() {
+        loginField.setText("");
+        passwordField.setText("");
+        errorLoginLabel.setVisible(false);
+    }
+
+
 
     @FXML
-    void btnLoginClick(ActionEvent event) {
+    void btnLoginClick(ActionEvent event) throws SQLException {
+        System.out.println("Before Login Attempt");
         String userName = loginField.getText();
         String password = passwordField.getText();
+        int sucursalID = 0;
 
-        User user = new User(userName, password);
+        User user = new User(userName, password, "","",sucursalID);
 
         if (user.login(userName, password)) {
-            
-            System.out.println("Exito al iniciar Sesion!");
-
-            
             int roleID = user.getRoleID();
-            
+            sucursalID = user.getSucursalID();            
+            User.setCurrentUser(user);
+            System.out.println(sucursalID);
 
-            
             switch (roleID) {
                 case 1:
-
+                    System.out.println("Switching to Dashboard Manager");
                     if (sceneController != null) {
-                
-                        sceneController.switchToDashboardManager();
-                    }   
-                    
+                        sceneController.switchToManagerDashboard();
+                    }
                     break;
 
                 case 2:
-                    
-                if (sceneController != null) {
-                
-                  sceneController.switchToDashboardSeller();
-                }
-              break;
+                    System.out.println("Switching to Dashboard Seller");
+                    if (sceneController != null) {
+                        sceneController.switchToDashboardSeller();
+                    }
+                    break;
 
                 default:
                     System.out.println("Error Relacionado al ROL");
@@ -79,4 +83,5 @@ public class loginController {
             System.out.println("Error en el inicio de sesión. Usuario o contraseña incorrectos.");
         }
     }
+
 }

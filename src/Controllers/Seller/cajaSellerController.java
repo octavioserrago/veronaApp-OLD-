@@ -5,6 +5,7 @@ import java.sql.SQLException;
 import Controllers.SceneController;
 import Data.Cotizacion;
 import Data.Entrada;
+import Data.User;
 import Data.Venta;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -67,8 +68,8 @@ public class cajaSellerController {
     @FXML
     private Button btnBuscar;
 
-    Venta venta = new Venta(0, null, null, null, null, null, 0, 0, 0, null, null, null, 0, null, null, null);
-
+    Venta venta = new Venta(0, null, null, null, null, null, 0, 0, 0, null, null, null, 0, null, null, null,0);
+    User user = User.getCurrentUser();
     private void buscar() {
         try {
             int numero = Integer.parseInt(idNombreClienteTextField.getText());
@@ -125,13 +126,14 @@ public class cajaSellerController {
         Integer ultimoIDCotizacion = null;
         double importeEnPesos = 0;
         double tasaCambio = 0;
+        String nombreVendedor = user.getNombre()+"\n"+user.getApellido();
 
         if ("ARS".equals(monedaSeleccionada)) {
             moneda = 1;
             importeEnPesos = importe;
 
             try {
-                Entrada entrada = new Entrada(detalle, metodoPagoSeleccionado, moneda, importe, 0, importeEnPesos, venta.getVentasID());
+                Entrada entrada = new Entrada(detalle, metodoPagoSeleccionado, moneda, importe, 0, importeEnPesos, venta.getVentasID(),nombreVendedor);
                 boolean insercionExitosa = entrada.insertarEntradaPesos();
 
                 if (insercionExitosa) {
@@ -153,9 +155,10 @@ public class cajaSellerController {
             ultimoIDCotizacion = (int) ultimaCotizacion[0];
             tasaCambio = (double) ultimaCotizacion[1];
             importeEnPesos = importe * tasaCambio;
+            
 
             try {
-            Entrada entrada = new Entrada(detalle, metodoPagoSeleccionado, moneda, importe, ultimoIDCotizacion, importeEnPesos, venta.getVentasID());
+            Entrada entrada = new Entrada(detalle, metodoPagoSeleccionado, moneda, importe, ultimoIDCotizacion, importeEnPesos, venta.getVentasID(),nombreVendedor);
             boolean insercionExitosa = entrada.insertarEntrada();
 
             if (insercionExitosa) {

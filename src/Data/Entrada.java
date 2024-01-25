@@ -20,11 +20,11 @@ public class Entrada {
     private String simboloMoneda;
     private double tasaCambio;
     private String nombreCliente;
+    private String nombreVendedor;
     
 
-
     public Entrada(String detalle, String metodoPago, int monedasID, Double importe, int cotizacionesID,
-            double importeEnPesos, int ventasID) {
+            double importeEnPesos, int ventasID, String nombreVendedor) {
         this.detalle = detalle;
         this.metodoPago = metodoPago;
         this.monedasID = monedasID;
@@ -32,6 +32,7 @@ public class Entrada {
         this.cotizacionesID = cotizacionesID;
         this.importeEnPesos = importeEnPesos;
         this.ventasID = ventasID;
+        this.nombreVendedor = nombreVendedor;
     }
 
     public String getFecha() {
@@ -120,6 +121,13 @@ public class Entrada {
     public void setNombreCliente(String nombreCliente) {
         this.nombreCliente = nombreCliente;
     }
+    public String getNombreVendedor() {
+        return nombreVendedor;
+    }
+
+    public void setNombreVendedor(String nombreVendedor) {
+        this.nombreVendedor = nombreVendedor;
+    }
 
     DatabaseConnection con = new DatabaseConnection();
 
@@ -128,7 +136,7 @@ public class Entrada {
 	PreparedStatement stmt;
 
     public boolean insertarEntrada() throws SQLException {
-        String sql = "INSERT INTO Entradas (detalle, metodoPago, monedasID, importe, cotizacionesID, importeEnPesos, ventasID) VALUES (?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO Entradas (detalle, metodoPago, monedasID, importe, cotizacionesID, importeEnPesos, ventasID, nombreVendedor) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
     
         try (PreparedStatement preparedStatement = conexion.prepareStatement(sql)) {
             preparedStatement.setString(1, detalle);
@@ -138,6 +146,7 @@ public class Entrada {
             preparedStatement.setInt(5, cotizacionesID);
             preparedStatement.setDouble(6, importeEnPesos);
             preparedStatement.setInt(7, ventasID);
+            preparedStatement.setString(8, nombreVendedor);
     
             int filasAfectadas = preparedStatement.executeUpdate();
     
@@ -146,7 +155,7 @@ public class Entrada {
     }
 
     public boolean insertarEntradaPesos() throws SQLException {
-        String sql = "INSERT INTO Entradas (detalle, metodoPago, monedasID, importe, importeEnPesos, ventasID) VALUES (?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO Entradas (detalle, metodoPago, monedasID, importe, importeEnPesos, ventasID, nombreVendedor) VALUES (?, ?, ?, ?, ?,?,?)";
     
         try (PreparedStatement preparedStatement = conexion.prepareStatement(sql)) {
             preparedStatement.setString(1, detalle);
@@ -155,6 +164,7 @@ public class Entrada {
             preparedStatement.setDouble(4, importe);
             preparedStatement.setDouble(5, importeEnPesos);
             preparedStatement.setInt(6, ventasID);
+            preparedStatement.setString(7, nombreVendedor);
     
             int filasAfectadas = preparedStatement.executeUpdate();
     
@@ -183,13 +193,15 @@ public class Entrada {
                         resultSet.getDouble("importe"),
                         resultSet.getInt("cotizacionesID"),
                         resultSet.getDouble("importeEnPesos"),
-                        resultSet.getInt("ventasID")
+                        resultSet.getInt("ventasID"),
+                        resultSet.getString("nombreVendedor")
                     );
     
                     entrada.setFecha(resultSet.getString("fecha")); 
                     entrada.setSimboloMoneda(resultSet.getString("monedaSimbolo")); 
                     entrada.setTasaCambio(resultSet.getDouble("tasaCambio"));
                     entrada.setNombreCliente(resultSet.getString("nombreCliente"));
+                    entrada.setNombreVendedor(resultSet.getString("nombreVendedor"));
     
                     entradasPorCliente.add(entrada);
                 }

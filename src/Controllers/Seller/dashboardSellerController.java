@@ -13,6 +13,7 @@ import Controllers.SceneController;
 import Controllers.Common.cotizacionesController;
 import Data.Bachas;
 import Data.Cotizacion;
+import Data.User;
 import Data.Venta;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleIntegerProperty;
@@ -115,9 +116,14 @@ public class dashboardSellerController {
 
     @FXML
     void btnCerrarSesionClicked(ActionEvent event) {
+        User user = new User("", "","","",0);
+        User.setCurrentUser(user);
+        System.gc();
         SceneController sceneController = new SceneController((Stage) btnCerrarSesion.getScene().getWindow());
         sceneController.switchToLogin();
     }
+
+
 
     @FXML
     void btnPedidosClicked(ActionEvent event) {
@@ -174,12 +180,6 @@ public class dashboardSellerController {
         } catch (IOException e) {
             e.printStackTrace();
         }
-    }
-
-
-    @FXML
-    void btnBuscarClicked(ActionEvent event) {
-
     }
 
     
@@ -258,7 +258,7 @@ public class dashboardSellerController {
     }
     
     private List<Venta> obtenerTodasLasVentas() throws SQLException {
-        Venta venta = new Venta(0,null, null, null, null, null, 0, 0.0, 0, 0.0, null, null, 0, null, null, null);
+        Venta venta = new Venta(0,null, null, null, null, null, 0, 0.0, 0, 0.0, null, null, 0, null, null, null,0);
         return venta.allVentas();
     }
 

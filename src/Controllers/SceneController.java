@@ -16,18 +16,36 @@ public class SceneController {
     }
 
     public void switchToLogin() {
-        switchScene("/Resources/Views/loginScreen.fxml", "Inicio de Sesión");
+        System.out.println("Switching to Login");
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/Resources/Views/loginScreen.fxml"));
+            Parent root = loader.load();
+            // Invalidar la caché del cargador FXML
+            loader.setControllerFactory(c -> new loginController());
+            Scene scene = new Scene(root);
+            stage.setScene(scene);
+            stage.setTitle("Inicio de Sesión");
+            stage.show();
+            System.out.println("Switched to Login");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    
+    public void switchToCargarPlano() {
+        switchScene("/Resources/Views/cargarPlano.fxml", "Cargar Plano");
     }
 
-    public void switchToCargarFotoPlano() {
-        switchScene("/Resources/Views/cargarFotoPlano.fxml", "Cargar Foto De Plano");
+    public void switchToVerProduccion() {
+        switchScene("/Resources/Views/verProduccion.fxml", "Produccion");
     }
+
 
     public void switchToDashboardSeller() {
         switchScene("/Resources/Views/dashboard.fxml", "Dashboard - Vendedor");
     }
-
-    public void switchToDashboardManager() {
+    
+    public void switchToManagerDashboard() {
         switchScene("/Resources/Views/managerDashboard.fxml", "Dashboard - Gerente");
     }
 
@@ -64,6 +82,7 @@ public class SceneController {
 
 
     private void switchScene(String fxmlPath, String windowTitle) {
+        System.out.println("Switching Scene: " + fxmlPath);
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlPath));
             Parent root = loader.load();
@@ -74,6 +93,8 @@ public class SceneController {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        System.out.println("Switched Scene: " + fxmlPath);
     }
+    
 }
     

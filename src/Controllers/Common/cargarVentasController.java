@@ -9,6 +9,7 @@ import java.util.List;
 import Controllers.SceneController;
 import Data.Colocador;
 import Data.DatabaseConnection;
+import Data.User;
 import Data.Validador;
 import Data.Venta;
 import javafx.event.ActionEvent;
@@ -82,11 +83,12 @@ public class cargarVentasController {
 
     private int colocadoresID;
    
+    User user = User.getCurrentUser();
 
     @FXML
     void initialize() {
         noVisibles();
-
+    
         colocadorASK.setOnAction(event -> {
             colocadorOptions.setVisible(colocadorASK.isSelected());
             precioColocacionLabel.setVisible(colocadorASK.isSelected());
@@ -99,72 +101,95 @@ public class cargarVentasController {
     }
 
     @FXML
-void btnCargarVentaClicked(ActionEvent event) throws SQLException {
-    String estado = "En Espera";
-    String nombreCliente = nombreClienteTextField.getText();
-    String descripcion = descripcionTextFIeld.getText();
-    String material = materialTextField.getText();
-    String color = colorTextField.getText();
+    void btnCargarVentaClicked(ActionEvent event) throws SQLException {
+        String estado = "En Espera";
+        String nombreCliente = nombreClienteTextField.getText();
+        String descripcion = descripcionTextFIeld.getText();
+        String material = materialTextField.getText();
+        String color = colorTextField.getText();
 
-    String fechaEstimadaTerminacion = (fechaTerminacionSelect.getValue() != null) ?
-            fechaTerminacionSelect.getValue().toString() : null;
+        String fechaEstimadaTerminacion = (fechaTerminacionSelect.getValue() != null) ?
+                fechaTerminacionSelect.getValue().toString() : null;
 
-    String colocadorSelected = colocadorOptions.getSelectionModel().getSelectedItem();
-
-    
-    colocadoresID = obtenerIDPorNombre(colocadorSelected);
-    
-
-    String telefono1 = telefonoTextField.getText();
-    String telefono2 = telefonoSecundarioTextField.getText();
-    String email = emailTextField.getText();
-
-    Double precioColocacion = colocadorASK.isSelected() ?
-            0.0 : 0.0; 
-
-    if (colocadorASK.isSelected()) {
-        String precioColocacionText = precioColocacionTextField.getText();
+        String colocadorSelected = colocadorOptions.getSelectionModel().getSelectedItem();
 
         
-        if (!precioColocacionText.isEmpty() && precioColocacionText.matches("\\d+(\\.\\d+)?")) {
-            precioColocacion = Double.parseDouble(precioColocacionText);
-        } else {
+        colocadoresID = obtenerIDPorNombre(colocadorSelected);
+        
+
+        String telefono1 = telefonoTextField.getText();
+        String telefono2 = telefonoSecundarioTextField.getText();
+        String email = emailTextField.getText();
+
+        Double precioColocacion = colocadorASK.isSelected() ?
+                0.0 : 0.0; 
+
+        if (colocadorASK.isSelected()) {
+            String precioColocacionText = precioColocacionTextField.getText();
+
             
-            mostrarMensaje("Error: El precio de colocación no es un número válido", false);
-            return; 
+            if (!precioColocacionText.isEmpty() && precioColocacionText.matches("\\d+(\\.\\d+)?")) {
+                precioColocacion = Double.parseDouble(precioColocacionText);
+            } else {
+                
+                mostrarMensaje("Error: El precio de colocación no es un número válido", false);
+                return; 
+            }
+        }   
+
+        Venta venta = new Venta(0,nombreCliente, descripcion, material, color,
+                fechaEstimadaTerminacion, colocadoresID, precioColocacion,
+                1, Double.parseDouble(importeTextField.getText()), null, estado, 0,
+                telefono1, telefono2, email,user.getSucursalID());
+
+
+        System.out.println(user.getSucursalID());
+
+        Validador validador = new Validador(venta);
+        String errores = validador.validarVenta();
+
+        if (errores.isEmpty()) {
+            try {
+                venta.insertarVenta();
+                mostrarMensaje("Venta cargada con éxito", true);
+            } catch (SQLException e) {
+                mostrarMensaje("Error al cargar la venta", false);
+                e.printStackTrace();
+            }
+        } else {
+            mostrarMensaje("Errores en la validación: " + errores, false);
         }
     }
 
-    Venta venta = new Venta(0,nombreCliente, descripcion, material, color,
-            fechaEstimadaTerminacion, colocadoresID, precioColocacion,
-            1, Double.parseDouble(importeTextField.getText()), null, estado, 0,
-            telefono1, telefono2, email);
-
-    Validador validador = new Validador(venta);
-    String errores = validador.validarVenta();
-
-    if (errores.isEmpty()) {
-        try {
-            venta.insertarVenta();
-            mostrarMensaje("Venta cargada con éxito", true);
-        } catch (SQLException e) {
-            mostrarMensaje("Error al cargar la venta", false);
-            e.printStackTrace();
-        }
-    } else {
-        mostrarMensaje("Errores en la validación: " + errores, false);
-    }
-}
 
 
 
-
-
+    
     @FXML
     void btnVolverClicked(ActionEvent event) {
-        SceneController sceneController = new SceneController((Stage) btnVolver.getScene().getWindow());
-        sceneController.switchToDashboardSeller();
+        User user = User.getCurrentUser();
+
+        if (user != null) {
+            SceneController sceneController = new SceneController((Stage) btnVolver.getScene().getWindow());
+
+            switch (user.getRoleID()) {
+                case 1:
+                    sceneController.switchToManagerDashboard();
+                break;
+                case 2:
+                    sceneController.switchToDashboardSeller();
+                break;
+                case 3:
+                // Lógica para el administrador
+                break;
+                default:
+                System.out.println("Error relacionado al ROL");
+                break;
+            }
+        }
     }
+
+
 
     public void noVisibles() {
         colocadorOptions.setVisible(false);

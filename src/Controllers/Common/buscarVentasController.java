@@ -19,6 +19,7 @@ import Data.Colocador;
 import Data.Cotizacion;
 import Data.DatabaseConnection;
 import Data.Entrada;
+import Data.User;
 import Data.Venta;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
@@ -230,8 +231,8 @@ public class buscarVentasController {
         idString = "";
         id = 0;
         nombreCliente = "";
-        entradaModel = new Entrada("", "", 0, 0.0, 0, 0, 0);
-        ventaModel = new Venta(id, nombreCliente, "", "", "", "", 0, 0, 0, null, "", "", 0, "", "", "");
+        entradaModel = new Entrada("", "", 0, null, 0, 0, 0, "");
+        ventaModel = new Venta(id, nombreCliente, "", "", "", "", 0, 0, 0, null, "", "", 0, "", "", "",0);
     }
 
     @FXML
@@ -344,7 +345,7 @@ public class buscarVentasController {
         cellLogo.setBorder(Rectangle.NO_BORDER);
         tableHeader.addCell(cellLogo);
 
-        Font fontItalic = new Font(Font.FontFamily.TIMES_ROMAN, 15, Font.ITALIC);
+        Font fontItalic = new Font(Font.FontFamily.TIMES_ROMAN, 14, Font.ITALIC);
 
         PdfPCell cellTitle = new PdfPCell(new Phrase("Detalle de Venta", fontItalic));
         cellTitle.setHorizontalAlignment(Element.ALIGN_CENTER);
@@ -363,8 +364,8 @@ public class buscarVentasController {
 
 
         
-        Font fontNegrita = new Font(Font.FontFamily.TIMES_ROMAN, 15, Font.BOLD);
-        Font fontNormal = new Font(Font.FontFamily.TIMES_ROMAN, 15, Font.NORMAL);
+        Font fontNegrita = new Font(Font.FontFamily.TIMES_ROMAN, 12, Font.BOLD);
+        Font fontNormal = new Font(Font.FontFamily.TIMES_ROMAN, 12, Font.NORMAL);
         Font fontMini = new Font(Font.FontFamily.TIMES_ROMAN, 10, Font.NORMAL);
         Font fontMiniSub = new Font(Font.FontFamily.TIMES_ROMAN, 10, Font.UNDERLINE);
 
@@ -493,11 +494,11 @@ public class buscarVentasController {
         
 
    
-        PdfPTable tableEntradas = new PdfPTable(7);
+        PdfPTable tableEntradas = new PdfPTable(8);
         tableEntradas.setWidthPercentage(100);
-        float[] columnWidths = {40f, 50f, 30f, 25f, 30f, 30f, 40f};
+        float[] columnWidths = {40f, 50f, 30f, 28f, 30f, 35f, 40f, 37f};
         tableEntradas.setWidths(columnWidths);
-        Font fontTitulosTabla = new Font(Font.FontFamily.TIMES_ROMAN, 12, Font.BOLD);
+        Font fontTitulosTabla = new Font(Font.FontFamily.TIMES_ROMAN, 10, Font.BOLD);
 
    
         tableEntradas.addCell(new PdfPCell(new Paragraph("Fecha", fontTitulosTabla)));
@@ -507,6 +508,7 @@ public class buscarVentasController {
         tableEntradas.addCell(new PdfPCell(new Paragraph("Importe", fontTitulosTabla)));
         tableEntradas.addCell(new PdfPCell(new Paragraph("Cotización USD", fontTitulosTabla)));
         tableEntradas.addCell(new PdfPCell(new Paragraph("Importe Total en ARS", fontTitulosTabla)));
+        tableEntradas.addCell(new PdfPCell(new Paragraph("Vendedor", fontTitulosTabla)));
 
         try {
             
@@ -519,7 +521,7 @@ public class buscarVentasController {
 
                 
                 PreparedStatement preparedStatement = conexion.prepareStatement(
-                    "SELECT fecha, detalle, metodoPago, monedasID, importe, cotizacionesID FROM Entradas WHERE ventasID = ?"
+                    "SELECT fecha, detalle, metodoPago, monedasID, importe, cotizacionesID, nombreVendedor FROM Entradas WHERE ventasID = ?"
                 );
 
                 
@@ -554,6 +556,7 @@ public class buscarVentasController {
                             tableEntradas.addCell(rs.getString(5));
                             tableEntradas.addCell(String.valueOf(tasaCambio));  
                             tableEntradas.addCell(String.valueOf(importeEnPesos));
+                            tableEntradas.addCell(rs.getString(7));
                         }
                        
                     } while (rs.next());
@@ -726,9 +729,26 @@ public class buscarVentasController {
     
     @FXML
     void btnVolverClicked(ActionEvent event) {
-      
-        SceneController sceneController = new SceneController((Stage) btnVolver.getScene().getWindow());
-        sceneController.switchToDashboardSeller();
+        User user = User.getCurrentUser();
+
+        if (user != null) {
+            SceneController sceneController = new SceneController((Stage) btnVolver.getScene().getWindow());
+
+            switch (user.getRoleID()) {
+                case 1:
+                    sceneController.switchToManagerDashboard();
+                break;
+                case 2:
+                    sceneController.switchToDashboardSeller();
+                break;
+                case 3:
+                // Lógica para el administrador
+                break;
+                default:
+                System.out.println("Error relacionado al ROL");
+                break;
+            }
+        }
     }
 
     
@@ -908,3 +928,4 @@ public class buscarVentasController {
         }
     }
 }
+
