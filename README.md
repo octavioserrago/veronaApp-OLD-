@@ -12,6 +12,11 @@ This JavaFX desktop application is designed for the management of a marble indus
 
 - **Relational Database:** The application integrates with a relational database to manage and store data efficiently.
 
+- **Branches and User Roles:** Added functionality to manage branches, where each branch has its own set of users with specific roles.
+  
+- **Production Organization:** Introducing a new feature for efficiently managing the organization of chain production within the company. This functionality enables users to streamline the production process, allocate resources effectively, and monitor the progress of each stage in the production chain. Users, particularly administrators and managers, can now optimize workflows and ensure a smooth and coordinated production flow.
+
+
 ## Getting Started
 
 ### Prerequisites
@@ -35,7 +40,7 @@ Open the project in your preferred Java IDE and configure the database connectio
 
 - **Dashboard:** The dashboard provides an overview of key business metrics and activities.
 
-- **Data Management:** Utilize the application to manage and update customer information, order details, and inventory.
+- **Data Management:** Utilize the application to manage and update customer information, order details, inventory, and now, branch-specific user roles.
 
 - **Reports:** Generate reports for insights into business performance.
 
