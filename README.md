@@ -1,8 +1,13 @@
 # Marble Industry Management System
 
+
 ## Description
 
 This JavaFX desktop application is designed for the management of a marble industry company in Argentina. The goal is to provide a user-friendly interface for efficient business administration. The application utilizes JavaFX for the graphical user interface, Scene Builder for UI design, and relational databases for data storage and management.
+
+## Coming Soon
+
+**Videos:** Stay tuned! I'll be adding instructional videos and demos to showcase the features of our Marble Industry Management System for a better comprehension as a whole. 
 
 ## Features
 
