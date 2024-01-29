@@ -128,7 +128,7 @@ public class cargarPlanoController {
             try {
                 conexion = con.conectar();
 
-                int materialColorPrecioID = Colores.obtenerColoresID(conexion, colorSeleccionado);
+                int materialColorPrecioID = Colores.obtenerColoresID(conexion, materialID, colorSeleccionado);
 
                 byte[] imgBytes = obtenerBytesDeImagen(selectedFile);
 

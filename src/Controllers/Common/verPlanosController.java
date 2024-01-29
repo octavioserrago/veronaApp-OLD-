@@ -91,7 +91,6 @@ public class verPlanosController {
         colMaterial.setCellValueFactory(cellData -> cellData.getValue().materialProperty());
         colColor.setCellValueFactory(cellData -> cellData.getValue().colorProperty());
         colEstado.setCellValueFactory(cellData -> cellData.getValue().estadoProperty());
-
         colImagen.setCellValueFactory(cellData -> cellData.getValue().verImagenButtonProperty());
     }
 

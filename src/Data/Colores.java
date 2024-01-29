@@ -75,12 +75,14 @@ public class Colores {
         return listaColores;
     }
 
-    public static int obtenerColoresID(Connection conexion, String color) {
+    public static int obtenerColoresID(Connection conexion, int materialID, String color) {
         int materialColorPrecioID = 0;
 
-        String sql = "SELECT materialColorPrecioID FROM Materiales_Colores_Precios WHERE color = ?";
+        String sql = "SELECT materialColorPrecioID FROM Materiales_Colores_Precios WHERE materialID = ? AND color = ?";
+
         try (PreparedStatement preparedStatement = conexion.prepareStatement(sql)) {
-            preparedStatement.setInt(1, materialColorPrecioID);
+            preparedStatement.setInt(1, materialID);
+            preparedStatement.setString(2, color);
 
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
                 if (resultSet.next()) {
