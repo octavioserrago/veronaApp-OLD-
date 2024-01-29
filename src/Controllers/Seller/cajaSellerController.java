@@ -68,8 +68,9 @@ public class cajaSellerController {
     @FXML
     private Button btnBuscar;
 
-    Venta venta = new Venta(0, null, null, null, null, null, 0, 0, 0, null, null, null, 0, null, null, null,0);
+    Venta venta = new Venta(0, null, null, null, null, null, 0, 0, 0, null, null, 0, null, null, null, 0);
     User user = User.getCurrentUser();
+
     private void buscar() {
         try {
             int numero = Integer.parseInt(idNombreClienteTextField.getText());
@@ -126,14 +127,15 @@ public class cajaSellerController {
         Integer ultimoIDCotizacion = null;
         double importeEnPesos = 0;
         double tasaCambio = 0;
-        String nombreVendedor = user.getNombre()+"\n"+user.getApellido();
+        String nombreVendedor = user.getNombre() + "\n" + user.getApellido();
 
         if ("ARS".equals(monedaSeleccionada)) {
             moneda = 1;
             importeEnPesos = importe;
 
             try {
-                Entrada entrada = new Entrada(detalle, metodoPagoSeleccionado, moneda, importe, 0, importeEnPesos, venta.getVentasID(),nombreVendedor);
+                Entrada entrada = new Entrada(detalle, metodoPagoSeleccionado, moneda, importe, 0, importeEnPesos,
+                        venta.getVentasID(), nombreVendedor);
                 boolean insercionExitosa = entrada.insertarEntradaPesos();
 
                 if (insercionExitosa) {
@@ -146,7 +148,7 @@ public class cajaSellerController {
                 mostrarMensaje("Error al registrar entrada: " + e.getMessage(), "red");
                 e.printStackTrace();
             }
-            
+
         } else if ("USD".equals(monedaSeleccionada)) {
             moneda = 3;
             Cotizacion cotizacion = new Cotizacion("", 0);
@@ -155,17 +157,17 @@ public class cajaSellerController {
             ultimoIDCotizacion = (int) ultimaCotizacion[0];
             tasaCambio = (double) ultimaCotizacion[1];
             importeEnPesos = importe * tasaCambio;
-            
 
             try {
-            Entrada entrada = new Entrada(detalle, metodoPagoSeleccionado, moneda, importe, ultimoIDCotizacion, importeEnPesos, venta.getVentasID(),nombreVendedor);
-            boolean insercionExitosa = entrada.insertarEntrada();
+                Entrada entrada = new Entrada(detalle, metodoPagoSeleccionado, moneda, importe, ultimoIDCotizacion,
+                        importeEnPesos, venta.getVentasID(), nombreVendedor);
+                boolean insercionExitosa = entrada.insertarEntrada();
 
-            if (insercionExitosa) {
-                mostrarMensaje("Entrada registrada correctamente", "green");
-            } else {
-                mostrarMensaje("Error al registrar entrada", "red");
-            }
+                if (insercionExitosa) {
+                    mostrarMensaje("Entrada registrada correctamente", "green");
+                } else {
+                    mostrarMensaje("Error al registrar entrada", "red");
+                }
 
             } catch (SQLException e) {
                 mostrarMensaje("Error al registrar entrada: " + e.getMessage(), "red");
@@ -173,7 +175,6 @@ public class cajaSellerController {
             }
         }
     }
-
 
     private void mostrarMensaje(String mensaje, String color) {
         resultadoRegistroLabel.setText(mensaje);
@@ -199,7 +200,8 @@ public class cajaSellerController {
     }
 
     private void llenarMetodoPagosComboBox() {
-        ObservableList<String> metodoPagos = FXCollections.observableArrayList("Efectivo", "Tarjeta de débito", "Tarjeta de crédito", "Transferencia", "Cheque");
+        ObservableList<String> metodoPagos = FXCollections.observableArrayList("Efectivo", "Tarjeta de débito",
+                "Tarjeta de crédito", "Transferencia", "Cheque");
         metodoPagosComboBox.setItems(metodoPagos);
     }
 

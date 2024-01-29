@@ -28,7 +28,6 @@ public class cargarVentasController {
     @FXML
     private Label alertLabel;
 
-
     @FXML
     private Button btnCargarVenta;
 
@@ -46,7 +45,6 @@ public class cargarVentasController {
 
     @FXML
     private Label cantidadBachasLabel;
-
 
     @FXML
     private TextArea descripcionTextFIeld;
@@ -82,22 +80,21 @@ public class cargarVentasController {
     private TextField precioColocacionTextField;
 
     private int colocadoresID;
-   
+
     User user = User.getCurrentUser();
 
     @FXML
     void initialize() {
         noVisibles();
-    
+
         colocadorASK.setOnAction(event -> {
             colocadorOptions.setVisible(colocadorASK.isSelected());
             precioColocacionLabel.setVisible(colocadorASK.isSelected());
             precioColocacionTextField.setVisible(colocadorASK.isSelected());
         });
 
-
         llenarComboBoxColocadores();
-        
+
     }
 
     @FXML
@@ -108,40 +105,36 @@ public class cargarVentasController {
         String material = materialTextField.getText();
         String color = colorTextField.getText();
 
-        String fechaEstimadaTerminacion = (fechaTerminacionSelect.getValue() != null) ?
-                fechaTerminacionSelect.getValue().toString() : null;
+        String fechaEstimadaTerminacion = (fechaTerminacionSelect.getValue() != null)
+                ? fechaTerminacionSelect.getValue().toString()
+                : null;
 
         String colocadorSelected = colocadorOptions.getSelectionModel().getSelectedItem();
 
-        
         colocadoresID = obtenerIDPorNombre(colocadorSelected);
-        
 
         String telefono1 = telefonoTextField.getText();
         String telefono2 = telefonoSecundarioTextField.getText();
         String email = emailTextField.getText();
 
-        Double precioColocacion = colocadorASK.isSelected() ?
-                0.0 : 0.0; 
+        Double precioColocacion = colocadorASK.isSelected() ? 0.0 : 0.0;
 
         if (colocadorASK.isSelected()) {
             String precioColocacionText = precioColocacionTextField.getText();
 
-            
             if (!precioColocacionText.isEmpty() && precioColocacionText.matches("\\d+(\\.\\d+)?")) {
                 precioColocacion = Double.parseDouble(precioColocacionText);
             } else {
-                
+
                 mostrarMensaje("Error: El precio de colocación no es un número válido", false);
-                return; 
+                return;
             }
-        }   
+        }
 
-        Venta venta = new Venta(0,nombreCliente, descripcion, material, color,
+        Venta venta = new Venta(0, nombreCliente, descripcion, material, color,
                 fechaEstimadaTerminacion, colocadoresID, precioColocacion,
-                1, Double.parseDouble(importeTextField.getText()), null, estado, 0,
-                telefono1, telefono2, email,user.getSucursalID());
-
+                1, Double.parseDouble(importeTextField.getText()), estado, 0,
+                telefono1, telefono2, email, user.getSucursalID());
 
         System.out.println(user.getSucursalID());
 
@@ -161,10 +154,6 @@ public class cargarVentasController {
         }
     }
 
-
-
-
-    
     @FXML
     void btnVolverClicked(ActionEvent event) {
         User user = User.getCurrentUser();
@@ -175,30 +164,26 @@ public class cargarVentasController {
             switch (user.getRoleID()) {
                 case 1:
                     sceneController.switchToManagerDashboard();
-                break;
+                    break;
                 case 2:
                     sceneController.switchToDashboardSeller();
-                break;
+                    break;
                 case 3:
-                // Lógica para el administrador
-                break;
+                    // Lógica para el administrador
+                    break;
                 default:
-                System.out.println("Error relacionado al ROL");
-                break;
+                    System.out.println("Error relacionado al ROL");
+                    break;
             }
         }
     }
-
-
 
     public void noVisibles() {
         colocadorOptions.setVisible(false);
         precioColocacionLabel.setVisible(false);
         precioColocacionTextField.setVisible(false);
-        
-    }
 
-    
+    }
 
     private void llenarComboBoxColocadores() {
         Colocador colocador = new Colocador(null, null, null, null);

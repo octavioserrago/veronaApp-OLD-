@@ -31,7 +31,7 @@ public class SceneController {
             e.printStackTrace();
         }
     }
-    
+
     public void switchToCargarPlano() {
         switchScene("/Resources/Views/cargarPlano.fxml", "Cargar Plano");
     }
@@ -40,11 +40,14 @@ public class SceneController {
         switchScene("/Resources/Views/verProduccion.fxml", "Produccion");
     }
 
+    public void switchToVerPlanos() {
+        switchScene("/Resources/Views/verPlanos.fxml", "Ver detalle de los Planos");
+    }
 
     public void switchToDashboardSeller() {
         switchScene("/Resources/Views/dashboard.fxml", "Dashboard - Vendedor");
     }
-    
+
     public void switchToManagerDashboard() {
         switchScene("/Resources/Views/managerDashboard.fxml", "Dashboard - Gerente");
     }
@@ -65,11 +68,14 @@ public class SceneController {
         switchScene("/Resources/Views/nuevaCotizacionBlue.fxml", "Nueva Cotización Blue");
     }
 
+    public void switchToBuscarVenta() {
+        switchScene("/Resources/Views/buscarVentas.fxml", "Buscador de Ventas");
+    }
+
     public void switchToModificarEstadoVenta() {
         switchScene("/Resources/Views/modificarEstadoVenta.fxml", "Modificar Estado de Venta");
     }
 
-    
     public void switchToVentas(AnchorPane rootPane) {
         try {
             Scene scene = new Scene(rootPane);
@@ -79,7 +85,6 @@ public class SceneController {
             e.printStackTrace();
         }
     }
-
 
     private void switchScene(String fxmlPath, String windowTitle) {
         System.out.println("Switching Scene: " + fxmlPath);
@@ -95,6 +100,5 @@ public class SceneController {
         }
         System.out.println("Switched Scene: " + fxmlPath);
     }
-    
+
 }
-    

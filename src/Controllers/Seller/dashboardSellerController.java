@@ -7,8 +7,6 @@ import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import java.util.List;
 
-
-
 import Controllers.SceneController;
 import Controllers.Common.cotizacionesController;
 import Data.Bachas;
@@ -76,12 +74,10 @@ public class dashboardSellerController {
     private Label fechaUltimaBlue;
 
     @FXML
-    private TableView<Bachas> bachasTablaPreview; 
+    private TableView<Bachas> bachasTablaPreview;
 
     @FXML
     private TableView<Venta> tablaVentasResumen;
-
-    
 
     @FXML
     void BtnCotizacionesClicked(ActionEvent event) {
@@ -112,24 +108,21 @@ public class dashboardSellerController {
         SceneController sceneController = new SceneController((Stage) btnCaja.getScene().getWindow());
         sceneController.switchToCajaSeller();
     }
-    
 
     @FXML
     void btnCerrarSesionClicked(ActionEvent event) {
-        User user = new User("", "","","",0);
+        User user = new User("", "", "", "", 0);
         User.setCurrentUser(user);
         System.gc();
         SceneController sceneController = new SceneController((Stage) btnCerrarSesion.getScene().getWindow());
         sceneController.switchToLogin();
     }
 
-
-
     @FXML
     void btnPedidosClicked(ActionEvent event) {
 
     }
-    
+
     @FXML
     void btnVentasClicked(ActionEvent event) {
         try {
@@ -146,7 +139,6 @@ public class dashboardSellerController {
             e.printStackTrace();
         }
     }
-
 
     @FXML
     void btnVentasBuscarClicked(ActionEvent event) {
@@ -182,10 +174,6 @@ public class dashboardSellerController {
         }
     }
 
-    
-
-    
-
     private void mostrarFechaActual() {
 
         LocalDate fechaActual = LocalDate.now();
@@ -212,57 +200,60 @@ public class dashboardSellerController {
 
     private List<Bachas> obtenerBachasStock() throws SQLException {
         Bachas bachas = new Bachas(0, null, null, 0);
-        bachas.setMarcasBachasID(2); 
+        bachas.setMarcasBachasID(2);
         return bachas.obtenerBachasStock();
     }
 
     private void cargarBachas() throws SQLException {
         List<Bachas> listaBachas = obtenerBachasStock();
-    
+
         bachasTablaPreview.getItems().clear();
         bachasTablaPreview.getColumns().clear();
-    
+
         if (listaBachas != null && !listaBachas.isEmpty()) {
-    
+
             TableColumn<Bachas, String> marcasBachasColumn = new TableColumn<>("Marca Bachas");
             TableColumn<Bachas, String> nombreModeloColumn = new TableColumn<>("Nombre Modelo");
             TableColumn<Bachas, String> medidasColumn = new TableColumn<>("Medidas");
             TableColumn<Bachas, Integer> cantidadColumn = new TableColumn<>("Cantidad");
-    
-            marcasBachasColumn.setCellValueFactory(cellData -> new SimpleStringProperty(obtenerNombreMarcaBachas(cellData.getValue().getMarcasBachasID())));
-            nombreModeloColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getNombreModelo()));
+
+            marcasBachasColumn.setCellValueFactory(cellData -> new SimpleStringProperty(
+                    obtenerNombreMarcaBachas(cellData.getValue().getMarcasBachasID())));
+            nombreModeloColumn
+                    .setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getNombreModelo()));
             medidasColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getMedidas()));
-            cantidadColumn.setCellValueFactory(cellData -> new SimpleIntegerProperty(cellData.getValue().getCantidad()).asObject());
-    
+            cantidadColumn.setCellValueFactory(
+                    cellData -> new SimpleIntegerProperty(cellData.getValue().getCantidad()).asObject());
+
             marcasBachasColumn.setMaxWidth(1f * Integer.MAX_VALUE * 25);
             nombreModeloColumn.setMaxWidth(1f * Integer.MAX_VALUE * 25);
             medidasColumn.setMaxWidth(1f * Integer.MAX_VALUE * 25);
             cantidadColumn.setMaxWidth(1f * Integer.MAX_VALUE * 25);
-    
+
             bachasTablaPreview.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
-    
-            List<TableColumn<Bachas, ?>> columnList = Arrays.asList(marcasBachasColumn, nombreModeloColumn, medidasColumn, cantidadColumn);
-    
+
+            List<TableColumn<Bachas, ?>> columnList = Arrays.asList(marcasBachasColumn, nombreModeloColumn,
+                    medidasColumn, cantidadColumn);
+
             bachasTablaPreview.getColumns().addAll(columnList);
             bachasTablaPreview.getItems().addAll(listaBachas);
             bachasTablaPreview.setItems(FXCollections.observableList(listaBachas));
         }
     }
-    
+
     private String obtenerNombreMarcaBachas(int marcasBachasID) {
-        
+
         if (marcasBachasID == 2) {
             return "Mi Pileta";
         }
         return "Desconocido";
     }
-    
+
     private List<Venta> obtenerTodasLasVentas() throws SQLException {
-        Venta venta = new Venta(0,null, null, null, null, null, 0, 0.0, 0, 0.0, null, null, 0, null, null, null,0);
+        Venta venta = new Venta(0, null, null, null, null, null, 0, 0.0, 0, 0.0, null, 0, null, null, null, 0);
         return venta.allVentas();
     }
 
-    
     private void cargarVentas() {
         try {
             List<Venta> listaVentas = obtenerTodasLasVentas();
@@ -284,21 +275,32 @@ public class dashboardSellerController {
                 TableColumn<Venta, String> telefono1Column = new TableColumn<>("Telefono");
                 TableColumn<Venta, String> telefono2Column = new TableColumn<>("Telefono Secundario");
                 TableColumn<Venta, String> emailColumn = new TableColumn<>("Email");
-    
-                ventasIDColumn.setCellValueFactory(cellData -> new SimpleIntegerProperty(cellData.getValue().getVentasID()).asObject());
-                nombreClienteColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getNombreCliente()));
-                descripcionColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getDescripcion()));
-                materialColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getMaterial()));
+
+                ventasIDColumn.setCellValueFactory(
+                        cellData -> new SimpleIntegerProperty(cellData.getValue().getVentasID()).asObject());
+                nombreClienteColumn.setCellValueFactory(
+                        cellData -> new SimpleStringProperty(cellData.getValue().getNombreCliente()));
+                descripcionColumn.setCellValueFactory(
+                        cellData -> new SimpleStringProperty(cellData.getValue().getDescripcion()));
+                materialColumn
+                        .setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getMaterial()));
                 colorColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getColor()));
                 fechaColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getFecha()));
-                fechaTerminacionColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getFechaEstimadaTerminacion()));
-                colocadorColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getNombreApellidoColocador()));
-                precioColocacionColumn.setCellValueFactory(cellData -> new SimpleDoubleProperty(cellData.getValue().getPrecioColocacion()).asObject());
-                importeColumn.setCellValueFactory(cellData -> new SimpleDoubleProperty(cellData.getValue().getImporte()).asObject());
+                fechaTerminacionColumn.setCellValueFactory(
+                        cellData -> new SimpleStringProperty(cellData.getValue().getFechaEstimadaTerminacion()));
+                colocadorColumn.setCellValueFactory(
+                        cellData -> new SimpleStringProperty(cellData.getValue().getNombreApellidoColocador()));
+                precioColocacionColumn.setCellValueFactory(
+                        cellData -> new SimpleDoubleProperty(cellData.getValue().getPrecioColocacion()).asObject());
+                importeColumn.setCellValueFactory(
+                        cellData -> new SimpleDoubleProperty(cellData.getValue().getImporte()).asObject());
                 estadoColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getEstado()));
-                tokenColumn.setCellValueFactory(cellData -> new SimpleIntegerProperty(cellData.getValue().getToken()).asObject());
-                telefono1Column.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getTelefono1()));
-                telefono2Column.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getTelefono2()));
+                tokenColumn.setCellValueFactory(
+                        cellData -> new SimpleIntegerProperty(cellData.getValue().getToken()).asObject());
+                telefono1Column
+                        .setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getTelefono1()));
+                telefono2Column
+                        .setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getTelefono2()));
                 emailColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getEmail()));
 
                 ventasIDColumn.setMaxWidth(1f * Integer.MAX_VALUE * 10);
@@ -316,12 +318,14 @@ public class dashboardSellerController {
                 telefono1Column.setMaxWidth(1f * Integer.MAX_VALUE * 25);
                 telefono2Column.setMaxWidth(1f * Integer.MAX_VALUE * 25);
                 emailColumn.setMaxWidth(1f * Integer.MAX_VALUE * 25);
-                
-    
+
                 tablaVentasResumen.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
-    
-                List<TableColumn<Venta, ?>> columnList = Arrays.asList(ventasIDColumn,nombreClienteColumn, descripcionColumn, materialColumn, colorColumn, fechaColumn,fechaTerminacionColumn, colocadorColumn, precioColocacionColumn,importeColumn, estadoColumn,tokenColumn, telefono1Column, telefono2Column, emailColumn);
-    
+
+                List<TableColumn<Venta, ?>> columnList = Arrays.asList(ventasIDColumn, nombreClienteColumn,
+                        descripcionColumn, materialColumn, colorColumn, fechaColumn, fechaTerminacionColumn,
+                        colocadorColumn, precioColocacionColumn, importeColumn, estadoColumn, tokenColumn,
+                        telefono1Column, telefono2Column, emailColumn);
+
                 tablaVentasResumen.getColumns().addAll(columnList);
                 tablaVentasResumen.getItems().addAll(listaVentas);
                 tablaVentasResumen.setItems(FXCollections.observableList(listaVentas));
