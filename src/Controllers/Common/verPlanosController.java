@@ -4,6 +4,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import Controllers.SceneController;
+import Data.Colores;
+import Data.Material;
 import Data.Plano;
 import Data.PlanosData;
 import javafx.collections.FXCollections;
@@ -35,6 +37,12 @@ public class verPlanosController {
     @FXML
     private TableColumn<PlanosData, String> colColor;
 
+    @FXML
+    private TableColumn<PlanosData, String> colEstado;
+
+    @FXML
+    private TableColumn<PlanosData, Button> colImagen;
+
     Plano plano = new Plano(null, getVentaActual(), getVentaActual(), null, getVentaActual(), null);
 
     private int ventaActual;
@@ -60,7 +68,6 @@ public class verPlanosController {
 
     private void cargarLosPlanosTabla() {
         int ventasID = Plano.getCurrentVentasID();
-        System.out.println(ventasID);
         List<Plano> listaPlanos = new ArrayList<>();
 
         try {
@@ -71,27 +78,34 @@ public class verPlanosController {
 
         ObservableList<PlanosData> data = FXCollections.observableArrayList();
         for (Plano p : listaPlanos) {
-            // Debes implementar métodos para obtener material y color según sus IDs
             String material = obtenerMaterialSegunID(p.getMaterialID());
             String color = obtenerColorSegunID(p.getColorID());
+            String estado = p.getEstado();
+            byte[] imgBytes = p.getImgBlueprint();
 
-            data.add(new PlanosData(p.getCodigoPlano(), material, color));
+            data.add(new PlanosData(p.getCodigoPlano(), material, color, estado, imgBytes));
         }
 
-        // Asignar datos a la tabla y a las columnas
         tablaDatos.setItems(data);
         colCodigoPlano.setCellValueFactory(cellData -> cellData.getValue().codigoPlanoProperty());
         colMaterial.setCellValueFactory(cellData -> cellData.getValue().materialProperty());
         colColor.setCellValueFactory(cellData -> cellData.getValue().colorProperty());
+        colEstado.setCellValueFactory(cellData -> cellData.getValue().estadoProperty());
+
+        colImagen.setCellValueFactory(cellData -> cellData.getValue().verImagenButtonProperty());
     }
 
     private String obtenerMaterialSegunID(int materialID) {
-        // Implementa la lógica para obtener el nombre del material según el ID
-        return "";
+        String material = "";
+        Material materialInstance = new Material(material);
+        material = materialInstance.obtenerMaterial(materialID);
+        return material;
     }
 
     private String obtenerColorSegunID(int colorID) {
-        // Implementa la lógica para obtener el nombre del color según el ID
-        return "";
+        String color = "";
+        Colores colorInstance = new Colores(0, "", 0, 0);
+        color = colorInstance.obtenerColor(colorID);
+        return color;
     }
 }

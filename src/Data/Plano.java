@@ -192,7 +192,7 @@ public class Plano {
 
     public List<Plano> obtenerPlanosParaVenta(int ventasID) throws SQLException {
         List<Plano> listaPlanos = new ArrayList<>();
-        String sql = "SELECT codigoPlano, materialID, materialColorPrecioID, estado FROM Planos WHERE ventasID = ?";
+        String sql = "SELECT * FROM Planos WHERE ventasID = ?";
 
         try (PreparedStatement preparedStatement = conexion.prepareStatement(sql)) {
             preparedStatement.setInt(1, ventasID);
@@ -203,7 +203,7 @@ public class Plano {
                             resultSet.getString("codigoPlano"),
                             resultSet.getInt("materialID"),
                             resultSet.getInt("materialColorPrecioID"),
-                            null, // Establecer imgBlueprint como null
+                            resultSet.getBytes("img"),
                             ventasID,
                             resultSet.getString("estado"));
 

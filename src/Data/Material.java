@@ -79,11 +79,11 @@ public class Material {
         return materialID;
     }
 
-    public static String obtenerMaterial(Connection conexion, String materialID) {
+    public String obtenerMaterial(int materialID) {
         String material = "";
         String sql = "SELECT tipoMaterial FROM Materiales WHERE materialID = ?";
         try (PreparedStatement preparedStatement = conexion.prepareStatement(sql)) {
-            preparedStatement.setString(1, materialID);
+            preparedStatement.setInt(1, materialID);
 
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
                 if (resultSet.next()) {

@@ -52,6 +52,12 @@ public class Colores {
         this.m2Precio = m2Precio;
     }
 
+    DatabaseConnection con = new DatabaseConnection();
+
+    Connection conexion = con.conectar();
+
+    PreparedStatement stmt;
+
     public static List<String> obtenerListaColoresPorMaterial(Connection conexion, int materialID) throws SQLException {
         List<String> listaColores = new ArrayList<>();
 
@@ -86,5 +92,23 @@ public class Colores {
         }
 
         return materialColorPrecioID;
+    }
+
+    public String obtenerColor(int colorID) {
+        String color = "";
+        String sql = "SELECT color FROM Materiales_Colores_Precios WHERE materialColorPrecioID = ?";
+        try (PreparedStatement preparedStatement = conexion.prepareStatement(sql)) {
+            preparedStatement.setInt(1, colorID);
+
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                if (resultSet.next()) {
+                    color = resultSet.getString("color");
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return color;
     }
 }

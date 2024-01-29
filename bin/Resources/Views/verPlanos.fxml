@@ -22,7 +22,8 @@
                 <TableColumn text="Codigo de Plano" fx:id="colCodigoPlano" />
                 <TableColumn text="Material" fx:id="colMaterial" />
                 <TableColumn text="Color" fx:id="colColor" />
-                
+                <TableColumn text="Estado" fx:id="colEstado" />
+                <TableColumn text="Imagenes" fx:id="colImagen" />
             </columns>
         </TableView>
     </children>
