@@ -1,0 +1,25 @@
+# Compiled class file
+target/
+
+# Maven artifacts
+*.jar
+*.war
+*.ear
+
+# Eclipse-specific files
+.project
+.classpath
+.settings/
+
+
+
+# Visual Studio Code-specific files
+.vscode/
+
+# Logs
+logs/
+*.log
+
+# OS-specific files
+.DS_Store
+Thumbs.db

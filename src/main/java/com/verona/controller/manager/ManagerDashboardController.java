@@ -111,7 +111,7 @@ public class ManagerDashboardController {
 
     private AnchorPane obtenerRootPaneParaBuscarVentas() {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/Resources/Views/buscarVentas.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/verona/view/buscarVentas.fxml"));
             return loader.load();
         } catch (IOException e) {
             e.printStackTrace();
@@ -127,7 +127,7 @@ public class ManagerDashboardController {
 
     private AnchorPane obtenerRootPaneParaVentas() {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/Resources/Views/cargarVentas.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/verona/view/cargarVentas.fxml"));
             return loader.load();
         } catch (IOException e) {
             e.printStackTrace();
