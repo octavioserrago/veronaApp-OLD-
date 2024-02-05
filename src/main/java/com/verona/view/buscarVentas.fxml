@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="744.0" prefWidth="872.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.verona.controller.common.BuscarVentasController">
+   <children>
+      <Label layoutX="306.0" layoutY="14.0" text="BUSCAR VENTA">
+         <font>
+            <Font name="Arial Bold" size="26.0" />
+         </font>
+      </Label>
+      <Label layoutX="4.0" layoutY="58.0" text="Ingrese ID de Cliente:">
+         <font>
+            <Font name="Arial Bold" size="13.0" />
+         </font></Label>
+      <Label layoutX="507.0" layoutY="58.0" text="Nombre de Cliente:">
+         <font>
+            <Font name="Arial Bold" size="13.0" />
+         </font></Label>
+      <TextField fx:id="idClienteTextField" layoutX="144.0" layoutY="52.0" prefHeight="26.0" prefWidth="105.0" />
+      <TextField fx:id="nombreClienteTextField" layoutX="647.0" layoutY="53.0" />
+      <Button fx:id="btnBuscar" layoutX="383.0" layoutY="79.0" mnemonicParsing="false" onAction="#btnBuscarClicked" style="-fx-background-color: FFAA00;" text="Buscar" />
+      <Separator layoutX="-1.0" layoutY="132.0" prefHeight="16.0" prefWidth="872.0" />
+      <Label fx:id="resultadoLabel" layoutX="330.0" layoutY="115.0" prefHeight="17.0" prefWidth="160.0" />
+      <Label fx:id="idLabel" layoutX="14.0" layoutY="148.0" text="ID:">
+         <font>
+            <Font name="Arial Bold" size="13.0" />
+         </font>
+      </Label>
+      <Label fx:id="nombreLabel" layoutX="13.0" layoutY="174.0" text="Nombre:">
+         <font>
+            <Font name="Arial Bold" size="13.0" />
+         </font>
+      </Label>
+      <Label fx:id="fechaCreacionLabel" layoutX="11.0" layoutY="311.0" text="Fecha de Creacion:">
+         <font>
+            <Font name="Arial Bold" size="13.0" />
+         </font>
+      </Label>
+      <Label fx:id="descripcionLabel" layoutX="13.0" layoutY="197.0" text="Descripcion:">
+         <font>
+            <Font name="Arial Bold" size="13.0" />
+         </font>
+      </Label>
+      <Label fx:id="fechaTerminacionLabel" layoutX="9.0" layoutY="343.0" text="Fecha de Terminacion:">
+         <font>
+            <Font name="Arial Bold" size="13.0" />
+         </font>
+      </Label>
+      <Label fx:id="materialLabel" layoutX="480.0" layoutY="148.0" text="Material:">
+         <font>
+            <Font name="Arial Bold" size="13.0" />
+         </font>
+      </Label>
+      <Label fx:id="colorLabel" layoutX="487.0" layoutY="175.0" text="Color:">
+         <font>
+            <Font name="Arial Bold" size="13.0" />
+         </font>
+      </Label>
+      <Label fx:id="estadoLabel" layoutX="482.0" layoutY="205.0" text="Estado:">
+         <font>
+            <Font name="Arial Bold" size="13.0" />
+         </font>
+      </Label>
+      <Label fx:id="importeTotalLabel" layoutX="463.0" layoutY="238.0" text="Importe Total:">
+         <font>
+            <Font name="Arial Bold" size="13.0" />
+         </font>
+      </Label>
+
+      <TableView fx:id="tablaCobros" layoutX="10.0" layoutY="479.0" prefHeight="216.0" prefWidth="848.0" />
+      
+      <Label fx:id="saldoLabel" layoutX="486.0" layoutY="276.0" text="Saldo:">
+         <font>
+            <Font name="Arial Bold" size="13.0" />
+         </font>
+      </Label>
+      <Label fx:id="colocadorLabel" layoutX="462.0" layoutY="311.0" text="Colocador:">
+         <font>
+            <Font name="Arial Bold" size="13.0" />
+         </font>
+      </Label>
+      <Label fx:id="precioColocacionLabel" layoutX="438.0" layoutY="343.0" text="Precio de Colocacion:">
+         <font>
+            <Font name="Arial Bold" size="13.0" />
+         </font>
+      </Label>
+      <Label fx:id="telefonoLabel" layoutX="30.0" layoutY="380.0" text="Telefono:">
+         <font>
+            <Font name="Arial Bold" size="13.0" />
+         </font>
+      </Label>
+      <Label fx:id="telefono2Label" layoutX="5.0" layoutY="413.0" text="Telefono Secundario:">
+         <font>
+            <Font name="Arial Bold" size="13.0" />
+         </font>
+      </Label>
+      <Label fx:id="emailLabel" layoutX="39.0" layoutY="446.0" text="Email:">
+         <font>
+            <Font name="Arial Bold" size="13.0" />
+         </font>
+      </Label>
+      <Label fx:id="idLabelToComplete" layoutX="40.0" layoutY="148.0" prefHeight="17.0" prefWidth="186.0" />
+      <Label fx:id="nombreLabelToComplete" layoutX="80.0" layoutY="175.0" prefHeight="17.0" prefWidth="246.0" />
+      <Label fx:id="descripcionLabelToComplete" layoutX="11.0" layoutY="215.0" prefHeight="79.0" prefWidth="376.0" wrapText="true" />
+      <Button fx:id="btnVolver" layoutX="385.0" layoutY="704.0" mnemonicParsing="false" onAction="#btnVolverClicked" style="-fx-background-color: FFAA00;" text="Volver" />
+      <Label fx:id="fechaCreacionLabelToComplete" layoutX="144.0" layoutY="311.0" prefHeight="17.0" prefWidth="227.0" />
+      <Label fx:id="fechaTerminacionLabelToComplete" layoutX="164.0" layoutY="343.0" prefHeight="17.0" prefWidth="207.0" />
+      <Label fx:id="colocadorLabelToComplete" layoutX="534.0" layoutY="311.0" prefHeight="17.0" prefWidth="265.0" />
+      <Label fx:id="precioColocacionLabelToComplete" layoutX="582.0" layoutY="343.0" prefHeight="17.0" prefWidth="207.0" />
+      <Label fx:id="telefonoLabelToComplete" layoutX="96.0" layoutY="380.0" prefHeight="17.0" prefWidth="207.0" />
+      <Label fx:id="telefono2LabelToComplete" layoutX="151.0" layoutY="413.0" prefHeight="17.0" prefWidth="175.0" />
+      <Label fx:id="emailLabelToComplete" layoutX="89.0" layoutY="446.0" prefHeight="17.0" prefWidth="227.0" />
+      <Label fx:id="materialLabelToComplete" layoutX="538.0" layoutY="148.0" prefHeight="17.0" prefWidth="218.0" />
+      <Label fx:id="colorLabelToComplete" layoutX="535.0" layoutY="175.0" prefHeight="17.0" prefWidth="227.0" />
+      <Label fx:id="estadoLabelToComplete" layoutX="535.0" layoutY="205.0" prefHeight="17.0" prefWidth="227.0" />
+      <Label fx:id="importeTotalLabelToComplete" layoutX="563.0" layoutY="237.0" prefHeight="17.0" prefWidth="207.0" />
+      <Label fx:id="saldoLabelToComplete" layoutX="534.0" layoutY="276.0" prefHeight="17.0" prefWidth="186.0" />
+      <Button fx:id="btnGenerarPDF" layoutX="463.0" layoutY="380.0" mnemonicParsing="false" onAction="#btnGenerarPDFClicked" style="-fx-background-color: black;" text="Generar PDF" textFill="WHITE" />
+      <Separator fx:id="linea1" layoutX="-2.0" layoutY="169.0" prefHeight="7.0" prefWidth="872.0" />
+      <Separator fx:id="linea2" layoutX="-2.0" layoutY="195.0" prefHeight="7.0" prefWidth="872.0" />
+      <Separator fx:id="linea5" layoutX="-2.0" layoutY="297.0" prefHeight="7.0" prefWidth="872.0" />
+      <Separator fx:id="linea10" layoutX="391.0" layoutY="142.0" orientation="VERTICAL" prefHeight="339.0" prefWidth="18.0" />
+      <Separator fx:id="linea3" layoutX="398.0" layoutY="222.0" prefHeight="7.0" prefWidth="473.0" />
+      <Separator fx:id="linea6" layoutX="-2.0" layoutY="332.0" prefHeight="7.0" prefWidth="872.0" />
+      <Separator fx:id="linea4" layoutX="398.0" layoutY="260.0" prefHeight="16.0" prefWidth="473.0" />
+      <Separator fx:id="linea7" layoutX="-1.0" layoutY="366.0" prefHeight="7.0" prefWidth="872.0" />
+      <Separator fx:id="linea8" layoutY="401.0" prefHeight="7.0" prefWidth="400.0" />
+      <Separator fx:id="linea9" layoutX="-3.0" layoutY="432.0" prefHeight="7.0" prefWidth="400.0" />
+      <Label fx:id="labelPdfAlert" layoutX="567.0" layoutY="385.0" prefHeight="17.0" prefWidth="254.0" />
+      <Button fx:id="btnFotoPlano" layoutX="460.0" layoutY="417.0" mnemonicParsing="false" onAction="#btnFotoPlanoClicked" style="-fx-background-color: Black;" text="Ver Planos" textFill="WHITE" />
+   </children>
+</AnchorPane>

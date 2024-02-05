@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.effect.Glow?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="513.0" prefWidth="602.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.verona.controller.manager.CargarPlanoController">
+   <children>
+      <Label layoutX="185.0" layoutY="29.0" text="CARGAR PLANO">
+         <font>
+            <Font name="Arial Bold" size="28.0" />
+         </font>
+         <effect>
+            <Glow level="0.45" />
+         </effect>
+      </Label>
+      <Label layoutX="49.0" layoutY="105.0" text="Ingrese ID VENTA que pertenece el plano:" />
+      <TextField fx:id="idTextField" layoutX="316.0" layoutY="100.0" prefHeight="26.0" prefWidth="150.0" />
+      <Button fx:id="btnVolver" layoutX="276.0" layoutY="463.0" mnemonicParsing="false" onAction="#btnVolverClicked" style="-fx-background-color: FFAA00;" text="Volver" />
+      <Label fx:id="firstAlert" alignment="CENTER" layoutX="-2.0" layoutY="294.0" prefHeight="17.0" prefWidth="602.0" />
+      <Button fx:id="btnSeleccionarArchivo" layoutX="316.0" layoutY="250.0" mnemonicParsing="false" onAction="#btnSeleccionarArchivoClicked" prefHeight="26.0" prefWidth="150.0" text="Seleccionar Archivo" />
+      <Label fx:id="labelIndicator" layoutX="144.0" layoutY="255.0" text="Cargue la foto del Plano:" />
+      <Button fx:id="btnCargar" layoutX="275.0" layoutY="347.0" mnemonicParsing="false" onAction="#btnCargarClicked" text="Cargar" />
+      <Label layoutX="185.0" layoutY="156.0" text="Ingrese Material:" />
+      <Label layoutX="194.0" layoutY="207.0" text="Ingrese color:" />
+      <ComboBox fx:id="materialComboBox" onAction="#materialComboBoxChanged" prefWidth="200.0" layoutX="316.0" layoutY="151.0" />
+      <ComboBox fx:id="colorCombobox" layoutX="316.0" layoutY="202.0" prefWidth="150.0" />
+   </children>
+</AnchorPane>
