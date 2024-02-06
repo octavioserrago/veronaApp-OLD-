@@ -10,6 +10,10 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.scene.chart.XYChart;
+
 public class Venta {
     private int ventasID;
     private String nombreCliente;
@@ -434,6 +438,34 @@ public class Venta {
         }
 
         return fechaFormateada;
+    }
+
+    public ObservableList<XYChart.Data<String, Integer>> obtenerVentasPorMes(int sucursalID) throws SQLException {
+        ObservableList<XYChart.Data<String, Integer>> datosVentasPorMes = FXCollections.observableArrayList();
+
+        String sql = "SELECT MONTH(fecha) AS mes, COUNT(*) AS cantidad FROM Ventas WHERE sucursalID = ? GROUP BY mes";
+
+        try (PreparedStatement preparedStatement = conexion.prepareStatement(sql)) {
+            preparedStatement.setInt(1, sucursalID);
+
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                while (resultSet.next()) {
+                    int mes = resultSet.getInt("mes");
+                    String nombreMes = obtenerNombreMes(mes);
+                    int cantidad = resultSet.getInt("cantidad");
+
+                    datosVentasPorMes.add(new XYChart.Data<>(nombreMes, cantidad));
+                }
+            }
+        }
+
+        return datosVentasPorMes;
+    }
+
+    private String obtenerNombreMes(int numeroMes) {
+        String[] meses = { "", "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre",
+                "Octubre", "Noviembre", "Diciembre" };
+        return meses[numeroMes];
     }
 
 }

@@ -1,11 +1,13 @@
 package com.verona.model;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+
 public class Moneda {
     private int monedasID;
     private String simbolo;
 
-    public Moneda(int monedasID, String simbolo) {
-        this.monedasID = monedasID;
+    public Moneda(String simbolo) {
         this.simbolo = simbolo;
     }
 
@@ -28,5 +30,11 @@ public class Moneda {
     public String toString() {
         return "Moneda ID: " + monedasID + ", Símbolo: " + simbolo;
     }
+
+    DatabaseConnection con = new DatabaseConnection();
+
+    Connection conexion = con.conectar();
+
+    PreparedStatement stmt;
 
 }

@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -146,7 +147,7 @@ public class Entrada {
     PreparedStatement stmt;
 
     public boolean insertarEntrada() throws SQLException {
-        String sql = "INSERT INTO Entradas (detalle, metodoPago, monedasID, importe, cotizacionesID, importeEnPesos, ventasID, nombreVendedor) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO Entradas (detalle, metodoPago, monedasID, importe, cotizacionesID, importeEnPesos, ventasID, sucursalID, nombreVendedor) VALUES (?, ?, ?, ?, ?, ?, ?, ?,?)";
 
         try (PreparedStatement preparedStatement = conexion.prepareStatement(sql)) {
             preparedStatement.setString(1, detalle);
@@ -156,7 +157,8 @@ public class Entrada {
             preparedStatement.setInt(5, cotizacionesID);
             preparedStatement.setDouble(6, importeEnPesos);
             preparedStatement.setInt(7, ventasID);
-            preparedStatement.setString(8, nombreVendedor);
+            preparedStatement.setInt(8, sucursalID);
+            preparedStatement.setString(9, nombreVendedor);
 
             int filasAfectadas = preparedStatement.executeUpdate();
 
@@ -233,13 +235,27 @@ public class Entrada {
                 while (resultSet.next()) {
                     double importeEnPesos = resultSet.getDouble("importeEnPesos");
                     totalEntradasEnPesos += importeEnPesos;
-                    System.out.println("Importe en Pesos: " + importeEnPesos);
-                    System.out.println("-------------------------");
+                }
+            }
+        }
+        return totalEntradasEnPesos;
+    }
+
+    public double calcularTotalEntradasEnPesosPorSucursalYMes(int sucursalID) throws SQLException {
+        double totalEntradasEnPesos = 0;
+        String sql = "SELECT SUM(importeEnPesos) AS total FROM Entradas WHERE sucursalID = ? AND MONTH(fecha) = ?";
+
+        try (PreparedStatement preparedStatement = conexion.prepareStatement(sql)) {
+            preparedStatement.setInt(1, sucursalID);
+            preparedStatement.setInt(2, LocalDate.now().getMonthValue());
+
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                if (resultSet.next()) {
+                    totalEntradasEnPesos = resultSet.getDouble("total");
                 }
             }
         }
 
-        System.out.println("Total Importes en Pesos: " + totalEntradasEnPesos);
         return totalEntradasEnPesos;
     }
 

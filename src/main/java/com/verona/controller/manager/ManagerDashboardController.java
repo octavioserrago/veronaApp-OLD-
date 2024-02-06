@@ -1,15 +1,26 @@
 package com.verona.controller.manager;
 
 import java.io.IOException;
+import java.sql.SQLException;
+import java.text.NumberFormat;
+import java.util.Currency;
 
+import java.util.Locale;
 import com.verona.controller.SceneController;
+import com.verona.model.Entrada;
+import com.verona.model.Pago;
 import com.verona.model.User;
+import com.verona.model.Venta;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.chart.LineChart;
+import javafx.scene.chart.PieChart;
+import javafx.scene.chart.XYChart;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.layout.AnchorPane;
@@ -33,9 +44,18 @@ public class ManagerDashboardController {
     private ComboBox<String> comboboxVentas;
 
     @FXML
+    private PieChart graficoEntradasYSalidas;
+
+    @FXML
+    private LineChart<String, Integer> graphVentasPorMes;
+
+    @FXML
     private Button btnEmpleados;
 
+    private Venta ventaModel = new Venta(0, null, null, null, null, null, 0, 0, 0, null, null, 0, null, null, null, 0);
     User user = User.getCurrentUser();
+    private Entrada entradaModel = new Entrada(null, null, 0, null, 0, 0, 0, 0, null);
+    private Pago pagoModel = new Pago(0, 0, 0, 0, 0, 0);
 
     @FXML
     void btnCerrarSesionClicked(ActionEvent event) {
@@ -47,15 +67,23 @@ public class ManagerDashboardController {
     }
 
     @FXML
-    void initialize() {
+    void initialize() throws SQLException {
 
         ObservableList<String> bachasItems = FXCollections.observableArrayList("Ver Stock de Bachas",
                 "Agregar cantidad de Bachas", "Modificar Cantidad de bachas", "Agregar modelo nuevo",
                 "Modificar modelo");
         comboboxBachas.setItems(bachasItems);
 
-        ObservableList<String> cajaItems = FXCollections.observableArrayList("Ver Balances", "Entradas", "Salidas");
+        ObservableList<String> cajaItems = FXCollections.observableArrayList("Ver Balances", "Registrar Nuevo Ingreso",
+                "Registrar Nueva Salida");
         comboboxCaja.setItems(cajaItems);
+
+        comboboxCaja.setOnAction(event -> {
+            String selectedItem = comboboxCaja.getSelectionModel().getSelectedItem();
+            if (selectedItem != null) {
+                handleCajaItemSelected(selectedItem);
+            }
+        });
 
         ObservableList<String> ventasItems = FXCollections.observableArrayList();
 
@@ -76,6 +104,68 @@ public class ManagerDashboardController {
             }
         });
 
+        // PieChart
+        double sumaTotal = entradaModel.calcularTotalEntradasEnPesosPorSucursalYMes(user.getSucursalID());
+        double sumaSalidas = pagoModel.obtenerSumaImporteEnPesosPorSucursalYMesVigente(user.getSucursalID());
+
+        PieChart.Data entradaData = new PieChart.Data("Entrada", sumaTotal);
+        PieChart.Data salidaData = new PieChart.Data("Salida", sumaSalidas);
+
+        graficoEntradasYSalidas.getData().clear();
+        graficoEntradasYSalidas.getData().addAll(entradaData, salidaData);
+
+        graficoEntradasYSalidas.setOnMouseClicked(event -> {
+            try {
+                handlePieChartClick();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        });
+
+        // Graph cantidad de ventas
+        XYChart.Series<String, Integer> seriesVentas = new XYChart.Series<>();
+        seriesVentas.setName("Ventas por Mes");
+        ObservableList<XYChart.Data<String, Integer>> datosVentasPorMes = ventaModel
+                .obtenerVentasPorMes(user.getSucursalID());
+        seriesVentas.getData().addAll(datosVentasPorMes);
+        graphVentasPorMes.getData().add(seriesVentas);
+        graphVentasPorMes.setTitle("Cantidad de Ventas por Mes");
+        graphVentasPorMes.getXAxis().setLabel("Mes");
+        graphVentasPorMes.getYAxis().setLabel("Cantidad de Ventas");
+    }
+
+    private void handlePieChartClick() throws SQLException {
+        PieChart.Data clickedData = graficoEntradasYSalidas.getData().stream()
+                .filter(data -> data.getNode().isHover())
+                .findFirst()
+                .orElse(null);
+
+        if (clickedData != null) {
+            String categoria = clickedData.getName();
+            double total = (categoria.equals("Entrada"))
+                    ? entradaModel.calcularTotalEntradasEnPesosPorSucursalYMes(user.getSucursalID())
+                    : pagoModel.obtenerSumaImporteEnPesosPorSucursalYMesVigente(user.getSucursalID());
+
+            System.out.println("Total de salidas: " + total);
+
+            String totalFormateado = formatearComoDinero(total);
+            mostrarAlert(categoria, totalFormateado);
+        }
+    }
+
+    @SuppressWarnings("deprecation")
+    private String formatearComoDinero(double cantidad) {
+        NumberFormat formatoDinero = NumberFormat.getCurrencyInstance(Locale.getDefault());
+        formatoDinero.setCurrency(Currency.getInstance(new Locale("es", "AR")));
+        return formatoDinero.format(cantidad);
+    }
+
+    private void mostrarAlert(String categoria, String total) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Total del mes");
+        alert.setHeaderText("Total de " + categoria);
+        alert.setContentText("El total de " + categoria.toLowerCase() + " para el mes vigente es:  " + total);
+        alert.showAndWait();
     }
 
     @FXML
@@ -96,6 +186,27 @@ public class ManagerDashboardController {
         } else if ("Ver Produccion".equals(selectedItem)) {
             verProduccion();
         }
+    }
+
+    private void handleCajaItemSelected(String selectedItem) {
+        if ("Ver Balances".equals(selectedItem)) {
+            // crearNuevaVenta();
+        } else if ("Registrar Nuevo Ingreso".equals(selectedItem)) {
+            nuevoIngreso();
+        } else if ("Registrar Nueva Salida".equals(selectedItem)) {
+            nuevaSalida();
+        }
+    }
+
+    private void nuevoIngreso() {
+        SceneController sceneController = new SceneController((Stage) btnCerrarSesion.getScene().getWindow());
+        sceneController.switchToRegistrarIngreso();
+    }
+
+    private void nuevaSalida() {
+        // SceneController sceneController = new SceneController((Stage)
+        // btnCerrarSesion.getScene().getWindow());
+        // sceneController.switchToRegistrarSalida();
     }
 
     private void verProduccion() {
