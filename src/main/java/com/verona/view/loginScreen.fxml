@@ -5,23 +5,24 @@
 <?import javafx.scene.control.PasswordField?>
 <?import javafx.scene.control.Separator?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.effect.DropShadow?>
 <?import javafx.scene.effect.Glow?>
-<?import javafx.scene.effect.InnerShadow?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.paint.Color?>
 <?import javafx.scene.text.Font?>
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="665.0" prefWidth="666.0" style="-fx-background-color: FFAA00;" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.verona.controller.LoginController">
    <children>
-      <Separator layoutX="301.0" layoutY="156.0" orientation="VERTICAL" prefHeight="353.0" prefWidth="83.0">
+      <Separator layoutX="301.0" layoutY="53.0" orientation="VERTICAL" prefHeight="546.0" prefWidth="83.0">
          <effect>
-            <Glow level="1.0" />
+            <DropShadow />
          </effect></Separator>
-      <Label alignment="CENTER" layoutX="45.0" layoutY="230.0" prefHeight="82.0" prefWidth="230.0" text="Marmoleria" textFill="#ffffffce">
+      <Label alignment="CENTER" layoutX="26.0" layoutY="223.0" prefHeight="82.0" prefWidth="267.0" text="MARMOLERIA" textFill="#ffffffce">
          <font>
             <Font name="Raleway Bold" size="39.0" />
          </font>
          <effect>
-            <Glow level="0.73" />
+            <DropShadow />
          </effect>
       </Label>
       <Label layoutX="57.0" layoutY="298.0" text="VERONA">
@@ -44,14 +45,22 @@
       <PasswordField fx:id="passwordField" layoutX="454.0" layoutY="286.0" />
       <Button fx:id="btnLogin" layoutX="470.0" layoutY="375.0" mnemonicParsing="false" onAction="#btnLoginClick" style="-fx-background-color: Black;" text="Iniciar Sesion" textFill="WHITE">
          <effect>
-            <InnerShadow height="0.0" radius="0.0" width="0.0" />
+            <DropShadow>
+               <color>
+                  <Color opacity="0.6367112994194031" />
+               </color>
+            </DropShadow>
          </effect></Button>
       <Label alignment="TOP_CENTER" contentDisplay="CENTER" layoutX="424.0" layoutY="147.0" prefHeight="36.0" prefWidth="219.0" text="Inicio de Sesion" textAlignment="CENTER">
          <font>
             <Font name="Arial Bold" size="25.0" />
          </font>
          <effect>
-            <Glow level="0.22" />
+            <DropShadow>
+               <color>
+                  <Color red="0.36000001430511475" green="0.36000001430511475" blue="0.36000001430511475" opacity="0.7017208337783813" />
+               </color>
+            </DropShadow>
          </effect>
       </Label>
       <Label fx:id="errorLoginLabel" layoutX="367.0" layoutY="325.0" prefHeight="17.0" prefWidth="282.0" text="Error al intentar Iniciar Sesion. Intente Nuevamente" textFill="RED" visible="false">

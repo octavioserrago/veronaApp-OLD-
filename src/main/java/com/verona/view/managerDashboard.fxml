@@ -7,25 +7,92 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ButtonBar?>
 <?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Separator?>
+<?import javafx.scene.effect.DropShadow?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.paint.Color?>
+<?import javafx.scene.text.Font?>
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="520.0" prefWidth="797.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.verona.controller.manager.ManagerDashboardController">
    <children>
       <ButtonBar prefHeight="40.0" prefWidth="782.0">
         <buttons>
-            <ComboBox fx:id="comboboxVentas" prefHeight="26.0" prefWidth="160.0" promptText="Ventas" style="-fx-background-color: FFAA00;" />
-            <ComboBox fx:id="comboboxCaja" prefWidth="150.0" promptText="Caja" style="-fx-background-color: ffaa00;" />
-            <ComboBox fx:id="comboboxBachas" prefWidth="150.0" promptText="Bachas" style="-fx-background-color: ffaa00;" />
-            <Button fx:id="btnNegocio" mnemonicParsing="false" onAction="#btnNegocioClicked" style="-fx-background-color: ffaa00;" text="Negocio" />
-            <Button fx:id="btnEmpleados" mnemonicParsing="false" onAction="#btnEmpleadosClicked" style="-fx-background-color: FFAA00;" text="Empleados" />
-          <Button fx:id="btnCerrarSesion" mnemonicParsing="false" onAction="#btnCerrarSesionClicked" prefHeight="26.0" style="-fx-background-color: black;" text="Cerrar Sesion" textFill="WHITE" />
+            <ComboBox fx:id="comboboxVentas" prefHeight="26.0" prefWidth="160.0" promptText="Ventas" style="-fx-background-color: FFAA00;">
+               <effect>
+                  <DropShadow>
+                     <color>
+                        <Color opacity="0.6800000071525574" />
+                     </color>
+                  </DropShadow>
+               </effect></ComboBox>
+            <ComboBox fx:id="comboboxCaja" prefWidth="150.0" promptText="Caja" style="-fx-background-color: ffaa00;">
+               <effect>
+                  <DropShadow>
+                     <color>
+                        <Color opacity="0.6800000071525574" />
+                     </color>
+                  </DropShadow>
+               </effect></ComboBox>
+            <ComboBox fx:id="comboboxBachas" prefWidth="150.0" promptText="Bachas" style="-fx-background-color: ffaa00;">
+               <effect>
+                  <DropShadow>
+                     <color>
+                        <Color opacity="0.6800000071525574" />
+                     </color>
+                  </DropShadow>
+               </effect></ComboBox>
+            <Button fx:id="btnNegocio" mnemonicParsing="false" onAction="#btnNegocioClicked" prefHeight="26.0" style="-fx-background-color: ffaa00;" text="Negocio">
+               <effect>
+                  <DropShadow>
+                     <color>
+                        <Color opacity="0.6800000071525574" />
+                     </color>
+                  </DropShadow>
+               </effect></Button>
+            <Button fx:id="btnEmpleados" mnemonicParsing="false" onAction="#btnEmpleadosClicked" style="-fx-background-color: FFAA00;" text="Empleados">
+               <effect>
+                  <DropShadow>
+                     <color>
+                        <Color opacity="0.6826003789901733" />
+                     </color>
+                  </DropShadow>
+               </effect></Button>
+          <Button fx:id="btnCerrarSesion" mnemonicParsing="false" onAction="#btnCerrarSesionClicked" prefHeight="26.0" style="-fx-background-color: black;" text="Cerrar Sesion" textFill="WHITE">
+               <effect>
+                  <DropShadow>
+                     <color>
+                        <Color opacity="0.6405353546142578" />
+                     </color>
+                  </DropShadow>
+               </effect></Button>
         </buttons>
       </ButtonBar>
-      <PieChart fx:id="graficoEntradasYSalidas" layoutX="73.0" layoutY="45.0" prefHeight="215.0" prefWidth="246.0" />
-      <Separator layoutX="389.0" layoutY="44.0" orientation="VERTICAL" prefHeight="482.0" prefWidth="20.0" />
-      <Separator layoutY="40.0" prefHeight="11.0" prefWidth="797.0" />
-      <Separator layoutY="255.0" prefHeight="11.0" prefWidth="797.0" />
+      <PieChart fx:id="graficoEntradasYSalidas" layoutX="75.0" layoutY="40.0" prefHeight="220.0" prefWidth="247.0" />
+      <Separator layoutX="389.0" layoutY="44.0" orientation="VERTICAL" prefHeight="477.0" prefWidth="20.0">
+         <effect>
+            <DropShadow blurType="ONE_PASS_BOX">
+               <color>
+                  <Color opacity="0.19540229439735413" />
+               </color>
+            </DropShadow>
+         </effect></Separator>
+      <Separator layoutY="40.0" prefHeight="11.0" prefWidth="797.0">
+         <effect>
+            <DropShadow>
+               <color>
+                  <Color opacity="0.5" />
+               </color>
+            </DropShadow>
+         </effect></Separator>
+      <Separator layoutY="255.0" prefHeight="11.0" prefWidth="797.0">
+         <effect>
+            <DropShadow>
+               <color>
+                  <Color opacity="0.20000000298023224" />
+               </color>
+            </DropShadow>
+         </effect></Separator>
       <LineChart fx:id="graphVentasPorMes" layoutX="-2.0" layoutY="260.0" prefHeight="259.0" prefWidth="400.0">
         <xAxis>
           <CategoryAxis side="BOTTOM" />
@@ -34,5 +101,64 @@
           <NumberAxis side="LEFT" />
         </yAxis>
       </LineChart>
+      <Separator layoutX="399.0" layoutY="83.0" prefHeight="11.0" prefWidth="400.0">
+         <effect>
+            <DropShadow>
+               <color>
+                  <Color opacity="0.20000000298023224" />
+               </color>
+            </DropShadow>
+         </effect></Separator>
+      <Button fx:id="btnRealizarPrespuesto" layoutX="522.0" layoutY="51.0" mnemonicParsing="false" onAction="#btnRealizarPresupuestoClicked" prefHeight="26.0" style="-fx-background-color: Black;" text="Realizar Prespuesto" textFill="WHITE">
+         <effect>
+            <DropShadow />
+         </effect>
+         <font>
+            <Font name="Arial Bold" size="13.0" />
+         </font></Button>
+      <Label layoutX="501.0" layoutY="101.0" text="Cotizacion Dolar Blue">
+         <font>
+            <Font name="Arial Bold" size="19.0" />
+         </font>
+         <effect>
+            <DropShadow>
+               <color>
+                  <Color opacity="0.4072657823562622" />
+               </color>
+            </DropShadow>
+         </effect>
+      </Label>
+      <Label fx:id="valorDolarBlueLabel" layoutX="482.0" layoutY="150.0" prefHeight="17.0" prefWidth="111.0" />
+      <Label fx:id="fechaUltimaDolarLabel" layoutX="617.0" layoutY="150.0" prefHeight="17.0" prefWidth="162.0" />
+      <Button fx:id="btnActualizarCotizacionDolarBlue" layoutX="527.0" layoutY="197.0" mnemonicParsing="false" onAction="#btnActualizarCotizacionDolarBlueClicked" style="-fx-background-color: ffaa00;" text="Actualizar Cotizacion">
+         <effect>
+            <DropShadow>
+               <color>
+                  <Color opacity="0.4455066919326782" />
+               </color>
+            </DropShadow>
+         </effect>
+      </Button>
+      <Label layoutX="413.0" layoutY="285.0" text="Total de Entradas del Dia:">
+         <font>
+            <Font name="Arial Bold" size="13.0" />
+         </font>
+      </Label>
+      <Label layoutX="418.0" layoutY="323.0" text="Total de Salidas del Dia:">
+         <font>
+            <Font name="Arial Bold" size="13.0" />
+         </font>
+      </Label>
+      <Separator layoutX="399.0" layoutY="359.0" prefHeight="11.0" prefWidth="400.0">
+         <effect>
+            <DropShadow>
+               <color>
+                  <Color opacity="0.20000000298023224" />
+               </color>
+            </DropShadow>
+         </effect>
+      </Separator>
+      <Label fx:id="entradasDiaLabel" layoutX="585.0" layoutY="285.0" prefHeight="17.0" prefWidth="126.0" />
+      <Label fx:id="salidasDiaLabel" layoutX="578.0" layoutY="322.0" prefHeight="17.0" prefWidth="126.0" />
    </children>
 </AnchorPane>

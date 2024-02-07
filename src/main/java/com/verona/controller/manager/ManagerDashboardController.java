@@ -23,6 +23,7 @@ import javafx.scene.chart.XYChart;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.Label;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 
@@ -51,6 +52,31 @@ public class ManagerDashboardController {
 
     @FXML
     private Button btnEmpleados;
+
+    @FXML
+    private Label valorDolarBlueLabel;
+
+    @FXML
+    private Label salidasDiaLabel;
+
+    @FXML
+    private Label entradasDiaLabel;
+
+    @FXML
+    private Label fechaUltimaDolarLabel;
+
+    @FXML
+    private Button btnRealizarPrespuesto;
+
+    @FXML
+    void btnActualizarCotizacionDolarBlueClicked(ActionEvent event) {
+
+    }
+
+    @FXML
+    void btnRealizarPresupuestoClicked(ActionEvent event) {
+
+    }
 
     private Venta ventaModel = new Venta(0, null, null, null, null, null, 0, 0, 0, null, null, 0, null, null, null, 0);
     User user = User.getCurrentUser();
@@ -170,7 +196,8 @@ public class ManagerDashboardController {
 
     @FXML
     void btnNegocioClicked(ActionEvent event) {
-
+        SceneController sceneController = new SceneController((Stage) btnNegocio.getScene().getWindow());
+        sceneController.switchToNegocio();
     }
 
     @FXML
@@ -190,7 +217,7 @@ public class ManagerDashboardController {
 
     private void handleCajaItemSelected(String selectedItem) {
         if ("Ver Balances".equals(selectedItem)) {
-            // crearNuevaVenta();
+            verBalances();
         } else if ("Registrar Nuevo Ingreso".equals(selectedItem)) {
             nuevoIngreso();
         } else if ("Registrar Nueva Salida".equals(selectedItem)) {
@@ -201,6 +228,11 @@ public class ManagerDashboardController {
     private void nuevoIngreso() {
         SceneController sceneController = new SceneController((Stage) btnCerrarSesion.getScene().getWindow());
         sceneController.switchToRegistrarIngreso();
+    }
+
+    private void verBalances() {
+        SceneController sceneController = new SceneController((Stage) btnCerrarSesion.getScene().getWindow());
+        sceneController.switchToVerBalances();
     }
 
     private void nuevaSalida() {

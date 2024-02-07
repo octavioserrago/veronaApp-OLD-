@@ -76,6 +76,14 @@ public class SceneController {
         switchScene("/com/verona/view/modificarEstadoVenta.fxml", "Modificar Estado de Venta");
     }
 
+    public void switchToVerBalances() {
+        switchScene("/com/verona/view/verBalances.fxml", "Balance - Gerente");
+    }
+
+    public void switchToNegocio() {
+        switchScene("/com/verona/view/negocio.fxml", "Negocio | Estadisitcas - Gerente");
+    }
+
     public void switchToVentas(AnchorPane rootPane) {
         try {
             Scene scene = new Scene(rootPane);
