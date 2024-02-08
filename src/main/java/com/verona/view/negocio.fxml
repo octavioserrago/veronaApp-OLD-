@@ -9,10 +9,9 @@
 <?import javafx.scene.control.Separator?>
 <?import javafx.scene.effect.DropShadow?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.paint.Color?>
 <?import javafx.scene.text.Font?>
-<?import javafx.scene.layout.HBox?>
-
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="555.0" prefWidth="702.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.verona.controller.manager.NegocioController">
    <children>
@@ -43,19 +42,11 @@
                </color>
             </DropShadow>
          </effect></Button>
-      <LineChart fx:id="graphCantidadVentas" layoutX="-2.0" layoutY="85.0" prefHeight="198.0" prefWidth="354.0">
-        <xAxis>
-          <CategoryAxis prefHeight="11.0" prefWidth="436.0" side="BOTTOM" />
-        </xAxis>
-        <yAxis>
-          <NumberAxis side="LEFT" />
-        </yAxis>
-      </LineChart>
       <HBox fx:id="legendContainer" spacing="10" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" />
       <Separator layoutX="348.0" layoutY="55.0" orientation="VERTICAL" prefHeight="446.0" prefWidth="6.0" />
       <Separator layoutX="7.0" layoutY="49.0" prefHeight="13.0" prefWidth="695.0" />
       <Separator layoutX="3.0" layoutY="287.0" prefHeight="1.0" prefWidth="344.0" />
-      <LineChart fx:id="graphDineroPorVenta" layoutX="-2.0" layoutY="303.0" prefHeight="158.0" prefWidth="354.0">
+      <LineChart fx:id="graphDineroPorVenta" layoutX="-2.0" layoutY="81.0" prefHeight="158.0" prefWidth="354.0">
         <xAxis>
           <CategoryAxis side="BOTTOM" />
         </xAxis>

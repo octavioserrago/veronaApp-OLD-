@@ -259,4 +259,24 @@ public class Entrada {
         return totalEntradasEnPesos;
     }
 
+    public double calcularTotalEntradasEnPesosPorSucursalYDia(int sucursalID) throws SQLException {
+        double totalEntradasEnPesos = 0;
+        String sql = "SELECT SUM(importeEnPesos) AS total " +
+                "FROM Entradas e " +
+                "INNER JOIN Ventas v ON e.ventasID = v.ventasID " +
+                "WHERE v.sucursalID = ? AND DATE(e.fecha) = ?";
+
+        try (PreparedStatement preparedStatement = conexion.prepareStatement(sql)) {
+            preparedStatement.setInt(1, sucursalID);
+            preparedStatement.setDate(2, java.sql.Date.valueOf(LocalDate.now()));
+
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                if (resultSet.next()) {
+                    totalEntradasEnPesos = resultSet.getDouble("total");
+                }
+            }
+        }
+
+        return totalEntradasEnPesos;
+    }
 }

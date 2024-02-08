@@ -5,45 +5,46 @@ import com.verona.controller.SceneController;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
-public class VerBalancesController {
+public class RegistrarPagoController {
 
     @FXML
-    private Label SeñasEfectivoLabelToComplete;
-
-    @FXML
-    private Button btnArqueo;
-
-    @FXML
-    private Button btnArqueosPasados;
+    private Button btnCargar;
 
     @FXML
     private Button btnVolver;
 
     @FXML
-    private Label cajaBancoLabelToComplete;
+    private ComboBox<?> comboboxDescribirGasto;
 
     @FXML
-    private Label cajaEfectivoLabelToComplete;
+    private ComboBox<?> comboboxProveedor;
 
     @FXML
-    private Label señasBancoLabelToComplete;
+    private ComboBox<?> fondosCombobox;
 
     @FXML
-    private Label totalCajaToComplete;
+    private TextField importeTextFieldToComplete;
 
     @FXML
-    private Label totalSeñasToComplete;
+    private Label proveedorLabel;
 
     @FXML
-    void btnArqueoClicked(ActionEvent event) {
+    void initialize() {
+        noVisibles();
+    }
 
+    private void noVisibles() {
+        proveedorLabel.setVisible(false);
+        comboboxProveedor.setVisible(false);
     }
 
     @FXML
-    void btnArqueosPasadosClicked(ActionEvent event) {
+    void btnCargarClicked(ActionEvent event) {
 
     }
 
@@ -52,4 +53,5 @@ public class VerBalancesController {
         SceneController sceneController = new SceneController((Stage) btnVolver.getScene().getWindow());
         sceneController.switchToManagerDashboard();
     }
+
 }

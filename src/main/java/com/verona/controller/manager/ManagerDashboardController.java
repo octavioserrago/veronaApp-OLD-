@@ -3,10 +3,14 @@ package com.verona.controller.manager;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.text.NumberFormat;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Currency;
 
 import java.util.Locale;
 import com.verona.controller.SceneController;
+import com.verona.controller.common.CotizacionesController;
+import com.verona.model.Cotizacion;
 import com.verona.model.Entrada;
 import com.verona.model.Pago;
 import com.verona.model.User;
@@ -51,7 +55,7 @@ public class ManagerDashboardController {
     private LineChart<String, Integer> graphVentasPorMes;
 
     @FXML
-    private Button btnEmpleados;
+    private ComboBox<?> proveedoresCombobox;
 
     @FXML
     private Label valorDolarBlueLabel;
@@ -69,8 +73,13 @@ public class ManagerDashboardController {
     private Button btnRealizarPrespuesto;
 
     @FXML
-    void btnActualizarCotizacionDolarBlueClicked(ActionEvent event) {
+    private Button btnActualizarCotizacionDolarBlue;
 
+    @FXML
+    void btnActualizarCotizacionDolarBlueClicked(ActionEvent event) {
+        SceneController sceneController = new SceneController(
+                (Stage) btnActualizarCotizacionDolarBlue.getScene().getWindow());
+        sceneController.switchToCotizaciones();
     }
 
     @FXML
@@ -113,7 +122,8 @@ public class ManagerDashboardController {
 
         ObservableList<String> ventasItems = FXCollections.observableArrayList();
 
-        ventasItems.addAll("Crear nueva Venta", "Buscar Venta", "Modificar datos de una venta", "Eliminar una venta");
+        ventasItems.addAll("Crear nueva Venta", "Buscar Venta", "Ver Ventas de Esta Sucursal",
+                "Modificar datos de una venta", "Eliminar una venta");
 
         int sucursalID = user.getSucursalID();
 
@@ -156,8 +166,13 @@ public class ManagerDashboardController {
         seriesVentas.getData().addAll(datosVentasPorMes);
         graphVentasPorMes.getData().add(seriesVentas);
         graphVentasPorMes.setTitle("Cantidad de Ventas por Mes");
-        graphVentasPorMes.getXAxis().setLabel("Mes");
         graphVentasPorMes.getYAxis().setLabel("Cantidad de Ventas");
+
+        // Cotizaciones dolar
+        cargarUltimasCotizaciones();
+
+        cargarTotalEntradasDelDia();
+        cargarSalidasDelDia();
     }
 
     private void handlePieChartClick() throws SQLException {
@@ -177,6 +192,7 @@ public class ManagerDashboardController {
             String totalFormateado = formatearComoDinero(total);
             mostrarAlert(categoria, totalFormateado);
         }
+
     }
 
     @SuppressWarnings("deprecation")
@@ -184,6 +200,24 @@ public class ManagerDashboardController {
         NumberFormat formatoDinero = NumberFormat.getCurrencyInstance(Locale.getDefault());
         formatoDinero.setCurrency(Currency.getInstance(new Locale("es", "AR")));
         return formatoDinero.format(cantidad);
+    }
+
+    // Cargar Entradas del dia
+    private void cargarTotalEntradasDelDia() throws SQLException {
+        double totalEntradas = entradaModel.calcularTotalEntradasEnPesosPorSucursalYDia(user.getSucursalID());
+        @SuppressWarnings("deprecation")
+        NumberFormat formatoPesos = NumberFormat.getCurrencyInstance(new Locale("es", "AR"));
+        String totalEntradasTexto = formatoPesos.format(totalEntradas);
+        entradasDiaLabel.setText(totalEntradasTexto);
+    }
+
+    // Cargar Salidas del dia
+    private void cargarSalidasDelDia() throws SQLException {
+        double totalSalidas = pagoModel.calcularTotalSalidasEnPesosPorSucursalYDia(user.getSucursalID());
+        @SuppressWarnings("deprecation")
+        NumberFormat formatoPesos = NumberFormat.getCurrencyInstance(new Locale("es", "AR"));
+        String totalSalidasTexto = formatoPesos.format(totalSalidas);
+        salidasDiaLabel.setText(totalSalidasTexto);
     }
 
     private void mostrarAlert(String categoria, String total) {
@@ -212,6 +246,8 @@ public class ManagerDashboardController {
             buscarVenta();
         } else if ("Ver Produccion".equals(selectedItem)) {
             verProduccion();
+        } else if ("Ver Ventas de Esta Sucursal".equals(selectedItem)) {
+            verVentasDeSucursal();
         }
     }
 
@@ -235,10 +271,14 @@ public class ManagerDashboardController {
         sceneController.switchToVerBalances();
     }
 
+    private void verVentasDeSucursal() {
+        SceneController sceneController = new SceneController((Stage) btnCerrarSesion.getScene().getWindow());
+        sceneController.switchToVerVentasDeSucursal();
+    }
+
     private void nuevaSalida() {
-        // SceneController sceneController = new SceneController((Stage)
-        // btnCerrarSesion.getScene().getWindow());
-        // sceneController.switchToRegistrarSalida();
+        SceneController sceneController = new SceneController((Stage) btnCerrarSesion.getScene().getWindow());
+        sceneController.switchToRegistrarPago();
     }
 
     private void verProduccion() {
@@ -275,6 +315,24 @@ public class ManagerDashboardController {
         } catch (IOException e) {
             e.printStackTrace();
             return null;
+        }
+    }
+
+    CotizacionesController cotizacionesController = new CotizacionesController();
+
+    private void cargarUltimasCotizaciones() {
+        Cotizacion ultimaCotizacionBlue = cotizacionesController.obtenerUltimaCotizacionBlue();
+
+        if (ultimaCotizacionBlue != null) {
+            DateTimeFormatter formatterDateTime = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+            LocalDateTime fechaUltimaCotizacion = LocalDateTime.parse(ultimaCotizacionBlue.getFecha(),
+                    formatterDateTime);
+
+            DateTimeFormatter formatterDate = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+            String fechaUltimaFormateada = fechaUltimaCotizacion.format(formatterDate);
+
+            fechaUltimaDolarLabel.setText(fechaUltimaFormateada);
+            valorDolarBlueLabel.setText(String.valueOf(ultimaCotizacionBlue.getTasaCambio()));
         }
     }
 }

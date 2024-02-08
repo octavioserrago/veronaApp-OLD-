@@ -34,7 +34,7 @@
                      </color>
                   </DropShadow>
                </effect></ComboBox>
-            <ComboBox fx:id="comboboxBachas" prefWidth="150.0" promptText="Bachas" style="-fx-background-color: ffaa00;">
+            <ComboBox fx:id="comboboxBachas" minWidth="61.0" prefHeight="26.0" prefWidth="150.0" promptText="Bachas" style="-fx-background-color: ffaa00;">
                <effect>
                   <DropShadow>
                      <color>
@@ -42,19 +42,20 @@
                      </color>
                   </DropShadow>
                </effect></ComboBox>
+            <ComboBox fx:id="proveedoresCombobox" minWidth="-Infinity" prefHeight="26.0" promptText="Proveedores" style="-fx-background-color: FFAA00;">
+               <effect>
+                  <DropShadow>
+                     <color>
+                        <Color opacity="0.6000000238418579" />
+                     </color>
+                  </DropShadow>
+               </effect>
+            </ComboBox>
             <Button fx:id="btnNegocio" mnemonicParsing="false" onAction="#btnNegocioClicked" prefHeight="26.0" style="-fx-background-color: ffaa00;" text="Negocio">
                <effect>
                   <DropShadow>
                      <color>
                         <Color opacity="0.6800000071525574" />
-                     </color>
-                  </DropShadow>
-               </effect></Button>
-            <Button fx:id="btnEmpleados" mnemonicParsing="false" onAction="#btnEmpleadosClicked" style="-fx-background-color: FFAA00;" text="Empleados">
-               <effect>
-                  <DropShadow>
-                     <color>
-                        <Color opacity="0.6826003789901733" />
                      </color>
                   </DropShadow>
                </effect></Button>
@@ -128,8 +129,8 @@
             </DropShadow>
          </effect>
       </Label>
-      <Label fx:id="valorDolarBlueLabel" layoutX="482.0" layoutY="150.0" prefHeight="17.0" prefWidth="111.0" />
-      <Label fx:id="fechaUltimaDolarLabel" layoutX="617.0" layoutY="150.0" prefHeight="17.0" prefWidth="162.0" />
+      <Label fx:id="valorDolarBlueLabel" layoutX="537.0" layoutY="142.0" prefHeight="17.0" prefWidth="111.0" />
+      <Label fx:id="fechaUltimaDolarLabel" layoutX="512.0" layoutY="167.0" prefHeight="17.0" prefWidth="162.0" />
       <Button fx:id="btnActualizarCotizacionDolarBlue" layoutX="527.0" layoutY="197.0" mnemonicParsing="false" onAction="#btnActualizarCotizacionDolarBlueClicked" style="-fx-background-color: ffaa00;" text="Actualizar Cotizacion">
          <effect>
             <DropShadow>

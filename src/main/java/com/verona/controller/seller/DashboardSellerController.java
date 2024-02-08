@@ -76,10 +76,19 @@ public class DashboardSellerController {
     private Label fechaUltimaBlue;
 
     @FXML
+    private MenuButton btnVentasDeEstaSucursal;
+
+    @FXML
     private TableView<Bacha> bachasTablaPreview;
 
     @FXML
     private TableView<Venta> tablaVentasResumen;
+
+    @FXML
+    void btnVentasDeEstaSucursalClicked(ActionEvent event) {
+        SceneController sceneController = new SceneController((Stage) btnCerrarSesion.getScene().getWindow());
+        sceneController.switchToVerVentasDeSucursal();
+    }
 
     @FXML
     void BtnCotizacionesClicked(ActionEvent event) {
@@ -196,7 +205,8 @@ public class DashboardSellerController {
             LocalDateTime fechaUltimaCotizacion = LocalDateTime.parse(ultimaCotizacionBlue.getFecha(),
                     formatterDateTime);
 
-            String fechaUltimaFormateada = fechaUltimaCotizacion.format(formatterDateTime);
+            DateTimeFormatter formatterDate = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+            String fechaUltimaFormateada = fechaUltimaCotizacion.format(formatterDate);
 
             fechaUltimaBlue.setText(fechaUltimaFormateada);
             cotizacionDolarBlue.setText(String.valueOf(ultimaCotizacionBlue.getTasaCambio()));

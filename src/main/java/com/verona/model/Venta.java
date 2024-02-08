@@ -2,7 +2,6 @@ package com.verona.model;
 
 import java.sql.Connection;
 import java.util.Date;
-import java.util.HashMap;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -10,7 +9,6 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -468,44 +466,6 @@ public class Venta {
         String[] meses = { "", "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre",
                 "Octubre", "Noviembre", "Diciembre" };
         return meses[numeroMes];
-    }
-
-    public Map<String, ObservableList<XYChart.Data<String, Integer>>> obtenerDatosVentasPorUsuario(int sucursalID)
-            throws SQLException {
-        Map<String, ObservableList<XYChart.Data<String, Integer>>> datosPorUsuario = new HashMap<>();
-        String sql = "SELECT u.nombre, MONTH(v.fecha) AS mes, COUNT(v.ventasID) AS cantidad " +
-                "FROM users u " +
-                "LEFT JOIN Ventas v ON v.colocadoresID = u.userID AND v.sucursalID = ? " +
-                "WHERE v.colocadoresID IS NOT NULL AND v.sucursalID = ? " +
-                "GROUP BY u.nombre, MONTH(v.fecha)";
-
-        try (PreparedStatement preparedStatement = conexion.prepareStatement(sql)) {
-            preparedStatement.setInt(1, sucursalID);
-            preparedStatement.setInt(2, sucursalID);
-
-            try (ResultSet resultSet = preparedStatement.executeQuery()) {
-                while (resultSet.next()) {
-                    String nombreUsuario = resultSet.getString("nombre");
-                    int mes = resultSet.getInt("mes");
-                    Integer cantidadVentas = resultSet.getInt("cantidad");
-
-                    System.out.println(
-                            "Usuario: " + nombreUsuario + ", Mes: " + mes + ", Cantidad de Ventas: " + cantidadVentas);
-
-                    if (!datosPorUsuario.containsKey(nombreUsuario)) {
-                        datosPorUsuario.put(nombreUsuario, FXCollections.observableArrayList());
-                    }
-
-                    if (cantidadVentas != null) {
-                        datosPorUsuario.get(nombreUsuario).add(new XYChart.Data<>(String.valueOf(mes), cantidadVentas));
-                    }
-                }
-            }
-        }
-
-        System.out.println("Datos por Usuario: " + datosPorUsuario);
-
-        return datosPorUsuario;
     }
 
 }

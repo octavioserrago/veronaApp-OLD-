@@ -10,7 +10,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="655.0" prefWidth="1279.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.verona.controller.seller.DashboardSellerController">
+<AnchorPane prefHeight="655.0" prefWidth="1279.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.verona.controller.seller.DashboardSellerController">
    <children>
       <Label layoutX="14.0" layoutY="85.0" text="Fecha:" />
       <Label fx:id="fechaLabel" layoutX="68.0" layoutY="85.0" prefHeight="17.0" prefWidth="111.0" />
@@ -23,6 +23,7 @@
                 <MenuItem fx:id="btnVentas" mnemonicParsing="false" onAction="#btnVentasClicked" text="Crear Venta" />
                 <MenuItem fx:id="btnVentasBuscar" mnemonicParsing="false" onAction="#btnVentasBuscarClicked" text="Buscar Venta" />
                 <MenuItem fx:id="btnVentasModificarEstado" mnemonicParsing="false" onAction="#btnVentasModificarEstadoClicked" text="Modificar Estado de Venta" />
+                  <MenuItem fx:id="btnVerVentasDeEstaSucursal" mnemonicParsing="false" onAction="#btnVentasDeEstaSucursalClicked" text="Ver Ventas de Esta Sucursal" />
               </items>
             </MenuButton>
             <Button fx:id="btnCaja" contentDisplay="CENTER" mnemonicParsing="false" onAction="#btnCajaClicked" style="-fx-background-color: FFAA00;" text="Registrar Entrada de Dinero" />
@@ -44,6 +45,6 @@
       <TableView fx:id="bachasTablaPreview" layoutX="711.0" layoutY="125.0" prefHeight="124.0" prefWidth="592.0" />
       <Separator layoutX="708.0" layoutY="125.0" orientation="VERTICAL" prefHeight="124.0" prefWidth="0.0" />
       <Label layoutX="453.0" layoutY="134.0" text="Mensajes del Dia:" />
-      <Label fx:id="msjDelDia" layoutX="329.0" layoutY="163.0" prefHeight="82.0" prefWidth="380.0" wrapText="true"/>
+      <Label fx:id="msjDelDia" layoutX="329.0" layoutY="163.0" prefHeight="82.0" prefWidth="380.0" wrapText="true" />
    </children>
 </AnchorPane>

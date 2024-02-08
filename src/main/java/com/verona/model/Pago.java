@@ -106,4 +106,22 @@ public class Pago {
         return sumaImporteEnPesos;
     }
 
+    public double calcularTotalSalidasEnPesosPorSucursalYDia(int sucursalID) throws SQLException {
+        double totalSalidasEnPesos = 0;
+        String sql = "SELECT SUM(importeEnPesos) AS total FROM Pagos WHERE sucursalID = ? AND DATE(fecha) = ?";
+
+        try (PreparedStatement preparedStatement = conexion.prepareStatement(sql)) {
+            preparedStatement.setInt(1, sucursalID);
+            preparedStatement.setDate(2, java.sql.Date.valueOf(LocalDate.now()));
+
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                if (resultSet.next()) {
+                    totalSalidasEnPesos = resultSet.getDouble("total");
+                }
+            }
+        }
+
+        return totalSalidasEnPesos;
+    }
+
 }
