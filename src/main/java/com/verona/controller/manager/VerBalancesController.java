@@ -1,6 +1,12 @@
 package com.verona.controller.manager;
 
+import java.sql.SQLException;
+import java.text.NumberFormat;
+import java.util.Locale;
+
 import com.verona.controller.SceneController;
+import com.verona.model.CajaSeñas;
+import com.verona.model.User;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -11,13 +17,7 @@ import javafx.stage.Stage;
 public class VerBalancesController {
 
     @FXML
-    private Label SeñasEfectivoLabelToComplete;
-
-    @FXML
-    private Button btnArqueo;
-
-    @FXML
-    private Button btnArqueosPasados;
+    private Button btnVerDetalleCajas;
 
     @FXML
     private Button btnVolver;
@@ -29,21 +29,36 @@ public class VerBalancesController {
     private Label cajaEfectivoLabelToComplete;
 
     @FXML
-    private Label señasBancoLabelToComplete;
+    private Label cajaSeñasBancoLabelToComplete;
 
     @FXML
-    private Label totalCajaToComplete;
+    private Label cajaSeñasEfectivoLabelToComplete;
 
     @FXML
-    private Label totalSeñasToComplete;
+    private Label dineroTotalLabelToComplete;
+
+    CajaSeñas cajaSeñas = new CajaSeñas(0, 0);
+    private User user = User.getCurrentUser();
+    @SuppressWarnings("deprecation")
+    Locale localeArgentina = new Locale("es", "AR");
+    NumberFormat formatoMoneda = NumberFormat.getCurrencyInstance(localeArgentina);
 
     @FXML
-    void btnArqueoClicked(ActionEvent event) {
+    void initialize() throws SQLException {
+        // cajaSeñasEfectivo
+        double saldo = cajaSeñas.obtenerUltimoSaldo(user.getSucursalID(), "CajaSeñasEfectivo", "cajaSeñasEfectivoID");
+        String saldoFormateado = formatoMoneda.format(saldo);
+        cajaSeñasEfectivoLabelToComplete.setText(saldoFormateado);
 
+        // cajaSeñasBanco
+        double saldoBanco = cajaSeñas.obtenerUltimoSaldo(user.getSucursalID(), "CajaSeñasBanco",
+                "cajaSeñasBancoID");
+        String saldoBancoFormateado = formatoMoneda.format(saldoBanco);
+        cajaSeñasBancoLabelToComplete.setText(saldoBancoFormateado);
     }
 
     @FXML
-    void btnArqueosPasadosClicked(ActionEvent event) {
+    void btnVerDetalleCajasClicked(ActionEvent event) {
 
     }
 
@@ -52,4 +67,5 @@ public class VerBalancesController {
         SceneController sceneController = new SceneController((Stage) btnVolver.getScene().getWindow());
         sceneController.switchToManagerDashboard();
     }
+
 }

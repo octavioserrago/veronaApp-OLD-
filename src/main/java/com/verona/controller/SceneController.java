@@ -92,6 +92,11 @@ public class SceneController {
         switchScene("/com/verona/view/registrarPago.fxml", "Registrar un pago (Salida)");
     }
 
+    public void switchToVerificarTarjetaCredito() {
+        switchScene("/com/verona/view/verificarIngresosTarjetaCredito.fxml",
+                "Verificar Los ingresos con tarjeta de credito");
+    }
+
     public void switchToVentas(AnchorPane rootPane) {
         try {
             Scene scene = new Scene(rootPane);

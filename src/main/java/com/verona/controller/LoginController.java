@@ -49,13 +49,16 @@ public class LoginController {
         String password = passwordField.getText();
         int sucursalID = 0;
 
-        User user = new User(userName, password, "", "", sucursalID);
+        User user = new User(userName, password, "", "", sucursalID, 0);
 
         if (user.login(userName, password)) {
             int roleID = user.getRoleID();
+            int userID = user.getUserID();
             sucursalID = user.getSucursalID();
+
+            user.setUserID(userID);
+
             User.setCurrentUser(user);
-            System.out.println(sucursalID);
 
             switch (roleID) {
                 case 1:

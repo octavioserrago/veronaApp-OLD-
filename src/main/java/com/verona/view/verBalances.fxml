@@ -8,21 +8,21 @@
 <?import javafx.scene.paint.Color?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.verona.controller.manager.VerBalancesController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="431.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.verona.controller.manager.VerBalancesController">
    <children>
-      <Label layoutX="246.0" layoutY="14.0" text="Balance">
+      <Label layoutX="239.0" layoutY="14.0" text="Balances">
          <font>
             <Font name="Arial Bold" size="28.0" />
          </font>
          <effect>
             <DropShadow>
                <color>
-                  <Color red="0.6052631735801697" green="0.6052631735801697" blue="0.6052631735801697" />
+                  <Color red="0.6000000238418579" green="0.6000000238418579" blue="0.6000000238418579" opacity="0.514340341091156" />
                </color>
             </DropShadow>
          </effect>
       </Label>
-      <Button fx:id="btnVolver" layoutX="279.0" layoutY="351.0" mnemonicParsing="false" onAction="#btnVolverClicked" style="-fx-background-color: FFAA00;" text="Volver">
+      <Button fx:id="btnVolver" layoutX="272.0" layoutY="372.0" mnemonicParsing="false" onAction="#btnVolverClicked" style="-fx-background-color: FFAA00;" text="Volver">
          <effect>
             <DropShadow blurType="GAUSSIAN">
                <color>
@@ -30,64 +30,72 @@
                </color>
             </DropShadow>
          </effect>
+         <font>
+            <Font name="Arial Bold" size="13.0" />
+         </font>
       </Button>
-      <Label layoutX="129.0" layoutY="70.0" text="Señas en Efectivo:">
+      <Button fx:id="btnVerDetalleCajas" layoutX="230.0" layoutY="59.0" mnemonicParsing="false" onAction="#btnVerDetalleCajasClicked" style="-fx-background-color: Black;" text="Ver Detalle de Cajas" textFill="WHITE">
          <font>
             <Font name="Arial Bold" size="13.0" />
          </font>
-      </Label>
-      <Label layoutX="140.0" layoutY="101.0" prefHeight="17.0" prefWidth="116.0" text="Señas en Banco:">
-         <font>
-            <Font name="Arial Bold" size="13.0" />
-         </font>
-      </Label>
-      <Label layoutX="151.0" layoutY="132.0" text="Caja en Banco:">
-         <font>
-            <Font name="Arial Bold" size="13.0" />
-         </font>
-      </Label>
-      <Label layoutX="146.0" layoutY="166.0" text="Caja en Efectivo:">
-         <font>
-            <Font name="Arial Bold" size="13.0" />
-         </font>
-      </Label>
-      <Separator layoutY="85.0" prefHeight="16.0" prefWidth="600.0" />
-      <Separator layoutX="-1.0" layoutY="122.0" prefHeight="0.0" prefWidth="600.0" />
-      <Separator layoutX="4.0" layoutY="153.0" prefHeight="3.0" prefWidth="600.0" />
-      <Separator layoutX="3.0" layoutY="192.0" prefHeight="16.0" prefWidth="594.0" />
-      <Button fx:id="btnArqueosPasados" layoutX="166.0" layoutY="286.0" mnemonicParsing="false" onAction="#btnArqueosPasadosClicked" style="-fx-background-color: Black;" text="Arqueos Pasados" textFill="WHITE">
          <effect>
             <DropShadow>
                <color>
-                  <Color opacity="0.5946462750434875" />
+                  <Color opacity="0.6000000238418579" />
                </color>
             </DropShadow>
-         </effect>
-      </Button>
-      <Button fx:id="btnArqueo" layoutX="331.0" layoutY="286.0" mnemonicParsing="false" onAction="#btnArqueoClicked" style="-fx-background-color: Black;" text="Arqueo del Dia" textFill="WHITE">
-         <effect>
-            <DropShadow>
-               <color>
-                  <Color opacity="0.600382387638092" />
-               </color>
-            </DropShadow>
-         </effect>
-      </Button>
-      <Label fx:id="SeñasEfectivoLabelToComplete" layoutX="253.0" layoutY="70.0" prefHeight="17.0" prefWidth="188.0" />
-      <Label fx:id="señasBancoLabelToComplete" layoutX="260.0" layoutY="101.0" prefHeight="17.0" prefWidth="188.0" />
-      <Label fx:id="cajaBancoLabelToComplete" layoutX="253.0" layoutY="131.0" prefHeight="17.0" prefWidth="188.0" />
-      <Label fx:id="cajaEfectivoLabelToComplete" layoutX="256.0" layoutY="165.0" prefHeight="17.0" prefWidth="188.0" />
-      <Label layoutX="156.0" layoutY="208.0" text="Total de Señas:">
+         </effect></Button>
+      <Separator layoutY="91.0" prefHeight="25.0" prefWidth="600.0" />
+      <Label layoutX="122.0" layoutY="124.0" text="Caja Señas Efectivo:">
          <font>
             <Font name="Arial Bold" size="13.0" />
          </font>
       </Label>
-      <Label layoutX="78.0" layoutY="237.0" text="Total de Caja de la Sucursal:">
+      <Label layoutX="127.0" layoutY="164.0" text="Caja Señas Banco:">
          <font>
             <Font name="Arial Bold" size="13.0" />
          </font>
       </Label>
-      <Label fx:id="totalSeñasToComplete" layoutX="262.0" layoutY="208.0" prefHeight="17.0" prefWidth="176.0" />
-      <Label fx:id="totalCajaToComplete" layoutX="259.0" layoutY="237.0" prefHeight="17.0" prefWidth="176.0" />
+      <Label layoutX="151.0" layoutY="202.0" text="Caja Efectivo:">
+         <font>
+            <Font name="Arial Bold" size="13.0" />
+         </font>
+      </Label>
+      <Label layoutX="156.0" layoutY="243.0" text="Caja Banco:">
+         <font>
+            <Font name="Arial Bold" size="13.0" />
+         </font>
+      </Label>
+      <Label layoutX="154.0" layoutY="296.0" text="Dinero Total:">
+         <font>
+            <Font name="Arial Bold" size="13.0" />
+         </font>
+      </Label>
+      <Separator layoutY="283.0" prefHeight="6.0" prefWidth="600.0" />
+      <Label fx:id="cajaSeñasEfectivoLabelToComplete" layoutX="268.0" layoutY="124.0" prefHeight="17.0" prefWidth="188.0">
+         <font>
+            <Font name="Arial" size="13.0" />
+         </font>
+      </Label>
+      <Label fx:id="cajaSeñasBancoLabelToComplete" layoutX="250.0" layoutY="164.0" prefHeight="17.0" prefWidth="188.0">
+         <font>
+            <Font name="Arial" size="13.0" />
+         </font>
+      </Label>
+      <Label fx:id="cajaEfectivoLabelToComplete" layoutX="250.0" layoutY="202.0" prefHeight="17.0" prefWidth="188.0">
+         <font>
+            <Font name="Arial" size="13.0" />
+         </font>
+      </Label>
+      <Label fx:id="cajaBancoLabelToComplete" layoutX="239.0" layoutY="243.0" prefHeight="17.0" prefWidth="188.0">
+         <font>
+            <Font name="Arial" size="13.0" />
+         </font>
+      </Label>
+      <Label fx:id="dineroTotalLabelToComplete" layoutX="239.0" layoutY="296.0" prefHeight="17.0" prefWidth="238.0">
+         <font>
+            <Font name="Arial" size="13.0" />
+         </font>
+      </Label>
    </children>
 </AnchorPane>

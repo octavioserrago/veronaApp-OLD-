@@ -24,4 +24,9 @@ public class Caja {
     public void setSucursalID(int sucursalID) {
         this.sucursalID = sucursalID;
     }
+
+    /*
+     * Recordar crear una vista para poder dejar en claro cuando hay que mover
+     * dinero en efectivo de las señas a la caja en efectivo
+     */
 }

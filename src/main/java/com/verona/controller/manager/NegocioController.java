@@ -4,8 +4,6 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 import com.verona.controller.SceneController;
-import com.verona.model.User;
-import com.verona.model.Venta;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -41,9 +39,6 @@ public class NegocioController implements Initializable {
 
     @FXML
     private HBox legendContainer;
-
-    private Venta ventaModel = new Venta(0, null, null, null, null, null, 0, 0, 0, null, null, 0, null, null, null, 0);
-    private User user = User.getCurrentUser();
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {

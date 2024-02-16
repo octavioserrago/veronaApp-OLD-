@@ -127,9 +127,6 @@ public class BuscarVentasController {
     private Label materialLabelToComplete;
 
     @FXML
-    private TextField nombreClienteTextField;
-
-    @FXML
     private Label nombreLabel;
 
     @FXML
@@ -213,7 +210,7 @@ public class BuscarVentasController {
         id = 0;
         nombreCliente = "";
         entradaModel = new Entrada("", "", 0, null, 0, 0, 0, 0, "");
-        ventaModel = new Venta(id, nombreCliente, "", "", "", "", 0, 0, 0, null, "", 0, "", "", "", 0);
+        ventaModel = new Venta(id, nombreCliente, "", "", "", "", 0, 0, 0, null, "", 0, "", "", "", 0, 0);
     }
 
     @FXML
@@ -551,9 +548,8 @@ public class BuscarVentasController {
     @FXML
     void btnBuscarClicked(ActionEvent event) {
         idString = idClienteTextField.getText();
-        nombreCliente = nombreClienteTextField.getText();
 
-        if (!idString.isEmpty() || !nombreCliente.isEmpty()) {
+        if (!idString.isEmpty()) {
             try {
                 if (!idString.isEmpty()) {
                     id = Integer.parseInt(idString);
@@ -567,23 +563,12 @@ public class BuscarVentasController {
                     } else {
                         resultadoLabel.setText("No se encontró ninguna venta con el ID proporcionado");
                     }
-                } else if (!nombreCliente.isEmpty()) {
-
-                    Venta venta = ventaModel.findVentaByName(nombreCliente);
-
-                    if (venta != null) {
-
-                        mostrarDetallesVenta(venta);
-                        resultadoLabel.setText("Venta encontrada");
-                    } else {
-                        resultadoLabel.setText("No se encontró ninguna venta con el nombre proporcionado");
-                    }
                 }
             } finally {
 
             }
         } else {
-            resultadoLabel.setText("Ingrese al menos un criterio de búsqueda (ID o Nombre Cliente)");
+            resultadoLabel.setText("Ingrese un ID correcta");
         }
     }
 

@@ -46,6 +46,9 @@ public class ManagerDashboardController {
     private Button btnNegocio;
 
     @FXML
+    private Button btnActualizarPrecios;
+
+    @FXML
     private ComboBox<String> comboboxVentas;
 
     @FXML
@@ -87,14 +90,20 @@ public class ManagerDashboardController {
 
     }
 
-    private Venta ventaModel = new Venta(0, null, null, null, null, null, 0, 0, 0, null, null, 0, null, null, null, 0);
+    @FXML
+    void btnActualizarPreciosClicked(ActionEvent event) {
+
+    }
+
+    private Venta ventaModel = new Venta(0, null, null, null, null, null, 0, 0, 0, null, null, 0, null, null, null, 0,
+            0);
     User user = User.getCurrentUser();
     private Entrada entradaModel = new Entrada(null, null, 0, null, 0, 0, 0, 0, null);
     private Pago pagoModel = new Pago(0, 0, 0, 0, 0, 0);
 
     @FXML
     void btnCerrarSesionClicked(ActionEvent event) {
-        User user = new User("", "", "", "", 0);
+        User user = new User("", "", "", "", 0, 0);
         User.setCurrentUser(user);
         System.gc();
         SceneController sceneController = new SceneController((Stage) btnCerrarSesion.getScene().getWindow());
@@ -110,7 +119,7 @@ public class ManagerDashboardController {
         comboboxBachas.setItems(bachasItems);
 
         ObservableList<String> cajaItems = FXCollections.observableArrayList("Ver Balances", "Registrar Nuevo Ingreso",
-                "Registrar Nueva Salida");
+                "Registrar Nueva Salida", "Verificar ingresos con tarjetas de crédito");
         comboboxCaja.setItems(cajaItems);
 
         comboboxCaja.setOnAction(event -> {
@@ -258,6 +267,8 @@ public class ManagerDashboardController {
             nuevoIngreso();
         } else if ("Registrar Nueva Salida".equals(selectedItem)) {
             nuevaSalida();
+        } else if ("Verificar ingresos con tarjetas de crédito".equals(selectedItem)) {
+            verificarIngresosCredito();
         }
     }
 
@@ -269,6 +280,11 @@ public class ManagerDashboardController {
     private void verBalances() {
         SceneController sceneController = new SceneController((Stage) btnCerrarSesion.getScene().getWindow());
         sceneController.switchToVerBalances();
+    }
+
+    private void verificarIngresosCredito() {
+        SceneController sceneController = new SceneController((Stage) btnCerrarSesion.getScene().getWindow());
+        sceneController.switchToVerificarTarjetaCredito();
     }
 
     private void verVentasDeSucursal() {

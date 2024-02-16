@@ -33,10 +33,11 @@ public class Venta {
     private String email;
     private String nombreApellidoColocador;
     private int sucursalID;
+    private int usersID;
 
     public Venta(int ventasID, String nombreCliente, String descripcion, String material, String color,
             String fechaEstimadaTerminacion, int colocadoresID, double precioColocacion, int monedasID, Double importe,
-            String estado, int token, String telefono1, String telefono2, String email, int sucursalID) {
+            String estado, int token, String telefono1, String telefono2, String email, int sucursalID, int usersID) {
         this.ventasID = ventasID;
         this.nombreCliente = nombreCliente;
         this.descripcion = descripcion;
@@ -53,6 +54,15 @@ public class Venta {
         this.telefono2 = telefono2;
         this.email = email;
         this.sucursalID = sucursalID;
+        this.usersID = usersID;
+    }
+
+    public int getUsersID() {
+        return usersID;
+    }
+
+    public void setUsersID(int usersID) {
+        this.usersID = usersID;
     }
 
     public void setNombreApellidoColocador(String nombreApellidoColocador) {
@@ -208,7 +218,7 @@ public class Venta {
     public void insertarVenta() throws SQLException {
         String sql = "INSERT INTO Ventas (nombreCliente, descripcion, material, color," +
                 "fechaEstimadaTerminacion, colocadoresID, precioColocacion, monedasID, importe, " +
-                "estado, token, telefono1, telefono2, email, sucursalID) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                "estado, token, telefono1, telefono2, email, sucursalID, usersID) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?)";
 
         try (PreparedStatement preparedStatement = conexion.prepareStatement(sql)) {
 
@@ -227,6 +237,7 @@ public class Venta {
             preparedStatement.setString(13, telefono2);
             preparedStatement.setString(14, email);
             preparedStatement.setInt(15, sucursalID);
+            preparedStatement.setInt(16, usersID);
 
             preparedStatement.executeUpdate();
         }
@@ -258,7 +269,8 @@ public class Venta {
                         resultSet.getString("telefono1"),
                         resultSet.getString("telefono2"),
                         resultSet.getString("email"),
-                        resultSet.getInt("sucursalID"));
+                        resultSet.getInt("sucursalID"),
+                        resultSet.getInt("usersID"));
 
                 venta.setFecha(formatFecha(resultSet.getString("fecha"), "fecha"));
                 venta.setFechaEstimadaTerminacion(formatFechaTerminacion(
@@ -353,7 +365,8 @@ public class Venta {
                             resultSet.getString("telefono1"),
                             resultSet.getString("telefono2"),
                             resultSet.getString("email"),
-                            resultSet.getInt("sucursalID"));
+                            resultSet.getInt("sucursalID"),
+                            resultSet.getInt("usersID"));
 
                 } else {
                     System.err.println("No se encontró ninguna venta con el ID: " + ventaID);
@@ -401,9 +414,8 @@ public class Venta {
                             resultSet.getString("telefono1"),
                             resultSet.getString("telefono2"),
                             resultSet.getString("email"),
-                            resultSet.getInt("sucursalID")
-
-                    );
+                            resultSet.getInt("sucursalID"),
+                            resultSet.getInt("usersID"));
                 }
             }
         } catch (SQLException e) {

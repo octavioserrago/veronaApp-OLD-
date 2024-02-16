@@ -1,17 +1,20 @@
 package com.verona.controller.common;
 
 import java.sql.SQLException;
-
 import com.verona.controller.SceneController;
+import com.verona.model.CajaSeñas;
 import com.verona.model.Cotizacion;
 import com.verona.model.Entrada;
+import com.verona.model.MovimientosCajaSeñas;
 import com.verona.model.User;
 import com.verona.model.Venta;
-
+import com.verona.model.VerificadorIngresosCredito;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
@@ -57,9 +60,6 @@ public class RegistrarIngresoController {
     private Label resultadoBusquedaLabel;
 
     @FXML
-    private Label resultadoRegistroLabel;
-
-    @FXML
     private Label nombreClienteLabel;
 
     @FXML
@@ -68,23 +68,25 @@ public class RegistrarIngresoController {
     @FXML
     private Button btnBuscar;
 
-    Venta venta = new Venta(0, null, null, null, null, null, 0, 0, 0, null, null, 0, null, null, null, 0);
-    User user = User.getCurrentUser();
+    private CajaSeñas cajaSeñas = new CajaSeñas(0, 0);
+    private VerificadorIngresosCredito verificadorCredito = new VerificadorIngresosCredito(0, 0);
+    private Venta venta = new Venta(0, null, null, null, null, null, 0, 0, 0, null, null, 0, null, null, null, 0, 0);
+    private User user = User.getCurrentUser();
+    private MovimientosCajaSeñas movimientoSeña = new MovimientosCajaSeñas(0, 0);
 
     private void buscar() {
         try {
             int numero = Integer.parseInt(idNombreClienteTextField.getText());
             venta.findVentaById(numero);
             String nombreCliente = venta.getNombreCliente();
-            System.out.println("Nombre del cliente: " + nombreCliente);
 
             if (numero > 0 && nombreCliente != null && !nombreCliente.isEmpty()) {
                 hacerVisibles();
-                mostrarResultado("Venta Encontrada", true);
+                mostrarAlerta("Venta Encontrada", AlertType.INFORMATION);
                 nombreClienteLabelToComplete.setText(nombreCliente);
                 venta.setVentasID(numero);
             } else {
-                mostrarResultado("Venta No Encontrada", false);
+                mostrarAlerta("Venta No Encontrada", AlertType.ERROR);
             }
 
         } catch (NumberFormatException e) {
@@ -94,11 +96,10 @@ public class RegistrarIngresoController {
 
             if (!texto.isEmpty() && nombreCliente != null && !nombreCliente.isEmpty()) {
                 hacerVisibles();
-                mostrarResultado("Venta Encontrada", true);
+                mostrarAlerta("Venta Encontrada", AlertType.INFORMATION);
                 nombreClienteLabelToComplete.setText(nombreCliente);
-
             } else {
-                mostrarResultado("Venta No Encontrada", false);
+                mostrarAlerta("Venta No Encontrada", AlertType.ERROR);
             }
         }
     }
@@ -109,7 +110,7 @@ public class RegistrarIngresoController {
         String importeTexto = importeTextField.getText();
 
         if (importeTexto.isEmpty()) {
-            mostrarMensaje("Debe ingresar un importe válido", "red");
+            mostrarAlerta("Debe ingresar un importe válido", AlertType.ERROR);
             return;
         }
 
@@ -119,7 +120,7 @@ public class RegistrarIngresoController {
         String monedaSeleccionada = monedasComboBox.getValue();
 
         if (metodoPagoSeleccionado == null || monedaSeleccionada == null) {
-            mostrarMensaje("Debe seleccionar un método de pago y una moneda", "red");
+            mostrarAlerta("Debe seleccionar un método de pago y una moneda", AlertType.ERROR);
             return;
         }
 
@@ -138,14 +139,45 @@ public class RegistrarIngresoController {
                         venta.getVentasID(), user.getSucursalID(), nombreVendedor);
                 boolean insercionExitosa = entrada.insertarEntradaPesos();
 
+                /*
+                 * Aca habria que inicializar una llamada a la clase de ventas y obtener el
+                 * precio total de la venta.
+                 * Luego habria que llamar a la caja y en cada caso comprobar la totalidad de la
+                 * seña ya que si abona
+                 * el 100% deberia pasarse a la caja y no a las señas. Queda pendiente
+                 */
+
                 if (insercionExitosa) {
-                    mostrarMensaje("Entrada registrada correctamente", "green");
+                    mostrarAlerta("Entrada registrada correctamente", AlertType.INFORMATION);
+                    switch (metodoPagoSeleccionado) {
+                        case "Efectivo":
+                            cajaSeñas.insertarCajaSeñaEfectivo(importeEnPesos, user.getSucursalID());
+                            movimientoSeña.cargarMovimientoCajaSeñasEfectivo(importeEnPesos,
+                                    user.getSucursalID());
+                            break;
+                        case "Transferencia":
+                            cajaSeñas.insertarCajaSeñaBanco(importeEnPesos, user.getSucursalID());
+                            movimientoSeña.cargarMovimientoCajaSeñasBanco(importeEnPesos, user.getSucursalID());
+                            break;
+                        case "Tarjeta de débito":
+                            cajaSeñas.insertarCajaSeñaBanco(importeEnPesos, user.getSucursalID());
+                            movimientoSeña.cargarMovimientoCajaSeñasBanco(importeEnPesos, user.getSucursalID());
+                            break;
+                        case "Tarjeta de crédito":
+                            verificadorCredito.insertVerificadorIngresosCredito(importeEnPesos, user.getSucursalID());
+                            break;
+                        case "Cheque":
+                            cajaSeñas.insertarCajaSeñaEfectivo(importeEnPesos, user.getSucursalID());
+                            movimientoSeña.cargarMovimientoCajaSeñasEfectivo(importeEnPesos,
+                                    user.getSucursalID());
+                            break;
+                    }
                 } else {
-                    mostrarMensaje("Error al registrar entrada", "red");
+                    mostrarAlerta("Error al registrar entrada", AlertType.ERROR);
                 }
 
             } catch (SQLException e) {
-                mostrarMensaje("Error al registrar entrada: " + e.getMessage(), "red");
+                mostrarAlerta("Error al registrar entrada: " + e.getMessage(), AlertType.ERROR);
                 e.printStackTrace();
             }
 
@@ -164,21 +196,24 @@ public class RegistrarIngresoController {
                 boolean insercionExitosa = entrada.insertarEntrada();
 
                 if (insercionExitosa) {
-                    mostrarMensaje("Entrada registrada correctamente", "green");
+                    mostrarAlerta("Entrada registrada correctamente", AlertType.INFORMATION);
+                    cajaSeñas.insertarCajaSeñaEfectivo(importeEnPesos, user.getSucursalID());
                 } else {
-                    mostrarMensaje("Error al registrar entrada", "red");
+                    mostrarAlerta("Error al registrar entrada", AlertType.ERROR);
                 }
 
             } catch (SQLException e) {
-                mostrarMensaje("Error al registrar entrada: " + e.getMessage(), "red");
+                mostrarAlerta("Error al registrar entrada: " + e.getMessage(), AlertType.ERROR);
                 e.printStackTrace();
             }
         }
     }
 
-    private void mostrarMensaje(String mensaje, String color) {
-        resultadoRegistroLabel.setText(mensaje);
-        resultadoRegistroLabel.setStyle("-fx-text-fill: " + color + ";");
+    private void mostrarAlerta(String mensaje, AlertType tipo) {
+        Alert alert = new Alert(tipo);
+        alert.setHeaderText(null); // Opcional, puedes definir un encabezado si lo deseas
+        alert.setContentText(mensaje);
+        alert.showAndWait();
     }
 
     @FXML
@@ -253,16 +288,4 @@ public class RegistrarIngresoController {
         monedasLabel.setVisible(true);
         nombreClienteLabel.setVisible(true);
     }
-
-    private void mostrarResultado(String mensaje, boolean exitoso) {
-        resultadoBusquedaLabel.setText(mensaje);
-
-        if (exitoso) {
-            resultadoBusquedaLabel.setStyle("-fx-text-fill: green; -fx-alignment: center;");
-        } else {
-            resultadoBusquedaLabel.setStyle("-fx-text-fill: red; -fx-alignment: center;");
-        }
-        resultadoBusquedaLabel.setVisible(true);
-    }
-
 }

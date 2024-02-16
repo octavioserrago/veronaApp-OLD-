@@ -11,13 +11,15 @@ public class User {
     private String apellido;
     private int roleID;
     private int sucursalID;
+    private int userID;
 
-    public User(String userName, String password, String nombre, String apellido, int sucursalID) {
+    public User(String userName, String password, String nombre, String apellido, int sucursalID, int userID) {
         this.userName = userName;
         this.password = password;
         this.nombre = nombre;
         this.apellido = apellido;
         this.sucursalID = sucursalID;
+        this.userID = userID;
     }
 
     private static User currentUser;
@@ -40,6 +42,14 @@ public class User {
 
     public int getRoleID() {
         return roleID;
+    }
+
+    public int getUserID() {
+        return userID;
+    }
+
+    public void setUserID(int userID) {
+        this.userID = userID;
     }
 
     public void setRoleID(int roleID) {
@@ -106,12 +116,13 @@ public class User {
             ResultSet resultSet = stmt.executeQuery();
 
             if (resultSet.next()) {
-
+                int userID = resultSet.getInt("userID");
                 int roleID = resultSet.getInt("roleID");
                 int sucursalID = resultSet.getInt("sucursalID");
                 String nombre = resultSet.getString("nombre");
                 String apellido = resultSet.getString("apellido");
 
+                this.setUserID(userID);
                 this.setUserName(enteredUserName);
                 this.setRoleID(roleID);
                 this.setSucursalID(sucursalID);

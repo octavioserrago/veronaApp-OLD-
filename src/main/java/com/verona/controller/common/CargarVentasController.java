@@ -15,7 +15,9 @@ import com.verona.model.Venta;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
@@ -25,9 +27,6 @@ import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
 public class CargarVentasController {
-
-    @FXML
-    private Label alertLabel;
 
     @FXML
     private Button btnCargarVenta;
@@ -52,6 +51,9 @@ public class CargarVentasController {
 
     @FXML
     private TextField emailTextField;
+
+    @FXML
+    private Label labelAclaracion;
 
     @FXML
     private DatePicker fechaTerminacionSelect;
@@ -96,6 +98,8 @@ public class CargarVentasController {
 
         llenarComboBoxColocadores();
 
+        System.out.println(user.getUserID());
+
     }
 
     @FXML
@@ -135,21 +139,37 @@ public class CargarVentasController {
         Venta venta = new Venta(0, nombreCliente, descripcion, material, color,
                 fechaEstimadaTerminacion, colocadoresID, precioColocacion,
                 1, Double.parseDouble(importeTextField.getText()), estado, 0,
-                telefono1, telefono2, email, user.getSucursalID());
-
-        System.out.println(user.getSucursalID());
+                telefono1, telefono2, email, user.getSucursalID(), user.getUserID());
 
         Validador validador = new Validador(venta);
         String errores = validador.validarVenta();
 
         if (errores.isEmpty()) {
-            try {
-                venta.insertarVenta();
-                mostrarMensaje("Venta cargada con éxito", true);
-            } catch (SQLException e) {
-                mostrarMensaje("Error al cargar la venta", false);
-                e.printStackTrace();
-            }
+            // Crear el mensaje de confirmación
+            String mensaje = "¿Está a punto de cargar una venta a nombre de: " + nombreCliente + " con un importe de: $"
+                    + importeTextField.getText() + "?";
+
+            // Crear el Alert de confirmación
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION, mensaje, ButtonType.YES, ButtonType.CANCEL);
+            alert.setTitle("Confirmación de carga de venta");
+
+            // Mostrar el Alert y esperar la respuesta del usuario
+            alert.showAndWait().ifPresent(response -> {
+                if (response == ButtonType.YES) {
+                    // El usuario confirmó la carga de la venta
+                    try {
+                        venta.insertarVenta();
+                        mostrarMensaje("Venta cargada con éxito", true);
+                    } catch (SQLException e) {
+                        mostrarMensaje("Error al cargar la venta", false);
+                        e.printStackTrace();
+                    }
+                } else {
+                    // El usuario canceló la carga de la venta
+                    // Puedes agregar aquí cualquier lógica adicional que desees realizar
+                    System.out.println("La carga de la venta fue cancelada por el usuario.");
+                }
+            });
         } else {
             mostrarMensaje("Errores en la validación: " + errores, false);
         }
@@ -202,15 +222,6 @@ public class CargarVentasController {
         }
     }
 
-    private void mostrarMensaje(String mensaje, boolean esLogro) {
-        alertLabel.setText(mensaje);
-        if (esLogro) {
-            alertLabel.setStyle("-fx-text-fill: green;");
-        } else {
-            alertLabel.setStyle("-fx-text-fill: red;");
-        }
-    }
-
     DatabaseConnection con = new DatabaseConnection();
 
     Connection conexion = con.conectar();
@@ -239,5 +250,13 @@ public class CargarVentasController {
         }
 
         return colocadorID;
+    }
+
+    private void mostrarMensaje(String mensaje, boolean exitoso) {
+        Alert alert = new Alert(exitoso ? Alert.AlertType.INFORMATION : Alert.AlertType.ERROR);
+        alert.setTitle(exitoso ? "Éxito" : "Error");
+        alert.setHeaderText(null);
+        alert.setContentText(mensaje);
+        alert.showAndWait();
     }
 }
