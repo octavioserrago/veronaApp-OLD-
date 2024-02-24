@@ -1,11 +1,9 @@
 package com.verona.controller.common;
 
-import java.sql.SQLException;
 import java.util.List;
 
 import com.verona.controller.SceneController;
-import com.verona.model.CajaSeñas;
-import com.verona.model.MovimientosCajaSeñas;
+
 import com.verona.model.User;
 import com.verona.model.VerificadorIngresosCredito;
 
@@ -30,15 +28,11 @@ public class VerificadorIngresosTarjetaCreditoController {
 
     private VerificadorIngresosCredito verificadorIngresosCredito;
 
-    private CajaSeñas cajaSeñas = new CajaSeñas(0, 0);
-    private MovimientosCajaSeñas movimientoBanco = new MovimientosCajaSeñas(0, 0);
-    private User user = User.getCurrentUser();
-
     @FXML
     void initialize() {
         User user = User.getCurrentUser();
         if (user != null) {
-            verificadorIngresosCredito = new VerificadorIngresosCredito(0.0, user.getSucursalID());
+            verificadorIngresosCredito = new VerificadorIngresosCredito(0.0, user.getSucursalID(), 0);
             createColumns();
             cargarTabla();
         }
@@ -54,6 +48,9 @@ public class VerificadorIngresosTarjetaCreditoController {
 
         TableColumn<VerificadorIngresosCredito, Double> importeColumn = new TableColumn<>("Importe");
         importeColumn.setCellValueFactory(new PropertyValueFactory<>("importe"));
+
+        TableColumn<VerificadorIngresosCredito, Integer> ventasIDColumn = new TableColumn<>("ID de Venta");
+        ventasIDColumn.setCellValueFactory(new PropertyValueFactory<>("ventasID"));
 
         TableColumn<VerificadorIngresosCredito, Void> buttonColumn = new TableColumn<>("Acción");
         buttonColumn.setCellFactory(column -> {
@@ -78,7 +75,8 @@ public class VerificadorIngresosTarjetaCreditoController {
             };
         });
 
-        tableVerificadorIngresos.getColumns().addAll(idColumn, fechaCobroColumn, importeColumn, buttonColumn);
+        tableVerificadorIngresos.getColumns().addAll(idColumn, fechaCobroColumn, importeColumn, ventasIDColumn,
+                buttonColumn);
     }
 
     private void cargarTabla() {
@@ -96,22 +94,13 @@ public class VerificadorIngresosTarjetaCreditoController {
             alert.setHeaderText("¿Está seguro/a de que este importe ya está vigente en la caja del banco?");
             alert.showAndWait().ifPresent(response -> {
                 if (response == ButtonType.OK) {
-                    try {
-                        double importe = ingresoSeleccionado.getImporte();
-                        int verificadorID = ingresoSeleccionado.getVerificadorIngresosCreditoID();
-                        if (verificadorIngresosCredito.eliminarVerificadorPorID(verificadorID)) {
-                            tableVerificadorIngresos.getItems().remove(ingresoSeleccionado);
+                    int verificadorID = ingresoSeleccionado.getVerificadorIngresosCreditoID();
+                    if (verificadorIngresosCredito.eliminarVerificadorPorID(verificadorID)) {
+                        tableVerificadorIngresos.getItems().remove(ingresoSeleccionado);
 
-                            cajaSeñas.insertarCajaSeñaBanco(importe, user.getSucursalID());
-                            movimientoBanco.cargarMovimientoCajaSeñasBanco(importe, user.getSucursalID());
-
-                            mostrarMensaje("Ingreso confirmado y eliminado correctamente", "green");
-                        } else {
-                            mostrarMensaje("Error al confirmar el ingreso", "red");
-                        }
-                    } catch (SQLException e) {
-                        mostrarMensaje("Error al confirmar el ingreso: " + e.getMessage(), "red");
-                        e.printStackTrace();
+                        mostrarMensaje("Ingreso confirmado y eliminado correctamente", "green");
+                    } else {
+                        mostrarMensaje("Error al confirmar el ingreso", "red");
                     }
                 }
             });

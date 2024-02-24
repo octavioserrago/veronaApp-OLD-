@@ -2,10 +2,10 @@ package com.verona.controller.common;
 
 import java.sql.SQLException;
 import com.verona.controller.SceneController;
-import com.verona.model.CajaSeñas;
+import com.verona.model.Caja;
 import com.verona.model.Cotizacion;
 import com.verona.model.Entrada;
-import com.verona.model.MovimientosCajaSeñas;
+import com.verona.model.Senias;
 import com.verona.model.User;
 import com.verona.model.Venta;
 import com.verona.model.VerificadorIngresosCredito;
@@ -68,23 +68,25 @@ public class RegistrarIngresoController {
     @FXML
     private Button btnBuscar;
 
-    private CajaSeñas cajaSeñas = new CajaSeñas(0, 0);
-    private VerificadorIngresosCredito verificadorCredito = new VerificadorIngresosCredito(0, 0);
+    private VerificadorIngresosCredito verificadorCredito = new VerificadorIngresosCredito(0, 0, 0);
     private Venta venta = new Venta(0, null, null, null, null, null, 0, 0, 0, null, null, 0, null, null, null, 0, 0);
     private User user = User.getCurrentUser();
-    private MovimientosCajaSeñas movimientoSeña = new MovimientosCajaSeñas(0, 0);
+    private Senias senia = new Senias(0, 0, 0, 0, 0, 0);
+    private Caja caja = new Caja(0, 0);
+    private Entrada entrada = new Entrada(null, null, 0, null, 0, 0, 0, 0, null);
 
-    private void buscar() {
+    private void buscar() throws SQLException {
         try {
             int numero = Integer.parseInt(idNombreClienteTextField.getText());
             venta.findVentaById(numero);
             String nombreCliente = venta.getNombreCliente();
+            venta.setVentasID(numero);
 
             if (numero > 0 && nombreCliente != null && !nombreCliente.isEmpty()) {
                 hacerVisibles();
                 mostrarAlerta("Venta Encontrada", AlertType.INFORMATION);
                 nombreClienteLabelToComplete.setText(nombreCliente);
-                venta.setVentasID(numero);
+
             } else {
                 mostrarAlerta("Venta No Encontrada", AlertType.ERROR);
             }
@@ -105,7 +107,8 @@ public class RegistrarIngresoController {
     }
 
     @FXML
-    void btnRegistrarEntradaClicked(ActionEvent event) {
+    void btnRegistrarEntradaClicked(ActionEvent event) throws SQLException {
+
         String detalle = detalleTextArea.getText();
         String importeTexto = importeTextField.getText();
 
@@ -130,48 +133,72 @@ public class RegistrarIngresoController {
         double tasaCambio = 0;
         String nombreVendedor = user.getNombre() + "\n" + user.getApellido();
 
+        double precioTotal = 0.0;
+        precioTotal = venta.findVentaImporte(venta.getVentasID());
+        double entradasDeVenta = entrada.calcularTotalEntradasEnPesos(venta.getVentasID());
+        double saldo = precioTotal - entradasDeVenta;
+
         if ("ARS".equals(monedaSeleccionada)) {
             moneda = 1;
             importeEnPesos = importe;
 
             try {
-                Entrada entrada = new Entrada(detalle, metodoPagoSeleccionado, moneda, importe, 0, importeEnPesos,
+                Entrada entrada = new Entrada(detalle, metodoPagoSeleccionado, moneda, importe, 0,
+                        importeEnPesos,
                         venta.getVentasID(), user.getSucursalID(), nombreVendedor);
                 boolean insercionExitosa = entrada.insertarEntradaPesos();
 
-                /*
-                 * Aca habria que inicializar una llamada a la clase de ventas y obtener el
-                 * precio total de la venta.
-                 * Luego habria que llamar a la caja y en cada caso comprobar la totalidad de la
-                 * seña ya que si abona
-                 * el 100% deberia pasarse a la caja y no a las señas. Queda pendiente
-                 */
-
                 if (insercionExitosa) {
                     mostrarAlerta("Entrada registrada correctamente", AlertType.INFORMATION);
-                    switch (metodoPagoSeleccionado) {
-                        case "Efectivo":
-                            cajaSeñas.insertarCajaSeñaEfectivo(importeEnPesos, user.getSucursalID());
-                            movimientoSeña.cargarMovimientoCajaSeñasEfectivo(importeEnPesos,
-                                    user.getSucursalID());
-                            break;
-                        case "Transferencia":
-                            cajaSeñas.insertarCajaSeñaBanco(importeEnPesos, user.getSucursalID());
-                            movimientoSeña.cargarMovimientoCajaSeñasBanco(importeEnPesos, user.getSucursalID());
-                            break;
-                        case "Tarjeta de débito":
-                            cajaSeñas.insertarCajaSeñaBanco(importeEnPesos, user.getSucursalID());
-                            movimientoSeña.cargarMovimientoCajaSeñasBanco(importeEnPesos, user.getSucursalID());
-                            break;
-                        case "Tarjeta de crédito":
-                            verificadorCredito.insertVerificadorIngresosCredito(importeEnPesos, user.getSucursalID());
-                            break;
-                        case "Cheque":
-                            cajaSeñas.insertarCajaSeñaEfectivo(importeEnPesos, user.getSucursalID());
-                            movimientoSeña.cargarMovimientoCajaSeñasEfectivo(importeEnPesos,
-                                    user.getSucursalID());
-                            break;
+
+                    if (importeEnPesos >= precioTotal) {
+                        switch (metodoPagoSeleccionado) {
+                            case "Efectivo":
+                                caja.insertarCajaEfectivo(importeEnPesos, user.getSucursalID());
+                                break;
+                            case "Transferencia":
+                                caja.insertarCajaBanco(importeEnPesos, user.getSucursalID());
+                                break;
+                            case "Tarjeta de débito":
+                                caja.insertarCajaBanco(importeEnPesos, user.getSucursalID());
+                                break;
+                            case "Tarjeta de crédito":
+                                verificadorCredito.insertVerificadorIngresosCredito(importeEnPesos,
+                                        user.getSucursalID(), venta.getVentasID());
+                                caja.insertarCajaBanco(importeEnPesos, user.getSucursalID());
+                                break;
+                            case "Cheque":
+                                caja.insertarCajaEfectivo(importeEnPesos, user.getSucursalID());
+                                break;
+                        }
+
+                    } else {
+                        switch (metodoPagoSeleccionado) {
+                            case "Efectivo":
+                                senia.insertarSeniaEfectivo(moneda, importeEnPesos, saldo - importeEnPesos,
+                                        venta.getVentasID(), user.getSucursalID());
+                                break;
+                            case "Transferencia":
+                                senia.insertarSeniaBanco(moneda, importeEnPesos, saldo - importeEnPesos,
+                                        venta.getVentasID(), user.getSucursalID());
+                                break;
+                            case "Tarjeta de débito":
+                                senia.insertarSeniaBanco(moneda, importeEnPesos, saldo - importeEnPesos,
+                                        venta.getVentasID(), user.getSucursalID());
+                                break;
+                            case "Tarjeta de crédito":
+                                verificadorCredito.insertVerificadorIngresosCredito(importeEnPesos,
+                                        user.getSucursalID(), venta.getVentasID());
+                                senia.insertarSeniaBanco(moneda, importeEnPesos, saldo - importeEnPesos,
+                                        venta.getVentasID(), user.getSucursalID());
+                                break;
+                            case "Cheque":
+                                senia.insertarSeniaEfectivo(moneda, importeEnPesos, saldo - importeEnPesos,
+                                        venta.getVentasID(), user.getSucursalID());
+                                break;
+                        }
                     }
+
                 } else {
                     mostrarAlerta("Error al registrar entrada", AlertType.ERROR);
                 }
@@ -180,8 +207,11 @@ public class RegistrarIngresoController {
                 mostrarAlerta("Error al registrar entrada: " + e.getMessage(), AlertType.ERROR);
                 e.printStackTrace();
             }
+        }
 
-        } else if ("USD".equals(monedaSeleccionada)) {
+        else if ("USD".equals(monedaSeleccionada))
+
+        {
             moneda = 3;
             Cotizacion cotizacion = new Cotizacion("", 0);
             Object[] ultimaCotizacion = cotizacion.getUltimaCotizacion();
@@ -196,8 +226,10 @@ public class RegistrarIngresoController {
                 boolean insercionExitosa = entrada.insertarEntrada();
 
                 if (insercionExitosa) {
+
                     mostrarAlerta("Entrada registrada correctamente", AlertType.INFORMATION);
-                    cajaSeñas.insertarCajaSeñaEfectivo(importeEnPesos, user.getSucursalID());
+                    senia.insertarSeniaEfectivo(moneda, importeEnPesos, saldo - importeEnPesos,
+                            venta.getVentasID(), user.getSucursalID());
                 } else {
                     mostrarAlerta("Error al registrar entrada", AlertType.ERROR);
                 }
@@ -211,13 +243,13 @@ public class RegistrarIngresoController {
 
     private void mostrarAlerta(String mensaje, AlertType tipo) {
         Alert alert = new Alert(tipo);
-        alert.setHeaderText(null); // Opcional, puedes definir un encabezado si lo deseas
+        alert.setHeaderText(null);
         alert.setContentText(mensaje);
         alert.showAndWait();
     }
 
     @FXML
-    void btnBuscarClicked(ActionEvent event) {
+    void btnBuscarClicked(ActionEvent event) throws SQLException {
         buscar();
     }
 

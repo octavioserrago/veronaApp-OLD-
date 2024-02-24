@@ -1,5 +1,10 @@
 package com.verona.model;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
 public class Caja {
     private double importe;
     private int sucursalID;
@@ -25,8 +30,53 @@ public class Caja {
         this.sucursalID = sucursalID;
     }
 
-    /*
-     * Recordar crear una vista para poder dejar en claro cuando hay que mover
-     * dinero en efectivo de las señas a la caja en efectivo
-     */
+    DatabaseConnection con = new DatabaseConnection();
+
+    Connection conexion = con.conectar();
+
+    PreparedStatement stmt;
+
+    public boolean insertarCajaEfectivo(double importeTransaccion, int sucursalID) throws SQLException {
+        String sqlInsert = "INSERT INTO CajaEfectivo (importeTransaccion, saldoActual, sucursalID) VALUES (?, ?, ?)";
+
+        try (PreparedStatement preparedStatement = conexion.prepareStatement(sqlInsert)) {
+            double saldoAnterior = obtenerUltimoSaldo(sucursalID, "CajaEfectivo", "cajaEfectivoID");
+
+            preparedStatement.setDouble(1, importeTransaccion);
+            preparedStatement.setDouble(2, saldoAnterior + importeTransaccion);
+            preparedStatement.setInt(3, sucursalID);
+
+            int filasAfectadas = preparedStatement.executeUpdate();
+            return filasAfectadas > 0;
+        }
+    }
+
+    public boolean insertarCajaBanco(double importeTransaccion, int sucursalID) throws SQLException {
+        String sqlInsert = "INSERT INTO CajaBanco (importeTransaccion, saldoActual ,sucursalID) VALUES (?, ?, ?)";
+
+        try (PreparedStatement preparedStatement = conexion.prepareStatement(sqlInsert)) {
+            double saldoAnterior = obtenerUltimoSaldo(sucursalID, "CajaBanco", "cajaBancoID");
+
+            preparedStatement.setDouble(1, importeTransaccion);
+            preparedStatement.setDouble(2, saldoAnterior + importeTransaccion);
+            preparedStatement.setInt(3, sucursalID);
+
+            int filasAfectadas = preparedStatement.executeUpdate();
+            return filasAfectadas > 0;
+        }
+    }
+
+    public double obtenerUltimoSaldo(int sucursalID, String tableName, String idColumnName) throws SQLException {
+        String sql = "SELECT saldoActual FROM " + tableName + " WHERE sucursalID = ? ORDER BY " + idColumnName
+                + " DESC LIMIT 1";
+        try (PreparedStatement preparedStatement = conexion.prepareStatement(sql)) {
+            preparedStatement.setInt(1, sucursalID);
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                if (resultSet.next()) {
+                    return resultSet.getDouble("saldoActual");
+                }
+                return 0;
+            }
+        }
+    }
 }

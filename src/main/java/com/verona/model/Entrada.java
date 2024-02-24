@@ -147,7 +147,7 @@ public class Entrada {
     PreparedStatement stmt;
 
     public boolean insertarEntrada() throws SQLException {
-        String sql = "INSERT INTO Entradas (detalle, metodoPago, monedasID, importe, cotizacionesID, importeEnPesos, ventasID, sucursalID, nombreVendedor) VALUES (?, ?, ?, ?, ?, ?, ?, ?,?)";
+        String sql = "INSERT INTO Entradas (detalle, metodoPago, monedasID, importe, cotizacionesID, importeEnPesos ,ventasID, sucursalID, nombreVendedor) VALUES (?, ?, ?, ?, ?, ?, ?,?,?)";
 
         try (PreparedStatement preparedStatement = conexion.prepareStatement(sql)) {
             preparedStatement.setString(1, detalle);
@@ -167,7 +167,7 @@ public class Entrada {
     }
 
     public boolean insertarEntradaPesos() throws SQLException {
-        String sql = "INSERT INTO Entradas (detalle, metodoPago, monedasID, importe, importeEnPesos, ventasID, sucursalID,nombreVendedor) VALUES (?, ?, ?, ?, ?,?,?,?)";
+        String sql = "INSERT INTO Entradas (detalle, metodoPago, monedasID, importe, importeEnPesos, ventasID, sucursalID,nombreVendedor) VALUES ( ?, ?, ?, ?,?,?,?,?)";
 
         try (PreparedStatement preparedStatement = conexion.prepareStatement(sql)) {
             preparedStatement.setString(1, detalle);

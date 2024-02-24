@@ -334,6 +334,26 @@ public class Venta {
         return tokenGenerated;
     }
 
+    public Double findVentaImporte(int ventaID) {
+        String sql = "SELECT importe FROM Ventas WHERE ventasID = ?";
+        try (PreparedStatement preparedStatement = conexion.prepareStatement(sql)) {
+            preparedStatement.setInt(1, ventaID);
+
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                if (resultSet.next()) {
+                    return resultSet.getDouble("importe");
+                } else {
+                    System.err.println("No se encontró ninguna venta con el ID: " + ventaID);
+                }
+            }
+        } catch (SQLException e) {
+            System.err.println("Error al buscar la venta con ID: " + ventaID);
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
     public Venta findVentaById(int ventaID) {
         String sql = "SELECT * FROM Ventas WHERE ventasID = ?";
         try (PreparedStatement preparedStatement = conexion.prepareStatement(sql)) {
