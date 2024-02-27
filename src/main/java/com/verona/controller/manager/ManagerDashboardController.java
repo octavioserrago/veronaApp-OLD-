@@ -119,7 +119,7 @@ public class ManagerDashboardController {
         comboboxBachas.setItems(bachasItems);
 
         ObservableList<String> cajaItems = FXCollections.observableArrayList("Ver Balances", "Registrar Nuevo Ingreso",
-                "Registrar Nueva Salida", "Verificar ingresos con tarjetas de crédito");
+                "Ver Señas", "Registrar Nueva Salida", "Verificar ingresos con tarjetas de crédito");
         comboboxCaja.setItems(cajaItems);
 
         comboboxCaja.setOnAction(event -> {
@@ -211,7 +211,6 @@ public class ManagerDashboardController {
         return formatoDinero.format(cantidad);
     }
 
-    // Cargar Entradas del dia
     private void cargarTotalEntradasDelDia() throws SQLException {
         double totalEntradas = entradaModel.calcularTotalEntradasEnPesosPorSucursalYDia(user.getSucursalID());
         @SuppressWarnings("deprecation")
@@ -220,7 +219,6 @@ public class ManagerDashboardController {
         entradasDiaLabel.setText(totalEntradasTexto);
     }
 
-    // Cargar Salidas del dia
     private void cargarSalidasDelDia() throws SQLException {
         double totalSalidas = pagoModel.calcularTotalSalidasEnPesosPorSucursalYDia(user.getSucursalID());
         @SuppressWarnings("deprecation")
@@ -269,12 +267,19 @@ public class ManagerDashboardController {
             nuevaSalida();
         } else if ("Verificar ingresos con tarjetas de crédito".equals(selectedItem)) {
             verificarIngresosCredito();
+        } else if ("Ver Señas".equals(selectedItem)) {
+            verSenias();
         }
     }
 
     private void nuevoIngreso() {
         SceneController sceneController = new SceneController((Stage) btnCerrarSesion.getScene().getWindow());
         sceneController.switchToRegistrarIngreso();
+    }
+
+    private void verSenias() {
+        SceneController sceneController = new SceneController((Stage) btnCerrarSesion.getScene().getWindow());
+        sceneController.switchToVerSenias();
     }
 
     private void verBalances() {

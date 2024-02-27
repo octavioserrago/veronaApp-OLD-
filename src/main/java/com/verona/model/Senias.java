@@ -2,7 +2,10 @@ package com.verona.model;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Senias {
     private int monedasID;
@@ -110,5 +113,31 @@ public class Senias {
 
             return filasAfectadas > 0;
         }
+    }
+
+    public List<Senias> obtenerSeniasPorSucursal(int sucursalID) throws SQLException {
+        List<Senias> senias = new ArrayList<>();
+
+        String sql = "SELECT ventasID, SUM(importeEfectivo) AS sumaEfectivo, SUM(importeBanco) AS sumaBanco, MAX(saldo) AS saldoMaximo FROM senias WHERE sucursalID = ? GROUP BY ventasID";
+
+        try (PreparedStatement preparedStatement = conexion.prepareStatement(sql)) {
+            preparedStatement.setInt(1, sucursalID);
+
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+
+                while (resultSet.next()) {
+                    int ventasID = resultSet.getInt("ventasID");
+                    double sumaImporteEfectivo = resultSet.getDouble("sumaEfectivo");
+                    double sumaImporteBanco = resultSet.getDouble("sumaBanco");
+                    double saldoMaximo = resultSet.getDouble("saldoMaximo");
+
+                    Senias senia = new Senias(-1, sumaImporteEfectivo, sumaImporteBanco, saldoMaximo, ventasID,
+                            sucursalID);
+                    senias.add(senia);
+                }
+            }
+        }
+
+        return senias;
     }
 }
