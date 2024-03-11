@@ -44,31 +44,26 @@ public class VerSeniasController {
         TableColumn<Senias, Double> saldoColumn = new TableColumn<>("Saldo");
         saldoColumn.setCellValueFactory(new PropertyValueFactory<>("saldo"));
 
-        TableColumn<Senias, Button> colBtn = new TableColumn<>("Acción");
-        colBtn.setCellValueFactory(new PropertyValueFactory<>("accionButton"));
-        colBtn.setCellFactory(tc -> new TableCell<Senias, Button>() {
+        TableColumn<Senias, Void> colBtn = new TableColumn<>("Acción");
+        colBtn.setCellFactory(param -> new TableCell<Senias, Void>() {
+            private final Button btn = new Button("Acción");
+
+            {
+                btn.setOnAction(event -> {
+                    Senias senias = getTableView().getItems().get(getIndex());
+                    System.out.println("Botón presionado para la Seña ID: " + senias.getVentasID());
+                    // Aquí puedes agregar cualquier acción adicional que desees realizar al hacer
+                    // clic en el botón
+                });
+            }
+
             @Override
-            protected void updateItem(Button item, boolean empty) {
+            protected void updateItem(Void item, boolean empty) {
                 super.updateItem(item, empty);
-                if (empty || item == null) {
+                if (empty) {
                     setGraphic(null);
                 } else {
-                    Senias senias = getTableView().getItems().get(getIndex());
-                    try {
-                        if (senias.isAccionDisponible(senias.getVentasID(), senias.getImporteEfectivo(),
-                                senias.getImporteBanco())) {
-                            setGraphic(item);
-                            setDisable(false);
-                            item.setOnAction(event -> {
-                                System.out.println("Botón presionado para la Seña ID: " + senias.getVentasID());
-                            });
-                        } else {
-                            setGraphic(item);
-                            setDisable(true);
-                        }
-                    } catch (SQLException e) {
-                        e.printStackTrace();
-                    }
+                    setGraphic(btn);
                 }
             }
         });

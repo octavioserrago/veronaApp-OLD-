@@ -163,12 +163,12 @@ public class Senias {
     public boolean isAccionDisponible(int ventasID, Double importeEfectivo, Double importeBanco) throws SQLException {
 
         double totalVenta = 0.0;
-        String sql = "SELECT totalVenta FROM ventas WHERE ventasID = ?";
+        String sql = "SELECT importe FROM Ventas WHERE ventasID = ?";
         try (PreparedStatement preparedStatement = conexion.prepareStatement(sql)) {
             preparedStatement.setInt(1, ventasID);
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
                 if (resultSet.next()) {
-                    totalVenta = resultSet.getDouble("totalVenta");
+                    totalVenta = resultSet.getDouble("importe");
                 }
             }
         }
