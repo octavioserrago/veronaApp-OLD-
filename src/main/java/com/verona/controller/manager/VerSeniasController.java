@@ -10,7 +10,9 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -51,9 +53,27 @@ public class VerSeniasController {
             {
                 btn.setOnAction(event -> {
                     Senias senias = getTableView().getItems().get(getIndex());
-                    System.out.println("Botón presionado para la Seña ID: " + senias.getVentasID());
-                    // Aquí puedes agregar cualquier acción adicional que desees realizar al hacer
-                    // clic en el botón
+                    Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+                    alert.setTitle("Confirmación");
+                    alert.setHeaderText(null);
+                    alert.setContentText("¿Seguro que desea pasar a caja el ID " + senias.getVentasID()
+                            + " por un total de " + (senias.getImporteEfectivo() + senias.getImporteBanco()) + "?");
+
+                    alert.showAndWait().ifPresent(response -> {
+                        if (response == ButtonType.OK) {
+                            System.out.println("Se presionó OK. Se procedería con la acción de caja.");
+                            try {
+                                senias.pasarACajaEfectivoYBanco(senias.getVentasID(), senias.getSucursalID(),
+                                        senias.getImporteEfectivo(), senias.getImporteBanco());
+                                // Actualizar la tabla después de realizar la acción
+                                tableSenias.getItems().remove(senias);
+                            } catch (SQLException e) {
+                                e.printStackTrace();
+                            }
+                        } else {
+                            System.out.println("Se presionó Cancelar. No se procederá con la acción de caja.");
+                        }
+                    });
                 });
             }
 

@@ -90,10 +90,26 @@ public class Senias {
 
     PreparedStatement stmt;
 
-    public boolean insertarSeniaEfectivo(int monedasID, double importeEfectivo, double saldo,
-            int ventasID,
-            int sucursalID) throws SQLException {
-        String sql = "INSERT INTO Senias (monedasID, importeEfectivo, saldo, ventasID, sucursalID) VALUES (?, ?, ?, ?, ?)";
+    public boolean agregarTransaccionFinanciera(String tipoMovimiento, double importe, int sucursalID)
+            throws SQLException {
+        String insertSql = "INSERT INTO TransaccionesFinancieras (tipoMovimiento, importeEnPesos, sucursalID) VALUES (?, ?, ?)";
+
+        try (PreparedStatement insertStatement = conexion.prepareStatement(insertSql)) {
+            insertStatement.setString(1, tipoMovimiento);
+            insertStatement.setDouble(2, importe);
+            insertStatement.setInt(3, sucursalID);
+
+            int filasInsertadas = insertStatement.executeUpdate();
+            return filasInsertadas > 0;
+        }
+    }
+
+    public boolean insertarSeniaEfectivo(int monedasID, double importeEfectivo, double saldo, int ventasID,
+            int sucursalID) {
+        String descripcionMovimiento = "Se agrega seña en efectivo de" + importeEfectivo
+                + ". Pertenece al ID de venta: "
+                + ventasID;
+        String sql = "INSERT INTO senias (monedasID, importeEfectivo, saldo, ventasID, sucursalID) VALUES (?, ?, ?, ?, ?)";
 
         try (PreparedStatement preparedStatement = conexion.prepareStatement(sql)) {
             preparedStatement.setInt(1, monedasID);
@@ -104,14 +120,18 @@ public class Senias {
 
             int filasAfectadas = preparedStatement.executeUpdate();
 
-            return filasAfectadas > 0;
+            return filasAfectadas > 0
+                    && agregarTransaccionFinanciera(descripcionMovimiento, importeEfectivo, sucursalID);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
         }
     }
 
-    public boolean insertarSeniaBanco(int monedasID, double importeBanco, double saldo,
-            int ventasID,
-            int sucursalID) throws SQLException {
-        String sql = "INSERT INTO Senias (monedasID, importeBanco, saldo, ventasID, sucursalID) VALUES (?, ?, ?, ?, ?)";
+    public boolean insertarSeniaBanco(int monedasID, double importeBanco, double saldo, int ventasID, int sucursalID) {
+        String descripcionMovimiento = "Se agrego seña por Banco de" + importeBanco + ". Pertenece al ID de venta: "
+                + ventasID;
+        String sql = "INSERT INTO senias (monedasID, importeBanco, saldo, ventasID, sucursalID) VALUES (?, ?, ?, ?, ?)";
 
         try (PreparedStatement preparedStatement = conexion.prepareStatement(sql)) {
             preparedStatement.setInt(1, monedasID);
@@ -122,7 +142,10 @@ public class Senias {
 
             int filasAfectadas = preparedStatement.executeUpdate();
 
-            return filasAfectadas > 0;
+            return filasAfectadas > 0 && agregarTransaccionFinanciera(descripcionMovimiento, importeBanco, sucursalID);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
         }
     }
 
@@ -175,6 +198,56 @@ public class Senias {
         double totalIngresos = importeEfectivo + importeBanco;
 
         return totalIngresos >= totalVenta;
+    }
+
+    public boolean pasarACajaEfectivoYBanco(int ventasID, int sucursalID, double importeEfectivo, double importeBanco)
+            throws SQLException {
+        String deleteSql = "DELETE FROM senias WHERE ventasID = ? AND sucursalID = ?";
+        String insertCajaEfectivoSql = "INSERT INTO CajaEfectivo (importeTransaccion, saldoActual, sucursalID) VALUES (?, ?, ?)";
+        String insertCajaBancoSql = "INSERT INTO CajaBanco (importeTransaccion, saldoActual, sucursalID) VALUES (?, ?, ?)";
+        String selectSaldoEfectivoSql = "SELECT saldoActual FROM CajaEfectivo ORDER BY cajaEfectivoID DESC LIMIT 1";
+        String selectSaldoBancoSql = "SELECT saldoActual FROM CajaBanco ORDER BY cajaBancoID DESC LIMIT 1";
+
+        try (PreparedStatement deleteStatement = conexion.prepareStatement(deleteSql);
+                PreparedStatement insertCajaEfectivoStatement = conexion.prepareStatement(insertCajaEfectivoSql);
+                PreparedStatement insertCajaBancoStatement = conexion.prepareStatement(insertCajaBancoSql);
+                PreparedStatement selectSaldoEfectivoStatement = conexion.prepareStatement(selectSaldoEfectivoSql);
+                PreparedStatement selectSaldoBancoStatement = conexion.prepareStatement(selectSaldoBancoSql)) {
+            deleteStatement.setInt(1, ventasID);
+            deleteStatement.setInt(2, sucursalID);
+            int filasEliminadas = deleteStatement.executeUpdate();
+
+            if (filasEliminadas > 0) {
+
+                double saldoActualEfectivo = 0;
+                ResultSet saldoEfectivoResult = selectSaldoEfectivoStatement.executeQuery();
+                if (saldoEfectivoResult.next()) {
+                    saldoActualEfectivo = saldoEfectivoResult.getDouble("saldoActual");
+                }
+
+                double nuevoSaldoEfectivo = saldoActualEfectivo + importeEfectivo;
+                insertCajaEfectivoStatement.setDouble(1, importeEfectivo);
+                insertCajaEfectivoStatement.setDouble(2, nuevoSaldoEfectivo);
+                insertCajaEfectivoStatement.setInt(3, sucursalID);
+                int filasInsertadasEfectivo = insertCajaEfectivoStatement.executeUpdate();
+
+                double saldoActualBanco = 0;
+                ResultSet saldoBancoResult = selectSaldoBancoStatement.executeQuery();
+                if (saldoBancoResult.next()) {
+                    saldoActualBanco = saldoBancoResult.getDouble("saldoActual");
+                }
+
+                double nuevoSaldoBanco = saldoActualBanco + importeBanco;
+                insertCajaBancoStatement.setDouble(1, importeBanco);
+                insertCajaBancoStatement.setDouble(2, nuevoSaldoBanco);
+                insertCajaBancoStatement.setInt(3, sucursalID);
+                int filasInsertadasBanco = insertCajaBancoStatement.executeUpdate();
+
+                return filasInsertadasEfectivo > 0 && filasInsertadasBanco > 0;
+            } else {
+                return false;
+            }
+        }
     }
 
 }

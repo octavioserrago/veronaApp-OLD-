@@ -98,8 +98,6 @@ public class CargarVentasController {
 
         llenarComboBoxColocadores();
 
-        System.out.println(user.getUserID());
-
     }
 
     @FXML
@@ -145,18 +143,16 @@ public class CargarVentasController {
         String errores = validador.validarVenta();
 
         if (errores.isEmpty()) {
-            // Crear el mensaje de confirmación
+
             String mensaje = "¿Está a punto de cargar una venta a nombre de: " + nombreCliente + " con un importe de: $"
                     + importeTextField.getText() + "?";
 
-            // Crear el Alert de confirmación
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION, mensaje, ButtonType.YES, ButtonType.CANCEL);
             alert.setTitle("Confirmación de carga de venta");
 
-            // Mostrar el Alert y esperar la respuesta del usuario
             alert.showAndWait().ifPresent(response -> {
                 if (response == ButtonType.YES) {
-                    // El usuario confirmó la carga de la venta
+
                     try {
                         venta.insertarVenta();
                         mostrarMensaje("Venta cargada con éxito", true);
@@ -165,8 +161,7 @@ public class CargarVentasController {
                         e.printStackTrace();
                     }
                 } else {
-                    // El usuario canceló la carga de la venta
-                    // Puedes agregar aquí cualquier lógica adicional que desees realizar
+
                     System.out.println("La carga de la venta fue cancelada por el usuario.");
                 }
             });

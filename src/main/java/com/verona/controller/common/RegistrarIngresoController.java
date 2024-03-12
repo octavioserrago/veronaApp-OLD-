@@ -189,8 +189,6 @@ public class RegistrarIngresoController {
                             case "Tarjeta de crédito":
                                 verificadorCredito.insertVerificadorIngresosCredito(importeEnPesos,
                                         user.getSucursalID(), venta.getVentasID());
-                                senia.insertarSeniaBanco(moneda, importeEnPesos, saldo - importeEnPesos,
-                                        venta.getVentasID(), user.getSucursalID());
                                 break;
                             case "Cheque":
                                 senia.insertarSeniaEfectivo(moneda, importeEnPesos, saldo - importeEnPesos,

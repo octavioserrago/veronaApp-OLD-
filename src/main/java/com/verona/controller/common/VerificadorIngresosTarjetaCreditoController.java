@@ -1,9 +1,10 @@
 package com.verona.controller.common;
 
+import java.sql.SQLException;
 import java.util.List;
 
 import com.verona.controller.SceneController;
-
+import com.verona.model.Senias;
 import com.verona.model.User;
 import com.verona.model.VerificadorIngresosCredito;
 
@@ -27,6 +28,8 @@ public class VerificadorIngresosTarjetaCreditoController {
     private TableView<VerificadorIngresosCredito> tableVerificadorIngresos;
 
     private VerificadorIngresosCredito verificadorIngresosCredito;
+
+    Senias senia = new Senias(0, 0, 0, 0, 0, 0);
 
     @FXML
     void initialize() {
@@ -98,7 +101,23 @@ public class VerificadorIngresosTarjetaCreditoController {
                     if (verificadorIngresosCredito.eliminarVerificadorPorID(verificadorID)) {
                         tableVerificadorIngresos.getItems().remove(ingresoSeleccionado);
 
-                        mostrarMensaje("Ingreso confirmado y eliminado correctamente", "green");
+                        if (senia.insertarSeniaBanco(1, ingresoSeleccionado.getImporte(), 0,
+                                ingresoSeleccionado.getVentasID(), User.getCurrentUser().getSucursalID())) {
+                            // Modificar la descripción del movimiento para que muestre el ID de venta en
+                            // lugar del ID de verificador
+                            String descripcionMovimiento = "Confirmacion de pago con tarjeta - ID de venta: "
+                                    + ingresoSeleccionado.getVentasID();
+                            double importe = ingresoSeleccionado.getImporte();
+                            int sucursalID = ingresoSeleccionado.getSucursalID();
+                            try {
+                                senia.agregarTransaccionFinanciera(descripcionMovimiento, importe, sucursalID);
+                            } catch (SQLException e) {
+                                e.printStackTrace();
+                            }
+                            mostrarMensaje("Ingreso confirmado y registrado en el banco correctamente", "green");
+                        } else {
+                            mostrarMensaje("Error al registrar la transacción en el banco", "red");
+                        }
                     } else {
                         mostrarMensaje("Error al confirmar el ingreso", "red");
                     }
@@ -128,7 +147,7 @@ public class VerificadorIngresosTarjetaCreditoController {
                     sceneController.switchToDashboardSeller();
                     break;
                 case 3:
-                    // Lógica para el administrador
+
                     break;
                 default:
                     System.out.println("Error relacionado al ROL");
