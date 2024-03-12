@@ -16,7 +16,8 @@ target/
 # Visual Studio Code-specific files
 .vscode/
 
-.src/main/java/com/verona/model/DatabaseConnection.java
+veronaApp/src/main/java/com/verona/model/DatabaseConnection.java
+
 
 # Logs
 logs/
