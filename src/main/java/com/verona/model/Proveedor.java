@@ -1,30 +1,28 @@
 package com.verona.model;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+
 public class Proveedor {
-    private String proveedoresID;
+
+    private int proveedorID;
     private String empresa;
-    private String email;
-    private String telefono;
-    private String cbuAlias;
-    private String direccion;
-    private String cuit;
 
-    public Proveedor(String empresa, String email, String telefono, String cbuAlias,
-            String direccion, String cuit) {
+    public Proveedor(int proveedorID, String empresa) {
+        this.proveedorID = proveedorID;
         this.empresa = empresa;
-        this.email = email;
-        this.telefono = telefono;
-        this.cbuAlias = cbuAlias;
-        this.direccion = direccion;
-        this.cuit = cuit;
     }
 
-    public String getProveedoresID() {
-        return proveedoresID;
+    public int getProveedorID() {
+        return proveedorID;
     }
 
-    public void setProveedoresID(String proveedoresID) {
-        this.proveedoresID = proveedoresID;
+    public void setProveedorID(int proveedorID) {
+        this.proveedorID = proveedorID;
     }
 
     public String getEmpresa() {
@@ -35,57 +33,40 @@ public class Proveedor {
         this.empresa = empresa;
     }
 
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getTelefono() {
-        return telefono;
-    }
-
-    public void setTelefono(String telefono) {
-        this.telefono = telefono;
-    }
-
-    public String getCbuAlias() {
-        return cbuAlias;
-    }
-
-    public void setCbuAlias(String cbuAlias) {
-        this.cbuAlias = cbuAlias;
-    }
-
-    public String getDireccion() {
-        return direccion;
-    }
-
-    public void setDireccion(String direccion) {
-        this.direccion = direccion;
-    }
-
-    public String getCuit() {
-        return cuit;
-    }
-
-    public void setCuit(String cuit) {
-        this.cuit = cuit;
-    }
-
     @Override
     public String toString() {
-        return "Proveedor{" +
-                "ID='" + proveedoresID + '\'' +
-                ", Empresa='" + empresa + '\'' +
-                ", Email='" + email + '\'' +
-                ", Teléfono='" + telefono + '\'' +
-                ", CBU o Alias='" + cbuAlias + '\'' +
-                ", Dirección='" + direccion + '\'' +
-                ", CUIT='" + cuit + '\'' +
-                '}';
+        return empresa;
     }
 
+    public List<Proveedor> obtenerProveedores() {
+        List<Proveedor> proveedores = new ArrayList<>();
+        String consulta = "SELECT proveedorID, empresa FROM Proveedores";
+
+        DatabaseConnection con = new DatabaseConnection();
+        Connection conexion = con.conectar();
+
+        try (PreparedStatement stmt = conexion.prepareStatement(consulta);
+                ResultSet rs = stmt.executeQuery()) {
+
+            while (rs.next()) {
+                int proveedorID = rs.getInt("proveedorID");
+                String empresa = rs.getString("empresa");
+                Proveedor proveedor = new Proveedor(proveedorID, empresa);
+                proveedores.add(proveedor);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (conexion != null && !conexion.isClosed()) {
+                    conexion.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+
+        return proveedores;
+    }
 }

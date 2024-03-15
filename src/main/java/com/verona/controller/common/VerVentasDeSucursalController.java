@@ -40,7 +40,7 @@ public class VerVentasDeSucursalController {
     @SuppressWarnings("unchecked")
     @FXML
     void initialize() {
-        // Inicializar las columnas
+
         TableColumn<Venta, Integer> ventasIDColumn = new TableColumn<>("ID Venta");
         ventasIDColumn.setCellValueFactory(new PropertyValueFactory<>("ventasID"));
 
@@ -68,7 +68,6 @@ public class VerVentasDeSucursalController {
         TableColumn<Venta, String> emailColumn = new TableColumn<>("Email");
         emailColumn.setCellValueFactory(new PropertyValueFactory<>("email"));
 
-        // Agregar las columnas a la tabla
         tableVentas.getColumns().addAll(
                 ventasIDColumn,
                 nombreClienteColumn,
@@ -79,8 +78,6 @@ public class VerVentasDeSucursalController {
                 telefono1Column,
                 telefono2Column,
                 emailColumn);
-
-        // Llamar a la función para obtener las ventas y rellenar la tabla
         try {
             cargarVentas();
         } catch (SQLException e) {

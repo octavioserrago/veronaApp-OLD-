@@ -9,7 +9,6 @@
 <?import javafx.scene.paint.Color?>
 <?import javafx.scene.text.Font?>
 
-
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="388.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.verona.controller.manager.RegistrarPagoController">
    <children>
       <Button fx:id="btnVolver" layoutX="272.0" layoutY="343.0" mnemonicParsing="false" onAction="#btnVolverClicked" style="-fx-background-color: Black;" text="Volver" textFill="WHITE">
@@ -36,15 +35,15 @@
             </DropShadow>
          </effect>
       </Label>
-      <Label layoutX="178.0" layoutY="75.0" text="Describa el gasto:" />
-      <ComboBox fx:id="comboboxDescribirGasto" layoutX="300.0" layoutY="70.0" prefWidth="150.0" />
-      <Label layoutX="226.0" layoutY="164.0" text="Importe:" />
-      <TextField fx:id="importeTextFieldToComplete" layoutX="300.0" layoutY="159.0" prefHeight="26.0" prefWidth="150.0" />
-      <ComboBox fx:id="fondosCombobox" layoutX="300.0" layoutY="201.0" prefWidth="150.0" />
-      <Label layoutX="177.0" layoutY="205.0" text="Origen de fondos:" />
-      <Label fx:id="proveedorLabel" layoutX="161.0" layoutY="118.0" text="Indique el Proveedor:" />
-      <ComboBox fx:id="comboboxProveedor" layoutX="300.0" layoutY="114.0" prefWidth="150.0" />
-      <Button fx:id="btnCargar" layoutX="273.0" layoutY="244.0" mnemonicParsing="false" onAction="#btnCargarClicked" style="-fx-background-color: FFAA00;" text="Cargar">
+      <Label layoutX="178.0" layoutY="84.0" text="Describa el gasto:" />
+      <ComboBox fx:id="comboboxDescribirGasto" layoutX="300.0" layoutY="79.0" prefWidth="150.0" />
+      <Label layoutX="226.0" layoutY="178.0" text="Importe:" />
+      <TextField fx:id="importeTextFieldToComplete" layoutX="297.0" layoutY="168.0" prefHeight="36.0" prefWidth="156.0" />
+      <ComboBox fx:id="fondosCombobox" layoutX="300.0" layoutY="222.0" prefWidth="150.0" />
+      <Label layoutX="178.0" layoutY="227.0" text="Origen de fondos:" />
+      <Label fx:id="proveedorLabel" layoutX="169.0" layoutY="134.0" text="Indique el Proveedor:" />
+      <ComboBox fx:id="comboboxProveedor" layoutX="300.0" layoutY="129.0" prefWidth="150.0" />
+      <Button fx:id="btnCargar" layoutX="271.0" layoutY="269.0" mnemonicParsing="false" onAction="#btnCargarClicked" style="-fx-background-color: FFAA00;" text="Cargar">
          <font>
             <Font name="Arial Bold" size="13.0" />
          </font>

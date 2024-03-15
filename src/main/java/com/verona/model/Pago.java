@@ -120,8 +120,23 @@ public class Pago {
                 }
             }
         }
-
         return totalSalidasEnPesos;
+    }
+
+    public void insertarPago(int sucursalID) throws SQLException {
+        String sql = "INSERT INTO Pagos (tipoPagosID, monedasID, importe, importeEnPesos, proveedorID, sucursalID) VALUES (?,?,?,?,?,?)";
+
+        try (PreparedStatement preparedStatement = conexion.prepareStatement(sql)) {
+
+            preparedStatement.setInt(1, tiposPagosID);
+            preparedStatement.setInt(2, monedasID);
+            preparedStatement.setDouble(3, importe);
+            preparedStatement.setDouble(4, importeEnPesos);
+            preparedStatement.setInt(5, proveedorID);
+            preparedStatement.setInt(6, sucursalID);
+
+            preparedStatement.executeUpdate();
+        }
     }
 
 }
