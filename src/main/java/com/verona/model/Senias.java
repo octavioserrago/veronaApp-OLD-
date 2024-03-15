@@ -90,23 +90,11 @@ public class Senias {
 
     PreparedStatement stmt;
 
-    public boolean agregarTransaccionFinanciera(String tipoMovimiento, double importe, int sucursalID)
-            throws SQLException {
-        String insertSql = "INSERT INTO TransaccionesFinancieras (tipoMovimiento, importeEnPesos, sucursalID) VALUES (?, ?, ?)";
-
-        try (PreparedStatement insertStatement = conexion.prepareStatement(insertSql)) {
-            insertStatement.setString(1, tipoMovimiento);
-            insertStatement.setDouble(2, importe);
-            insertStatement.setInt(3, sucursalID);
-
-            int filasInsertadas = insertStatement.executeUpdate();
-            return filasInsertadas > 0;
-        }
-    }
+    TransaccionesFinancieras transaccion = new TransaccionesFinancieras(null, importeBanco, sucursalID);
 
     public boolean insertarSeniaEfectivo(int monedasID, double importeEfectivo, double saldo, int ventasID,
             int sucursalID) {
-        String descripcionMovimiento = "Se agrega seña en efectivo de" + importeEfectivo
+        String descripcionMovimiento = "Se agrega seña en efectivo de " + importeEfectivo
                 + ". Pertenece al ID de venta: "
                 + ventasID;
         String sql = "INSERT INTO senias (monedasID, importeEfectivo, saldo, ventasID, sucursalID) VALUES (?, ?, ?, ?, ?)";
@@ -121,7 +109,7 @@ public class Senias {
             int filasAfectadas = preparedStatement.executeUpdate();
 
             return filasAfectadas > 0
-                    && agregarTransaccionFinanciera(descripcionMovimiento, importeEfectivo, sucursalID);
+                    && transaccion.agregarTransaccionFinanciera(descripcionMovimiento, importeEfectivo, sucursalID);
         } catch (SQLException e) {
             e.printStackTrace();
             return false;
@@ -142,7 +130,8 @@ public class Senias {
 
             int filasAfectadas = preparedStatement.executeUpdate();
 
-            return filasAfectadas > 0 && agregarTransaccionFinanciera(descripcionMovimiento, importeBanco, sucursalID);
+            return filasAfectadas > 0
+                    && transaccion.agregarTransaccionFinanciera(descripcionMovimiento, importeBanco, sucursalID);
         } catch (SQLException e) {
             e.printStackTrace();
             return false;
@@ -248,6 +237,20 @@ public class Senias {
                 return false;
             }
         }
+    }
+
+    public double obtenerCajaSenia(String tipoImporte, int sucursalID) throws SQLException {
+        String selectSql = "SELECT SUM(" + tipoImporte + ") AS total FROM Senias WHERE sucursalID = ?";
+
+        try (PreparedStatement selectStatement = conexion.prepareStatement(selectSql)) {
+            selectStatement.setInt(1, sucursalID);
+            ResultSet resultSet = selectStatement.executeQuery();
+
+            if (resultSet.next()) {
+                return resultSet.getDouble("total");
+            }
+        }
+        return 0.0;
     }
 
 }

@@ -2,6 +2,7 @@ package com.verona.model;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.SQLException;
 
 public class TransaccionesFinancieras {
 
@@ -44,5 +45,19 @@ public class TransaccionesFinancieras {
     Connection conexion = con.conectar();
 
     PreparedStatement stmt;
+
+    public boolean agregarTransaccionFinanciera(String tipoMovimiento, double importe, int sucursalID)
+            throws SQLException {
+        String insertSql = "INSERT INTO TransaccionesFinancieras (tipoMovimiento, importeEnPesos, sucursalID) VALUES (?, ?, ?)";
+
+        try (PreparedStatement insertStatement = conexion.prepareStatement(insertSql)) {
+            insertStatement.setString(1, tipoMovimiento);
+            insertStatement.setDouble(2, importe);
+            insertStatement.setInt(3, sucursalID);
+
+            int filasInsertadas = insertStatement.executeUpdate();
+            return filasInsertadas > 0;
+        }
+    }
 
 }

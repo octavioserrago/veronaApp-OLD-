@@ -85,6 +85,7 @@ public class CargarVentasController {
     private int colocadoresID;
 
     User user = User.getCurrentUser();
+    private boolean ventaCargada = false;
 
     @FXML
     void initialize() {
@@ -102,7 +103,11 @@ public class CargarVentasController {
 
     @FXML
     void btnCargarVentaClicked(ActionEvent event) throws SQLException {
-        String estado = "En Espera";
+        if (ventaCargada) {
+            return;
+        }
+
+        String estado = "En Produccion";
         String nombreCliente = nombreClienteTextField.getText();
         String descripcion = descripcionTextFIeld.getText();
         String material = materialTextField.getText();
@@ -156,6 +161,8 @@ public class CargarVentasController {
                     try {
                         venta.insertarVenta();
                         mostrarMensaje("Venta cargada con éxito", true);
+                        btnCargarVenta.setDisable(true);
+                        ventaCargada = true;
                     } catch (SQLException e) {
                         mostrarMensaje("Error al cargar la venta", false);
                         e.printStackTrace();

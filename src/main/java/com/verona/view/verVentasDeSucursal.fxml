@@ -9,7 +9,6 @@
 <?import javafx.scene.paint.Color?>
 <?import javafx.scene.text.Font?>
 
-
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="655.0" prefWidth="801.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.verona.controller.common.VerVentasDeSucursalController">
    <children>
       <Button fx:id="btnVolver" layoutX="372.0" layoutY="608.0" mnemonicParsing="false" onAction="#btnVolverClicked" style="-fx-background-color: Black;" text="Volver" textFill="WHITE">
@@ -24,7 +23,7 @@
             </DropShadow>
          </effect>
       </Button>
-      <TableView layoutX="15.0" layoutY="198.0" prefHeight="391.0" prefWidth="772.0">
+      <TableView fx:id="tableVentas" layoutX="15.0" layoutY="198.0" prefHeight="391.0" prefWidth="772.0">
          <effect>
             <DropShadow>
                <color>

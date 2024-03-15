@@ -243,6 +243,57 @@ public class Venta {
         }
     }
 
+    public List<Venta> ventasPorSucursal(int sucursalID) throws SQLException {
+        List<Venta> ventas = new ArrayList<>();
+        String sql = "SELECT ventasID, nombreCliente, descripcion, material, color, fechaEstimadaTerminacion, telefono1, telefono2, email FROM Ventas WHERE sucursalID = ?";
+
+        try (PreparedStatement preparedStatement = conexion.prepareStatement(sql)) {
+            preparedStatement.setInt(1, sucursalID);
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            while (resultSet.next()) {
+                Venta venta = new Venta(
+                        resultSet.getInt("ventasID"),
+                        resultSet.getString("nombreCliente"),
+                        resultSet.getString("descripcion"),
+                        resultSet.getString("material"),
+                        resultSet.getString("color"),
+                        resultSet.getString("fechaEstimadaTerminacion"),
+                        0,
+                        0.0,
+                        0,
+                        0.0,
+                        "",
+                        0,
+                        resultSet.getString("telefono1"),
+                        resultSet.getString("telefono2"),
+                        resultSet.getString("email"),
+                        0,
+                        0);
+
+                ventas.add(venta);
+            }
+        }
+
+        return ventas;
+    }
+
+    public String obtenerFechaVenta(int ventaID) throws SQLException {
+        String sql = "SELECT fecha FROM Ventas WHERE ventasID = ?";
+        String fechaVenta = null;
+
+        try (PreparedStatement preparedStatement = conexion.prepareStatement(sql)) {
+            preparedStatement.setInt(1, ventaID);
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            if (resultSet.next()) {
+                fechaVenta = resultSet.getString("fecha");
+            }
+        }
+
+        return fechaVenta;
+    }
+
     public List<Venta> allVentas() throws SQLException {
         List<Venta> ventas = new ArrayList<>();
         String sql = "SELECT * FROM Ventas";

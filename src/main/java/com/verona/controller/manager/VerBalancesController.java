@@ -5,6 +5,7 @@ import java.text.NumberFormat;
 import java.util.Locale;
 
 import com.verona.controller.SceneController;
+import com.verona.model.Caja;
 import com.verona.model.Senias;
 import com.verona.model.User;
 
@@ -38,6 +39,7 @@ public class VerBalancesController {
     private Label dineroTotalLabelToComplete;
 
     Senias cajaSeñas = new Senias(0, 0, 0, 0, 0, 0);
+    Caja caja = new Caja(0, 0);
     private User user = User.getCurrentUser();
     @SuppressWarnings("deprecation")
     Locale localeArgentina = new Locale("es", "AR");
@@ -46,11 +48,50 @@ public class VerBalancesController {
     @FXML
     void initialize() throws SQLException {
 
+        double cajaBanco = obtenerCajaBanco();
+        double cajaEfectivo = obtenerCajaEfectivo();
+        double cajaSeniasBanco = obtenerCajaSeniasBanco();
+        double cajaSeniasEfectivo = obtenerCajaSeniasEfectivo();
+
+        String cajaBancoFormateada = formatoMoneda.format(cajaBanco);
+        String cajaEfectivoFormateada = formatoMoneda.format(cajaEfectivo);
+        String cajaSeniasBancoFormateada = formatoMoneda.format(cajaSeniasBanco);
+        String cajaSeniasEfectivoFormateada = formatoMoneda.format(cajaSeniasEfectivo);
+
+        cajaBancoLabelToComplete.setText(cajaBancoFormateada);
+        cajaEfectivoLabelToComplete.setText(cajaEfectivoFormateada);
+        cajaSeñasBancoLabelToComplete.setText(cajaSeniasBancoFormateada);
+        cajaSeñasEfectivoLabelToComplete.setText(cajaSeniasEfectivoFormateada);
+
+        double dineroTotal = cajaBanco + cajaEfectivo + cajaSeniasBanco + cajaSeniasEfectivo;
+        String dineroTotalFormateado = formatoMoneda.format(dineroTotal);
+        dineroTotalLabelToComplete.setText(dineroTotalFormateado);
+    }
+
+    private double obtenerCajaBanco() throws SQLException {
+        double cajaBanco = caja.obtenerUltimoSaldo(user.getSucursalID(), "CajaBanco", "saldoActual");
+        return cajaBanco;
+    }
+
+    private double obtenerCajaEfectivo() throws SQLException {
+        double cajaEfectivo = caja.obtenerUltimoSaldo(user.getSucursalID(), "CajaEfectivo", "saldoActual");
+        return cajaEfectivo;
+    }
+
+    private double obtenerCajaSeniasBanco() throws SQLException {
+        double cajaSeñaBanco = cajaSeñas.obtenerCajaSenia("importeBanco", user.getSucursalID());
+        return cajaSeñaBanco;
+    }
+
+    private double obtenerCajaSeniasEfectivo() throws SQLException {
+        double cajaSeñaEfectivo = cajaSeñas.obtenerCajaSenia("importeEfectivo", user.getSucursalID());
+        return cajaSeñaEfectivo;
     }
 
     @FXML
     void btnVerDetalleCajasClicked(ActionEvent event) {
-
+        SceneController sceneController = new SceneController((Stage) btnVerDetalleCajas.getScene().getWindow());
+        sceneController.switchToVerDetalleCaja();
     }
 
     @FXML

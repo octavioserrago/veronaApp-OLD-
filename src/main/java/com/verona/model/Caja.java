@@ -36,6 +36,8 @@ public class Caja {
 
     PreparedStatement stmt;
 
+    TransaccionesFinancieras transaccion = new TransaccionesFinancieras(null, 0, sucursalID);
+
     public boolean insertarCajaEfectivo(double importeTransaccion, int sucursalID) throws SQLException {
         String sqlInsert = "INSERT INTO CajaEfectivo (importeTransaccion, saldoActual, sucursalID) VALUES (?, ?, ?)";
 
@@ -47,8 +49,12 @@ public class Caja {
             preparedStatement.setInt(3, sucursalID);
 
             int filasAfectadas = preparedStatement.executeUpdate();
-            return filasAfectadas > 0;
+            if (filasAfectadas > 0) {
+                return transaccion.agregarTransaccionFinanciera("Ingreso a caja efectivo", importeTransaccion,
+                        sucursalID);
+            }
         }
+        return false;
     }
 
     public boolean insertarCajaBanco(double importeTransaccion, int sucursalID) throws SQLException {
@@ -62,8 +68,11 @@ public class Caja {
             preparedStatement.setInt(3, sucursalID);
 
             int filasAfectadas = preparedStatement.executeUpdate();
-            return filasAfectadas > 0;
+            if (filasAfectadas > 0) {
+                return transaccion.agregarTransaccionFinanciera("Ingreso a caja banco", importeTransaccion, sucursalID);
+            }
         }
+        return false;
     }
 
     public double obtenerUltimoSaldo(int sucursalID, String tableName, String idColumnName) throws SQLException {
@@ -79,4 +88,5 @@ public class Caja {
             }
         }
     }
+
 }

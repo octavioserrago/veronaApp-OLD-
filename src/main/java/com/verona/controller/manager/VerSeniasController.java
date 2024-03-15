@@ -48,7 +48,7 @@ public class VerSeniasController {
 
         TableColumn<Senias, Void> colBtn = new TableColumn<>("Acción");
         colBtn.setCellFactory(param -> new TableCell<Senias, Void>() {
-            private final Button btn = new Button("Acción");
+            private final Button btn = new Button("Pasar a Caja");
 
             {
                 btn.setOnAction(event -> {
@@ -65,7 +65,6 @@ public class VerSeniasController {
                             try {
                                 senias.pasarACajaEfectivoYBanco(senias.getVentasID(), senias.getSucursalID(),
                                         senias.getImporteEfectivo(), senias.getImporteBanco());
-                                // Actualizar la tabla después de realizar la acción
                                 tableSenias.getItems().remove(senias);
                             } catch (SQLException e) {
                                 e.printStackTrace();
@@ -83,7 +82,13 @@ public class VerSeniasController {
                 if (empty) {
                     setGraphic(null);
                 } else {
-                    setGraphic(btn);
+                    Senias senias = getTableView().getItems().get(getIndex());
+                    if (senias.getSaldo() == 0) {
+                        setGraphic(btn);
+                        btn.setDisable(false);
+                    } else {
+                        setGraphic(null);
+                    }
                 }
             }
         });
