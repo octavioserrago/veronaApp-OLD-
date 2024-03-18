@@ -10,7 +10,6 @@
 <?import javafx.scene.paint.Color?>
 <?import javafx.scene.text.Font?>
 
-
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="590.0" prefWidth="846.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.verona.controller.manager.VerDetalleCajaController">
    <children>
       <Button fx:id="btnVolver" layoutX="395.0" layoutY="545.0" mnemonicParsing="false" onAction="#btnVolverClicked" style="-fx-background-color: BLack;" text="Volver" textFill="WHITE">
@@ -39,10 +38,10 @@
       </Label>
       <TableView fx:id="tableDetails" layoutX="5.0" layoutY="149.0" prefHeight="346.0" prefWidth="840.0" />
       <Separator layoutX="5.0" layoutY="129.0" prefHeight="2.0" prefWidth="840.0" style="-fx-background-color: Black;" />
-      <DatePicker layoutX="183.0" layoutY="59.0" />
+      <DatePicker fx:id="desdeDateSelect" layoutX="183.0" layoutY="59.0" />
       <Label layoutX="127.0" layoutY="63.0" text="Desde:" />
       <Label layoutX="510.0" layoutY="63.0" text="Hasta:" />
-      <DatePicker layoutX="557.0" layoutY="59.0" />
+      <DatePicker fx:id="hastaDateSelect" layoutX="557.0" layoutY="59.0" />
       <Button fx:id="btnActualizar" layoutX="388.0" layoutY="96.0" mnemonicParsing="false" onAction="#btnActualizarClicked" style="-fx-background-color: FFAA00;" text="Actualizar">
          <font>
             <Font name="Arial Bold" size="13.0" />

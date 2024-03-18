@@ -165,7 +165,6 @@ public class RegistrarIngresoController {
                             case "Tarjeta de crédito":
                                 verificadorCredito.insertVerificadorIngresosCredito(importeEnPesos,
                                         user.getSucursalID(), venta.getVentasID());
-                                caja.insertarCajaBanco(importeEnPesos, user.getSucursalID());
                                 break;
                             case "Cheque":
                                 caja.insertarCajaEfectivo(importeEnPesos, user.getSucursalID());

@@ -99,7 +99,8 @@ public class DashboardSellerController {
 
     @FXML
     void btnVentasDeEstaSucursalClicked(ActionEvent event) {
-
+        SceneController sceneController = new SceneController((Stage) btnCerrarSesion.getScene().getWindow());
+        sceneController.switchToVerVentasDeSucursal();
     }
 
     @FXML

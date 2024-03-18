@@ -10,6 +10,7 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
 /**
@@ -31,8 +32,10 @@ public class App extends Application {
 
             LoginController loginController = loader.getController();
             loginController.setSceneController(sceneController);
-
             Scene scene = new Scene(root);
+
+            Image image = new Image("file: /images/verona.png");
+            primaryStage.getIcons().add(image);
             primaryStage.setScene(scene);
             primaryStage.setTitle("Marmoleria Verona");
             primaryStage.show();

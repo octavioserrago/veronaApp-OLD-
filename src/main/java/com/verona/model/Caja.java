@@ -42,7 +42,7 @@ public class Caja {
         String sqlInsert = "INSERT INTO CajaEfectivo (importeTransaccion, saldoActual, sucursalID) VALUES (?, ?, ?)";
 
         try (PreparedStatement preparedStatement = conexion.prepareStatement(sqlInsert)) {
-            double saldoAnterior = obtenerUltimoSaldo(sucursalID, "CajaEfectivo", "cajaEfectivoID");
+            double saldoAnterior = obtenerUltimoSaldo(sucursalID, "CajaEfectivo");
 
             preparedStatement.setDouble(1, importeTransaccion);
             preparedStatement.setDouble(2, saldoAnterior + importeTransaccion);
@@ -61,7 +61,7 @@ public class Caja {
         String sqlInsert = "INSERT INTO CajaBanco (importeTransaccion, saldoActual ,sucursalID) VALUES (?, ?, ?)";
 
         try (PreparedStatement preparedStatement = conexion.prepareStatement(sqlInsert)) {
-            double saldoAnterior = obtenerUltimoSaldo(sucursalID, "CajaBanco", "cajaBancoID");
+            double saldoAnterior = obtenerUltimoSaldo(sucursalID, "CajaBanco");
 
             preparedStatement.setDouble(1, importeTransaccion);
             preparedStatement.setDouble(2, saldoAnterior + importeTransaccion);
@@ -75,9 +75,50 @@ public class Caja {
         return false;
     }
 
-    public double obtenerUltimoSaldo(int sucursalID, String tableName, String idColumnName) throws SQLException {
-        String sql = "SELECT saldoActual FROM " + tableName + " WHERE sucursalID = ? ORDER BY " + idColumnName
-                + " DESC LIMIT 1";
+    public boolean pagoCajaEfectivo(double importeTransaccion, int sucursalID) throws SQLException {
+        String sqlInsert = "INSERT INTO CajaEfectivo (importeTransaccion, saldoActual, sucursalID) VALUES (?, ?, ?)";
+
+        try (PreparedStatement preparedStatement = conexion.prepareStatement(sqlInsert)) {
+            double saldoAnterior = obtenerUltimoSaldo(sucursalID, "CajaEfectivo");
+
+            preparedStatement.setDouble(1, importeTransaccion);
+            preparedStatement.setDouble(2, saldoAnterior - importeTransaccion);
+            preparedStatement.setInt(3, sucursalID);
+
+            int filasAfectadas = preparedStatement.executeUpdate();
+            if (filasAfectadas > 0) {
+                return transaccion.agregarTransaccionFinanciera(
+                        "Se realizo un pago de $" + importeTransaccion + " desde los fondos en efectivo",
+                        importeTransaccion,
+                        sucursalID);
+            }
+        }
+        return false;
+    }
+
+    public boolean pagoCajaBanco(double importeTransaccion, int sucursalID) throws SQLException {
+        String sqlInsert = "INSERT INTO CajaBanco (importeTransaccion, saldoActual, sucursalID) VALUES (?, ?, ?)";
+
+        try (PreparedStatement preparedStatement = conexion.prepareStatement(sqlInsert)) {
+            double saldoAnterior = obtenerUltimoSaldo(sucursalID, "CajaBanco");
+
+            preparedStatement.setDouble(1, importeTransaccion);
+            preparedStatement.setDouble(2, saldoAnterior - importeTransaccion);
+            preparedStatement.setInt(3, sucursalID);
+
+            int filasAfectadas = preparedStatement.executeUpdate();
+            if (filasAfectadas > 0) {
+                return transaccion.agregarTransaccionFinanciera(
+                        "Se realizo un pago de $" + importeTransaccion + " desde los fondos en Banco",
+                        importeTransaccion,
+                        sucursalID);
+            }
+        }
+        return false;
+    }
+
+    public double obtenerUltimoSaldo(int sucursalID, String tableName) throws SQLException {
+        String sql = "SELECT saldoActual FROM " + tableName + " WHERE sucursalID = ? ORDER BY fecha DESC LIMIT 1";
         try (PreparedStatement preparedStatement = conexion.prepareStatement(sql)) {
             preparedStatement.setInt(1, sucursalID);
             try (ResultSet resultSet = preparedStatement.executeQuery()) {

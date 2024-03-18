@@ -10,6 +10,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.DatePicker;
+import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -49,6 +50,21 @@ public class VerVentasDeSucursalController {
 
         TableColumn<Venta, String> descripcionColumn = new TableColumn<>("Descripción");
         descripcionColumn.setCellValueFactory(new PropertyValueFactory<>("descripcion"));
+        descripcionColumn.setCellFactory(tc -> {
+            TableCell<Venta, String> cell = new TableCell<Venta, String>() {
+                @Override
+                protected void updateItem(String item, boolean empty) {
+                    super.updateItem(item, empty);
+                    if (item == null || empty) {
+                        setText(null);
+                    } else {
+                        setText(item);
+                        setWrapText(true);
+                    }
+                }
+            };
+            return cell;
+        });
 
         TableColumn<Venta, String> materialColumn = new TableColumn<>("Material");
         materialColumn.setCellValueFactory(new PropertyValueFactory<>("material"));

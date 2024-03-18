@@ -69,12 +69,12 @@ public class VerBalancesController {
     }
 
     private double obtenerCajaBanco() throws SQLException {
-        double cajaBanco = caja.obtenerUltimoSaldo(user.getSucursalID(), "CajaBanco", "saldoActual");
+        double cajaBanco = caja.obtenerUltimoSaldo(user.getSucursalID(), "CajaBanco");
         return cajaBanco;
     }
 
     private double obtenerCajaEfectivo() throws SQLException {
-        double cajaEfectivo = caja.obtenerUltimoSaldo(user.getSucursalID(), "CajaEfectivo", "saldoActual");
+        double cajaEfectivo = caja.obtenerUltimoSaldo(user.getSucursalID(), "CajaEfectivo");
         return cajaEfectivo;
     }
 

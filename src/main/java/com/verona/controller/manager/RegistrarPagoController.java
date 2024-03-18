@@ -1,6 +1,7 @@
 package com.verona.controller.manager;
 
 import com.verona.controller.SceneController;
+import com.verona.model.Caja;
 import com.verona.model.Pago;
 import com.verona.model.Proveedor;
 import com.verona.model.TipoPago;
@@ -10,7 +11,9 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
@@ -34,7 +37,7 @@ public class RegistrarPagoController {
     private ComboBox<Proveedor> comboboxProveedor;
 
     @FXML
-    private ComboBox<?> fondosCombobox;
+    private ComboBox<String> fondosCombobox;
 
     @FXML
     private TextField importeTextFieldToComplete;
@@ -45,11 +48,13 @@ public class RegistrarPagoController {
     private User user = User.getCurrentUser();
     private TipoPago tiposDePago = new TipoPago(0, null);
     private Proveedor proveedor = new Proveedor(0, null);
+    private Caja caja = new Caja(0, 0);
 
     @FXML
     void initialize() {
         noVisibles();
         llenarComboBoxTiposDePago();
+        llenarComboBoxFondos();
         comboboxDescribirGasto.setOnAction(event -> {
             TipoPago tipoPagoSeleccionado = comboboxDescribirGasto.getValue();
             if (tipoPagoSeleccionado != null && tipoPagoSeleccionado.getDetalle().equals("Pago a Proveedor")) {
@@ -80,29 +85,59 @@ public class RegistrarPagoController {
         comboboxProveedor.setItems(observableListaProveedores);
     }
 
+    private void llenarComboBoxFondos() {
+        ObservableList<String> fondosList = FXCollections.observableArrayList(
+                "Caja Efectivo",
+                "Caja Banco",
+                "Caja Efectivo y Caja Banco");
+        fondosCombobox.setItems(fondosList);
+    }
+
     @FXML
     void btnCargarClicked(ActionEvent event) {
         TipoPago tipoPagoSeleccionado = comboboxDescribirGasto.getValue();
-        Proveedor proveedorSeleccionado = comboboxProveedor.getValue(); // Obtener el proveedor seleccionado
+        Proveedor proveedorSeleccionado = comboboxProveedor.getValue();
+        String fondoSeleccionado = fondosCombobox.getValue();
 
-        if (tipoPagoSeleccionado == null || proveedorSeleccionado == null) {
-            // Manejar el caso en que no se haya seleccionado algún tipo de pago o proveedor
-            // Por ejemplo, mostrar un mensaje de error al usuario y salir del método
-            return;
-        }
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Confirmación de Pago");
+        alert.setHeaderText(null);
+        alert.setContentText("¿Estás seguro/a que deseas realizar este pago?");
 
-        int tipoPagoID = tipoPagoSeleccionado.getTiposPagosID();
-        int monedasID = 1;
-        double importe = Double.parseDouble(importeTextFieldToComplete.getText());
-        double importeEnPesos = Double.parseDouble(importeTextFieldToComplete.getText());
-        int proveedorID = proveedorSeleccionado.getProveedorID();
-        int sucursalID = user.getSucursalID();
+        ButtonType result = alert.showAndWait().orElse(ButtonType.CANCEL);
 
-        Pago pago = new Pago(tipoPagoID, monedasID, importe, importeEnPesos, proveedorID, sucursalID);
-        try {
-            pago.insertarPago(sucursalID);
-        } catch (SQLException e) {
-            e.printStackTrace();
+        if (result == ButtonType.OK) {
+            int tipoPagoID = tipoPagoSeleccionado.getTiposPagosID();
+            int monedasID = 1;
+            double importe = Double.parseDouble(importeTextFieldToComplete.getText());
+            double importeEnPesos = Double.parseDouble(importeTextFieldToComplete.getText());
+            int proveedorID = (proveedorSeleccionado != null) ? proveedorSeleccionado.getProveedorID() : 0;
+            int sucursalID = user.getSucursalID();
+
+            try {
+                Pago pago;
+                if (proveedorSeleccionado == null) {
+                    pago = new Pago(tipoPagoID, monedasID, importe, importeEnPesos, 0, sucursalID);
+                    pago.insertarPagoNoProveedor(sucursalID);
+                } else {
+                    pago = new Pago(tipoPagoID, monedasID, importe, importeEnPesos, proveedorID, sucursalID);
+                    pago.insertarPagoProveedor(sucursalID);
+                }
+
+                switch (fondoSeleccionado) {
+                    case "Caja Efectivo":
+                        caja.pagoCajaEfectivo(importeEnPesos, sucursalID);
+                        break;
+                    case "Caja Banco":
+                        caja.pagoCajaBanco(importeEnPesos, sucursalID);
+                        break;
+                    case "Caja Efectivo y Caja Banco":
+                        // Lógica para el caso de "Caja Efectivo y Caja Banco"
+                        break;
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
     }
 
