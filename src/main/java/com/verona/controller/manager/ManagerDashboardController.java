@@ -87,7 +87,9 @@ public class ManagerDashboardController {
 
     @FXML
     void btnRealizarPresupuestoClicked(ActionEvent event) {
-
+        SceneController sceneController = new SceneController(
+                (Stage) btnRealizarPrespuesto.getScene().getWindow());
+        sceneController.switchToPresupuesto();
     }
 
     @FXML

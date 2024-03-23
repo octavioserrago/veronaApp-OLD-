@@ -92,6 +92,10 @@ public class SceneController {
         switchScene("/com/verona/view/registrarPago.fxml", "Registrar un pago (Salida)");
     }
 
+    public void switchToPresupuesto() {
+        switchScene("/com/verona/view/realizarPresupuesto.fxml", "Presupuesto");
+    }
+
     public void switchToVerDetalleCaja() {
         switchScene("/com/verona/view/verDetalleCajas.fxml", "Detalle de Caja)");
     }
