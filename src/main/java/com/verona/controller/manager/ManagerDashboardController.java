@@ -3,14 +3,12 @@ package com.verona.controller.manager;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.text.NumberFormat;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.Currency;
 
 import java.util.Locale;
 import com.verona.controller.SceneController;
-import com.verona.controller.common.CotizacionesController;
-import com.verona.model.Cotizacion;
+import com.verona.model.ApiDolarBlue;
+import com.verona.model.ApiDolarOficial;
 import com.verona.model.Entrada;
 import com.verona.model.Pago;
 import com.verona.model.User;
@@ -61,16 +59,16 @@ public class ManagerDashboardController {
     private ComboBox<?> proveedoresCombobox;
 
     @FXML
-    private Label valorDolarBlueLabel;
+    private Label dolarBlueLabelToComplete;
+
+    @FXML
+    private Label dolarOficialLabelToComplete;
 
     @FXML
     private Label salidasDiaLabel;
 
     @FXML
     private Label entradasDiaLabel;
-
-    @FXML
-    private Label fechaUltimaDolarLabel;
 
     @FXML
     private Button btnRealizarPrespuesto;
@@ -179,8 +177,8 @@ public class ManagerDashboardController {
         graphVentasPorMes.setTitle("Cantidad de Ventas por Mes");
         graphVentasPorMes.getYAxis().setLabel("Cantidad de Ventas");
 
-        // Cotizaciones dolar
-        cargarUltimasCotizaciones();
+        dolarOficialLabelToComplete.setText(cargarCotizacionOficial());
+        dolarBlueLabelToComplete.setText(cargarCotizacionBlue());
 
         cargarTotalEntradasDelDia();
         cargarSalidasDelDia();
@@ -331,6 +329,23 @@ public class ManagerDashboardController {
         sceneController.switchToVentas(nuevoRootPane);
     }
 
+    ApiDolarOficial apiOficial = new ApiDolarOficial();
+    ApiDolarBlue apiBlue = new ApiDolarBlue();
+
+    private String cargarCotizacionOficial() {
+        double dolarOficial = ApiDolarOficial.obtenerDolarOficial();
+        String dolarOficialReal = Double.toString(dolarOficial);
+
+        return dolarOficialReal;
+    }
+
+    private String cargarCotizacionBlue() {
+        double dolarBlue = ApiDolarBlue.obtenerDolarBlue();
+        String dolarBlueReal = Double.toString(dolarBlue);
+
+        return dolarBlueReal;
+    }
+
     private AnchorPane obtenerRootPaneParaVentas() {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/verona/view/cargarVentas.fxml"));
@@ -341,21 +356,4 @@ public class ManagerDashboardController {
         }
     }
 
-    CotizacionesController cotizacionesController = new CotizacionesController();
-
-    private void cargarUltimasCotizaciones() {
-        Cotizacion ultimaCotizacionBlue = cotizacionesController.obtenerUltimaCotizacionBlue();
-
-        if (ultimaCotizacionBlue != null) {
-            DateTimeFormatter formatterDateTime = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-            LocalDateTime fechaUltimaCotizacion = LocalDateTime.parse(ultimaCotizacionBlue.getFecha(),
-                    formatterDateTime);
-
-            DateTimeFormatter formatterDate = DateTimeFormatter.ofPattern("dd-MM-yyyy");
-            String fechaUltimaFormateada = fechaUltimaCotizacion.format(formatterDate);
-
-            fechaUltimaDolarLabel.setText(fechaUltimaFormateada);
-            valorDolarBlueLabel.setText(String.valueOf(ultimaCotizacionBlue.getTasaCambio()));
-        }
-    }
 }

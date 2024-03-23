@@ -3,15 +3,14 @@ package com.verona.controller.seller;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import java.util.List;
 
 import com.verona.controller.SceneController;
-import com.verona.controller.common.CotizacionesController;
+import com.verona.model.ApiDolarBlue;
+import com.verona.model.ApiDolarOficial;
 import com.verona.model.Bacha;
-import com.verona.model.Cotizacion;
 import com.verona.model.User;
 import com.verona.model.Venta;
 
@@ -60,7 +59,10 @@ public class DashboardSellerController {
     private MenuButton btnVentasMenu;
 
     @FXML
-    private Label cotizacionDolarBlue;
+    private Label dolarBlueLabelToComplete;
+
+    @FXML
+    private Label dolarOficialLabelToComplete;
 
     @FXML
     private Button btnRealizarPresupuesto;
@@ -73,9 +75,6 @@ public class DashboardSellerController {
 
     @FXML
     private Label nombreEmpleado;
-
-    @FXML
-    private Label fechaUltimaBlue;
 
     @FXML
     private MenuButton btnVentasDeEstaSucursal;
@@ -112,7 +111,8 @@ public class DashboardSellerController {
     @FXML
     public void initialize() {
         mostrarFechaActual();
-        cargarUltimasCotizaciones();
+        dolarOficialLabelToComplete.setText(cargarCotizacionOficial());
+        dolarBlueLabelToComplete.setText(cargarCotizacionBlue());
         try {
             cargarVentas();
             cargarBachas();
@@ -208,22 +208,21 @@ public class DashboardSellerController {
         fechaLabel.setText(fechaFormateada);
     }
 
-    CotizacionesController cotizacionesController = new CotizacionesController();
+    ApiDolarOficial apiOficial = new ApiDolarOficial();
+    ApiDolarBlue apiBlue = new ApiDolarBlue();
 
-    private void cargarUltimasCotizaciones() {
-        Cotizacion ultimaCotizacionBlue = cotizacionesController.obtenerUltimaCotizacionBlue();
+    private String cargarCotizacionOficial() {
+        double dolarOficial = ApiDolarOficial.obtenerDolarOficial();
+        String dolarOficialReal = Double.toString(dolarOficial);
 
-        if (ultimaCotizacionBlue != null) {
-            DateTimeFormatter formatterDateTime = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-            LocalDateTime fechaUltimaCotizacion = LocalDateTime.parse(ultimaCotizacionBlue.getFecha(),
-                    formatterDateTime);
+        return dolarOficialReal;
+    }
 
-            DateTimeFormatter formatterDate = DateTimeFormatter.ofPattern("dd-MM-yyyy");
-            String fechaUltimaFormateada = fechaUltimaCotizacion.format(formatterDate);
+    private String cargarCotizacionBlue() {
+        double dolarBlue = ApiDolarBlue.obtenerDolarBlue();
+        String dolarBlueReal = Double.toString(dolarBlue);
 
-            fechaUltimaBlue.setText(fechaUltimaFormateada);
-            cotizacionDolarBlue.setText(String.valueOf(ultimaCotizacionBlue.getTasaCambio()));
-        }
+        return dolarBlueReal;
     }
 
     private List<Bacha> obtenerBachasStock() throws SQLException {

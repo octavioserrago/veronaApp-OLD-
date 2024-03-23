@@ -10,7 +10,7 @@ public class ApiDolarOficial {
 
     public static double obtenerDolarOficial() {
         try {
-            // URL de la API
+
             @SuppressWarnings("deprecation")
             URL url = new URL("https://dolarapi.com/v1/dolares/oficial");
 
