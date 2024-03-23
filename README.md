@@ -49,3 +49,8 @@ Contributions are welcome! If you find any issues or have suggestions for improv
 ## Acknowledgments
 
 - Special thanks to the JavaFX and Scene Builder communities for their valuable tools and resources.
+## Acknowledgments
+
+- Special thanks to the JavaFX and Scene Builder communities for their valuable tools and resources.
+- Grateful acknowledgment to enzonotario for providing the value of the blue and official dollar exchange rates.
+
