@@ -2,8 +2,8 @@ package com.verona.controller.common;
 
 import java.sql.SQLException;
 import com.verona.controller.SceneController;
+import com.verona.model.ApiDolarBlue;
 import com.verona.model.Caja;
-import com.verona.model.Cotizacion;
 import com.verona.model.Entrada;
 import com.verona.model.Senias;
 import com.verona.model.User;
@@ -128,9 +128,7 @@ public class RegistrarIngresoController {
         }
 
         Integer moneda = null;
-        Integer ultimoIDCotizacion = null;
         double importeEnPesos = 0;
-        double tasaCambio = 0;
         String nombreVendedor = user.getNombre() + "\n" + user.getApellido();
 
         double precioTotal = 0.0;
@@ -210,15 +208,11 @@ public class RegistrarIngresoController {
 
         {
             moneda = 3;
-            Cotizacion cotizacion = new Cotizacion("", 0);
-            Object[] ultimaCotizacion = cotizacion.getUltimaCotizacion();
-
-            ultimoIDCotizacion = (int) ultimaCotizacion[0];
-            tasaCambio = (double) ultimaCotizacion[1];
-            importeEnPesos = importe * tasaCambio;
+            double cotizacionDolar = ApiDolarBlue.obtenerDolarBlue();
+            importeEnPesos = cotizacionDolar * importe;
 
             try {
-                Entrada entrada = new Entrada(detalle, metodoPagoSeleccionado, moneda, importe, ultimoIDCotizacion,
+                Entrada entrada = new Entrada(detalle, metodoPagoSeleccionado, moneda, importe, cotizacionDolar,
                         importeEnPesos, venta.getVentasID(), user.getSucursalID(), nombreVendedor);
                 boolean insercionExitosa = entrada.insertarEntrada();
 

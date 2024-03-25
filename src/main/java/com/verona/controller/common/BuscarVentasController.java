@@ -42,7 +42,6 @@ import java.util.Locale;
 
 import com.verona.controller.SceneController;
 import com.verona.model.Colocador;
-import com.verona.model.Cotizacion;
 import com.verona.model.DatabaseConnection;
 import com.verona.model.Entrada;
 import com.verona.model.Plano;
@@ -137,9 +136,6 @@ public class BuscarVentasController {
 
     @FXML
     private Label precioColocacionLabelToComplete;
-
-    @FXML
-    private Label resultadoLabel;
 
     @FXML
     private Label saldoLabel;
@@ -411,7 +407,6 @@ public class BuscarVentasController {
             tableEntradas.addCell(new PdfPCell(new Paragraph("Vendedor", fontTitulosTabla)));
 
             try {
-
                 DatabaseConnection con = new DatabaseConnection();
                 Connection conexion = con.conectar();
 
@@ -420,7 +415,7 @@ public class BuscarVentasController {
                     int idVenta = Integer.parseInt(idLabelToComplete.getText());
 
                     PreparedStatement preparedStatement = conexion.prepareStatement(
-                            "SELECT fecha, detalle, metodoPago, monedasID, importe, cotizacionesID, nombreVendedor FROM Entradas WHERE ventasID = ?");
+                            "SELECT fecha, detalle, metodoPago, monedasID, importe, cotizacionDolar, nombreVendedor FROM Entradas WHERE ventasID = ?");
 
                     preparedStatement.setInt(1, idVenta);
 
@@ -428,31 +423,36 @@ public class BuscarVentasController {
 
                     if (rs.next()) {
                         do {
-                            Cotizacion cotizacion1 = new Cotizacion("", 0);
                             int monedaID = rs.getInt(4);
                             String monedaSimbolo = (monedaID == 1) ? "ARS" : (monedaID == 3) ? "USD" : "";
 
-                            int cotizacionesID = rs.getInt(6);
-                            Double tasaCambio = cotizacion1.getCotizacion(cotizacionesID);
-
                             double importe = rs.getDouble(5);
-                            double importeEnPesos = (monedaID == 3) ? importe * tasaCambio : importe;
+                            double cotizacionDolar = rs.getDouble("cotizacionDolar");
+                            double importeEnPesos = (monedaID == 3) ? importe * cotizacionDolar : importe;
 
                             String fechaString = rs.getString(1);
                             LocalDate fecha = LocalDate.parse(fechaString);
                             String fechaFormateada = fecha.format(DateTimeFormatter.ofPattern("dd-MM-yyyy"));
 
-                            if (tasaCambio != null) {
+                            if (cotizacionDolar != 0.0) {
                                 tableEntradas.addCell(fechaFormateada);
                                 tableEntradas.addCell(rs.getString(2));
                                 tableEntradas.addCell(rs.getString(3));
                                 tableEntradas.addCell(monedaSimbolo);
                                 tableEntradas.addCell(rs.getString(5));
-                                tableEntradas.addCell(String.valueOf(tasaCambio));
+                                tableEntradas.addCell(String.valueOf(cotizacionDolar));
+                                tableEntradas.addCell(String.valueOf(importeEnPesos));
+                                tableEntradas.addCell(rs.getString(7));
+                            } else {
+                                tableEntradas.addCell(fechaFormateada);
+                                tableEntradas.addCell(rs.getString(2));
+                                tableEntradas.addCell(rs.getString(3));
+                                tableEntradas.addCell(monedaSimbolo);
+                                tableEntradas.addCell(rs.getString(5));
+                                tableEntradas.addCell("");
                                 tableEntradas.addCell(String.valueOf(importeEnPesos));
                                 tableEntradas.addCell(rs.getString(7));
                             }
-
                         } while (rs.next());
 
                     } else {
@@ -464,6 +464,7 @@ public class BuscarVentasController {
             } catch (SQLException | NumberFormatException e) {
                 e.printStackTrace();
             }
+
             document.add(tableEntradas);
             document.add(new Paragraph("\n"));
 
@@ -559,16 +560,16 @@ public class BuscarVentasController {
                     if (venta != null) {
 
                         mostrarDetallesVenta(venta);
-                        resultadoLabel.setText("Venta encontrada");
+
                     } else {
-                        resultadoLabel.setText("No se encontró ninguna venta con el ID proporcionado");
+
                     }
                 }
             } finally {
 
             }
         } else {
-            resultadoLabel.setText("Ingrese un ID correcta");
+
         }
     }
 
@@ -585,7 +586,6 @@ public class BuscarVentasController {
         materialLabel.setVisible(false);
         nombreLabel.setVisible(false);
         precioColocacionLabel.setVisible(false);
-        resultadoLabel.setVisible(false);
         saldoLabel.setVisible(false);
         tablaCobros.setVisible(false);
         telefono2Label.setVisible(false);
@@ -699,7 +699,6 @@ public class BuscarVentasController {
         importeTotalLabel.setVisible(true);
         materialLabel.setVisible(true);
         nombreLabel.setVisible(true);
-        resultadoLabel.setVisible(true);
         saldoLabel.setVisible(true);
         tablaCobros.setVisible(true);
         telefono2Label.setVisible(true);
@@ -748,13 +747,12 @@ public class BuscarVentasController {
             tablaCobros.getItems().clear();
             tablaCobros.getColumns().clear();
             if (listaEntrada != null && !listaEntrada.isEmpty()) {
-                Cotizacion cotizacion1 = new Cotizacion("", 0);
                 TableColumn<Entrada, String> fechaColumn = new TableColumn<>("Fecha");
                 TableColumn<Entrada, String> nombreClienteColumn = new TableColumn<>("Nombre");
                 TableColumn<Entrada, String> descripcionColumn = new TableColumn<>("Descripción");
                 TableColumn<Entrada, String> monedaColumn = new TableColumn<>("Moneda");
                 TableColumn<Entrada, Double> importeColumn = new TableColumn<>("Importe");
-                TableColumn<Entrada, Double> cotizacionColumn = new TableColumn<>("Cotizacion USD");
+                TableColumn<Entrada, Double> cotizacionDolarColumn = new TableColumn<>("Cotizacion USD");
                 TableColumn<Entrada, Double> importeEnPesosColumn = new TableColumn<>("Importe Total ARS");
                 fechaColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getFecha()));
                 nombreClienteColumn.setCellValueFactory(
@@ -775,15 +773,19 @@ public class BuscarVentasController {
                     }
                     return new SimpleStringProperty(monedaSimbolo);
                 });
-                cotizacionColumn.setCellValueFactory(cellData -> {
-                    int cotizacionesID = cellData.getValue().getCotizacionesID();
-                    return new SimpleDoubleProperty(cotizacion1.getCotizacion(cotizacionesID)).asObject();
+                importeColumn.setCellValueFactory(cellData -> {
+                    double importe = cellData.getValue().getImporte();
+                    return new SimpleDoubleProperty(importe).asObject();
                 });
-                importeColumn.setCellValueFactory(
-                        cellData -> new SimpleDoubleProperty(cellData.getValue().getImporte()).asObject());
+
+                cotizacionDolarColumn.setCellValueFactory(cellData -> {
+                    double cotizacion = cellData.getValue().getCotizacionDolar();
+                    return new SimpleDoubleProperty(cotizacion).asObject();
+                });
+
                 importeEnPesosColumn.setCellValueFactory(cellData -> {
                     double importe = cellData.getValue().getImporte();
-                    double cotizacion = cotizacionColumn.getCellObservableValue(cellData.getValue()).getValue();
+                    double cotizacion = cotizacionDolarColumn.getCellObservableValue(cellData.getValue()).getValue();
                     double importeEnPesos = operacion[0] ? importe * cotizacion : importe;
                     return new SimpleDoubleProperty(importeEnPesos).asObject();
                 });
@@ -792,11 +794,11 @@ public class BuscarVentasController {
                 descripcionColumn.setMaxWidth(1f * Integer.MAX_VALUE * 50);
                 monedaColumn.setMaxWidth(1f * Integer.MAX_VALUE * 25);
                 importeColumn.setMaxWidth(1f * Integer.MAX_VALUE * 25);
-                cotizacionColumn.setMaxWidth(1f * Integer.MAX_VALUE * 25);
+                cotizacionDolarColumn.setMaxWidth(1f * Integer.MAX_VALUE * 25);
                 importeEnPesosColumn.setMaxWidth(1f * Integer.MAX_VALUE * 25);
                 tablaCobros.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
                 List<TableColumn<Entrada, ?>> columnList = Arrays.asList(fechaColumn, nombreClienteColumn,
-                        descripcionColumn, monedaColumn, importeColumn, cotizacionColumn, importeEnPesosColumn);
+                        descripcionColumn, monedaColumn, importeColumn, cotizacionDolarColumn, importeEnPesosColumn);
                 tablaCobros.getColumns().addAll(columnList);
                 tablaCobros.getItems().addAll(listaEntrada);
                 tablaCobros.setItems(FXCollections.observableList(listaEntrada));

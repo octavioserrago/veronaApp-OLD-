@@ -14,7 +14,7 @@ public class Entrada {
     private String metodoPago;
     private int monedasID;
     private Double importe;
-    private Integer cotizacionesID;
+    private Double cotizacionDolar;
     private double importeEnPesos;
     private int ventasID;
     private int sucursalID;
@@ -23,13 +23,13 @@ public class Entrada {
     private String nombreCliente;
     private String nombreVendedor;
 
-    public Entrada(String detalle, String metodoPago, int monedasID, Double importe, int cotizacionesID,
+    public Entrada(String detalle, String metodoPago, int monedasID, Double importe, double cotizacionDolar,
             double importeEnPesos, int ventasID, int sucursalID, String nombreVendedor) {
         this.detalle = detalle;
         this.metodoPago = metodoPago;
         this.monedasID = monedasID;
         this.importe = importe;
-        this.cotizacionesID = cotizacionesID;
+        this.cotizacionDolar = cotizacionDolar;
         this.importeEnPesos = importeEnPesos;
         this.ventasID = ventasID;
         this.sucursalID = sucursalID;
@@ -84,14 +84,6 @@ public class Entrada {
         this.importe = importe;
     }
 
-    public int getCotizacionesID() {
-        return cotizacionesID;
-    }
-
-    public void setCotizacionesID(int cotizacionesID) {
-        this.cotizacionesID = cotizacionesID;
-    }
-
     public double getImporteEnPesos() {
         return importeEnPesos;
     }
@@ -124,6 +116,14 @@ public class Entrada {
         this.tasaCambio = tasaCambio;
     }
 
+    public Double getCotizacionDolar() {
+        return cotizacionDolar;
+    }
+
+    public void setCotizacionDolar(Double cotizacionDolar) {
+        this.cotizacionDolar = cotizacionDolar;
+    }
+
     public String getNombreCliente() {
         return nombreCliente;
     }
@@ -147,14 +147,14 @@ public class Entrada {
     PreparedStatement stmt;
 
     public boolean insertarEntrada() throws SQLException {
-        String sql = "INSERT INTO Entradas (detalle, metodoPago, monedasID, importe, cotizacionesID, importeEnPesos ,ventasID, sucursalID, nombreVendedor) VALUES (?, ?, ?, ?, ?, ?, ?,?,?)";
+        String sql = "INSERT INTO Entradas (detalle, metodoPago, monedasID, importe, cotizacionDolar, importeEnPesos ,ventasID, sucursalID, nombreVendedor) VALUES (?, ?, ?, ?, ?, ?, ?,?,?)";
 
         try (PreparedStatement preparedStatement = conexion.prepareStatement(sql)) {
             preparedStatement.setString(1, detalle);
             preparedStatement.setString(2, metodoPago);
             preparedStatement.setInt(3, monedasID);
             preparedStatement.setDouble(4, importe);
-            preparedStatement.setInt(5, cotizacionesID);
+            preparedStatement.setDouble(5, cotizacionDolar);
             preparedStatement.setDouble(6, importeEnPesos);
             preparedStatement.setInt(7, ventasID);
             preparedStatement.setInt(8, sucursalID);
@@ -187,10 +187,9 @@ public class Entrada {
 
     public List<Entrada> obtenerEntradaPorCliente(int ventasID) throws SQLException {
         List<Entrada> entradasPorCliente = new ArrayList<>();
-        String sql = "SELECT e.*, m.simbolo AS monedaSimbolo, c.tasaCambio, v.nombreCliente " +
+        String sql = "SELECT e.*, m.simbolo AS monedaSimbolo, v.nombreCliente " +
                 "FROM Entradas e " +
                 "INNER JOIN Monedas m ON e.monedasID = m.monedasID " +
-                "LEFT JOIN Cotizaciones c ON e.cotizacionesID = c.cotizacionesID " +
                 "INNER JOIN Ventas v ON e.ventasID = v.ventasID " +
                 "WHERE v.ventasID = ?";
 
@@ -204,7 +203,7 @@ public class Entrada {
                             resultSet.getString("metodoPago"),
                             resultSet.getInt("monedasID"),
                             resultSet.getDouble("importe"),
-                            resultSet.getInt("cotizacionesID"),
+                            resultSet.wasNull() ? null : resultSet.getDouble("cotizacionDolar"), // Manejo de valor nulo
                             resultSet.getDouble("importeEnPesos"),
                             resultSet.getInt("ventasID"),
                             resultSet.getInt("sucursalID"),
@@ -212,12 +211,12 @@ public class Entrada {
 
                     entrada.setFecha(resultSet.getString("fecha"));
                     entrada.setSimboloMoneda(resultSet.getString("monedaSimbolo"));
-                    entrada.setTasaCambio(resultSet.getDouble("tasaCambio"));
                     entrada.setNombreCliente(resultSet.getString("nombreCliente"));
                     entrada.setNombreVendedor(resultSet.getString("nombreVendedor"));
 
                     entradasPorCliente.add(entrada);
                 }
+
             }
         }
 
