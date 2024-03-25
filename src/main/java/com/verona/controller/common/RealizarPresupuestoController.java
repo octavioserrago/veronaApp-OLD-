@@ -3,12 +3,11 @@ package com.verona.controller.common;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
-import javafx.scene.control.Label;
+import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
 import com.verona.controller.SceneController;
-import com.verona.model.ApiDolarOficial;
-import com.verona.model.ApiDolarBlue;
 import com.verona.model.User;
 
 public class RealizarPresupuestoController {
@@ -17,13 +16,17 @@ public class RealizarPresupuestoController {
     private Button btnVolver;
 
     @FXML
-    private Label dolarOficialLabel;
+    private TableView<?> coloresTable;
+
+    @FXML
+    private TextField m2TextFieldToComplete;
+
+    @FXML
+    private TextField nombreClienteTextFieldToComplete;
 
     @FXML
     void initialize() {
-        double valorDolar = ApiDolarOficial.obtenerDolarOficial();
-        double valorDolarBlue = ApiDolarBlue.obtenerDolarBlue();
-        dolarOficialLabel.setText(String.valueOf("oficial: " + valorDolar + "Dolar Blue" + valorDolarBlue));
+
     }
 
     @FXML

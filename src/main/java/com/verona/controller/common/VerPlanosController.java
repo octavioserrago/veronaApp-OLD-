@@ -5,8 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.verona.controller.SceneController;
-import com.verona.model.Colores;
-import com.verona.model.Material;
+
 import com.verona.model.Plano;
 import com.verona.model.PlanosData;
 
@@ -45,7 +44,7 @@ public class VerPlanosController {
     @FXML
     private TableColumn<PlanosData, Button> colImagen;
 
-    Plano plano = new Plano(null, getVentaActual(), getVentaActual(), null, getVentaActual(), null);
+    Plano plano = new Plano(null, "", "", null, getVentaActual(), null, "");
 
     private int ventaActual;
 
@@ -80,8 +79,8 @@ public class VerPlanosController {
 
         ObservableList<PlanosData> data = FXCollections.observableArrayList();
         for (Plano p : listaPlanos) {
-            String material = obtenerMaterialSegunID(p.getMaterialID());
-            String color = obtenerColorSegunID(p.getColorID());
+            String material = p.getMaterial();
+            String color = p.getColor();
             String estado = p.getEstado();
             byte[] imgBytes = p.getImgBlueprint();
 
@@ -96,17 +95,4 @@ public class VerPlanosController {
         colImagen.setCellValueFactory(cellData -> cellData.getValue().verImagenButtonProperty());
     }
 
-    private String obtenerMaterialSegunID(int materialID) {
-        String material = "";
-        Material materialInstance = new Material(material);
-        material = materialInstance.obtenerMaterial(materialID);
-        return material;
-    }
-
-    private String obtenerColorSegunID(int colorID) {
-        String color = "";
-        Colores colorInstance = new Colores(0, "", 0, 0);
-        color = colorInstance.obtenerColor(colorID);
-        return color;
-    }
 }

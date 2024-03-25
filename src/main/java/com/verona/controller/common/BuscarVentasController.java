@@ -197,7 +197,7 @@ public class BuscarVentasController {
     String nombreCliente;
 
     private Venta ventaModel;
-    Plano plano = new Plano("", 0, 0, null, 0, "");
+    Plano plano = new Plano("", "", "", null, 0, "", "");
 
     @FXML
     void initialize() {
@@ -214,8 +214,8 @@ public class BuscarVentasController {
         String id = idLabelToComplete.getText();
         int id1 = Integer.parseInt(id);
 
-        Plano.setCurrentPlano(0, "codigoDeseado", 0, 0, null,
-                id1, "estadoDeseado");
+        Plano.setCurrentPlano(0, "codigoDeseado", "", "", null,
+                id1, "estadoDeseado", "");
 
         SceneController sceneController = new SceneController((Stage) btnFotoPlano.getScene().getWindow());
         sceneController.switchToVerPlanos();

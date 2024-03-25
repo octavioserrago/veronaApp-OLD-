@@ -28,12 +28,19 @@ public class ApiDolarBlue {
             con.disconnect();
 
             String jsonResponse = response.toString();
-            int index = jsonResponse.indexOf("venta\":") + 7;
-            int endIndex = jsonResponse.indexOf(",", index);
-            String ventaStr = jsonResponse.substring(index, endIndex);
+            int indexVenta = jsonResponse.indexOf("venta\":") + 7;
+            int endIndexVenta = jsonResponse.indexOf(",", indexVenta);
+            String ventaStr = jsonResponse.substring(indexVenta, endIndexVenta);
             double venta = Double.parseDouble(ventaStr);
 
-            return venta;
+            int indexCompra = jsonResponse.indexOf("compra\":") + 8;
+            int endIndexCompra = jsonResponse.indexOf(",", indexCompra);
+            String compraStr = jsonResponse.substring(indexCompra, endIndexCompra);
+            double compra = Double.parseDouble(compraStr);
+
+            double valorMedio = (venta + compra) / 2.0;
+
+            return valorMedio;
 
         } catch (IOException e) {
             e.printStackTrace();

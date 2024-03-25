@@ -7,6 +7,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -215,6 +217,47 @@ public class Venta {
 
     PreparedStatement stmt;
 
+    public List<Venta> ventasPorSucursalYFecha(int sucursalID, LocalDate fechaDesde, LocalDate fechaHasta)
+            throws SQLException {
+        List<Venta> ventas = new ArrayList<>();
+        String sql = "SELECT ventasID, nombreCliente, descripcion, material, color, fechaEstimadaTerminacion, telefono1, telefono2, email FROM Ventas WHERE sucursalID = ? AND fecha BETWEEN ? AND ?";
+
+        String fechaDesdeFormateada = fechaDesde.format(DateTimeFormatter.ISO_LOCAL_DATE);
+        String fechaHastaFormateada = fechaHasta.format(DateTimeFormatter.ISO_LOCAL_DATE);
+
+        try (PreparedStatement preparedStatement = conexion.prepareStatement(sql)) {
+            preparedStatement.setInt(1, sucursalID);
+            preparedStatement.setString(2, fechaDesdeFormateada);
+            preparedStatement.setString(3, fechaHastaFormateada);
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            while (resultSet.next()) {
+                Venta venta = new Venta(
+                        resultSet.getInt("ventasID"),
+                        resultSet.getString("nombreCliente"),
+                        resultSet.getString("descripcion"),
+                        resultSet.getString("material"),
+                        resultSet.getString("color"),
+                        resultSet.getString("fechaEstimadaTerminacion"),
+                        0,
+                        0.0,
+                        0,
+                        0.0,
+                        "",
+                        0,
+                        resultSet.getString("telefono1"),
+                        resultSet.getString("telefono2"),
+                        resultSet.getString("email"),
+                        0,
+                        0);
+
+                ventas.add(venta);
+            }
+        }
+
+        return ventas;
+    }
+
     public void insertarVenta() throws SQLException {
         String sql = "INSERT INTO Ventas (nombreCliente, descripcion, material, color," +
                 "fechaEstimadaTerminacion, colocadoresID, precioColocacion, monedasID, importe, " +
@@ -245,7 +288,7 @@ public class Venta {
 
     public List<Venta> ventasPorSucursal(int sucursalID) throws SQLException {
         List<Venta> ventas = new ArrayList<>();
-        String sql = "SELECT ventasID, nombreCliente, descripcion, material, color, fechaEstimadaTerminacion, telefono1, telefono2, email FROM Ventas WHERE sucursalID = ?";
+        String sql = "SELECT ventasID, nombreCliente, descripcion, estado,material, color, fechaEstimadaTerminacion, telefono1, telefono2, email FROM Ventas WHERE sucursalID = ?";
 
         try (PreparedStatement preparedStatement = conexion.prepareStatement(sql)) {
             preparedStatement.setInt(1, sucursalID);
@@ -263,7 +306,7 @@ public class Venta {
                         0.0,
                         0,
                         0.0,
-                        "",
+                        resultSet.getString("estado"),
                         0,
                         resultSet.getString("telefono1"),
                         resultSet.getString("telefono2"),

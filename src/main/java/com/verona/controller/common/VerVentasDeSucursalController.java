@@ -17,6 +17,8 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 
 import java.sql.SQLException;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 public class VerVentasDeSucursalController {
@@ -45,6 +47,9 @@ public class VerVentasDeSucursalController {
         TableColumn<Venta, Integer> ventasIDColumn = new TableColumn<>("ID Venta");
         ventasIDColumn.setCellValueFactory(new PropertyValueFactory<>("ventasID"));
 
+        TableColumn<Venta, String> fechaCreacionColumn = new TableColumn<>("Fecha de Creación");
+        fechaCreacionColumn.setCellValueFactory(new PropertyValueFactory<>("fecha"));
+
         TableColumn<Venta, String> nombreClienteColumn = new TableColumn<>("Nombre Cliente");
         nombreClienteColumn.setCellValueFactory(new PropertyValueFactory<>("nombreCliente"));
 
@@ -66,6 +71,9 @@ public class VerVentasDeSucursalController {
             return cell;
         });
 
+        TableColumn<Venta, String> estadoColumn = new TableColumn<>("Estado");
+        estadoColumn.setCellValueFactory(new PropertyValueFactory<>("estado"));
+
         TableColumn<Venta, String> materialColumn = new TableColumn<>("Material");
         materialColumn.setCellValueFactory(new PropertyValueFactory<>("material"));
 
@@ -86,8 +94,10 @@ public class VerVentasDeSucursalController {
 
         tableVentas.getColumns().addAll(
                 ventasIDColumn,
+                fechaCreacionColumn,
                 nombreClienteColumn,
                 descripcionColumn,
+                estadoColumn,
                 materialColumn,
                 colorColumn,
                 fechaEstimadaTerminacionColumn,
@@ -106,9 +116,46 @@ public class VerVentasDeSucursalController {
 
         Venta venta = new Venta(0, null, null, null, null, null, 0, 0, 0, null,
                 null, 0, null, null, null, 0, 0);
-        List<Venta> ventas = venta.ventasPorSucursal(sucursalID); // Llamar al método en la instancia
+        List<Venta> ventas = venta.ventasPorSucursal(sucursalID);
         ObservableList<Venta> ventasObservable = FXCollections.observableArrayList(ventas);
+        for (Venta v : ventasObservable) {
+            String fecha = v.obtenerFechaVenta(v.getVentasID());
+            v.setFecha(fecha);
+        }
         tableVentas.setItems(ventasObservable);
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+        for (Venta v : ventasObservable) {
+            String fecha = v.obtenerFechaVenta(v.getVentasID());
+            LocalDate fechaLocal = LocalDate.parse(fecha);
+            String fechaFormateada = fechaLocal.format(formatter);
+            v.setFecha(fechaFormateada);
+        }
+    }
+
+    @FXML
+    void btnCargarFiltradasClicked(ActionEvent event) throws SQLException {
+        int sucursalID = user.getSucursalID();
+        LocalDate fechaDesde = dateFromPicker.getValue();
+        LocalDate fechaHasta = dateToPicker.getValue();
+
+        if (fechaDesde != null && fechaHasta != null) {
+            Venta venta = new Venta(0, null, null, null, null, null, 0, 0, 0, null,
+                    null, 0, null, null, null, 0, 0);
+            List<Venta> ventas = venta.ventasPorSucursalYFecha(sucursalID, fechaDesde, fechaHasta);
+
+            System.out.println("Cantidad de ventas filtradas: " + ventas.size());
+
+            ObservableList<Venta> ventasObservable = FXCollections.observableArrayList(ventas);
+            for (Venta v : ventasObservable) {
+                String fecha = v.obtenerFechaVenta(v.getVentasID());
+                v.setFecha(fecha);
+            }
+            tableVentas.setItems(ventasObservable);
+        } else {
+            System.out.println("Por favor seleccione ambas fechas.");
+        }
+        System.out.println("Clickeaste este boton");
     }
 
     @FXML

@@ -5,16 +5,12 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.util.List;
+import java.time.format.DateTimeFormatter;
 
 import com.verona.controller.SceneController;
 import com.verona.model.DatabaseConnection;
 import com.verona.model.Material;
 import com.verona.model.Plano;
-import com.verona.model.Colores;
-
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
@@ -22,6 +18,7 @@ import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.paint.Color;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.stage.FileChooser;
@@ -53,50 +50,27 @@ public class CargarPlanoController {
     private TextField idTextField;
 
     @FXML
+    private TextField materialTextFieldToComplete;
+
+    @FXML
+    private TextField colorTextFieldToComplete;
+
+    @FXML
     private Label labelIndicator;
+
+    @FXML
+    private DatePicker dateFechaTerminacion;
 
     @FXML
     private File selectedFile;
 
     Material material = new Material("");
 
-    Plano plano = new Plano("", 0, 0, null, 0, "");
+    Plano plano = new Plano("", "", "", null, 0, "", "");
     private final FileChooser fileChooser = new FileChooser();
 
     DatabaseConnection con = new DatabaseConnection();
     Connection conexion;
-
-    @FXML
-    public void initialize() throws SQLException {
-        try {
-            conexion = con.conectar();
-            List<Material> listaMateriales = Material.obtenerListaMateriales(conexion);
-            ObservableList<Material> materialesItems = FXCollections.observableArrayList(listaMateriales);
-            materialComboBox.setItems(materialesItems);
-        } finally {
-            cerrarConexion();
-        }
-    }
-
-    @FXML
-    void materialComboBoxChanged(ActionEvent event) {
-        try {
-            conexion = con.conectar();
-            Material materialSeleccionado = materialComboBox.getValue();
-
-            if (materialSeleccionado != null) {
-                int materialID = Material.obtenerMaterialID(conexion, materialSeleccionado.getTipoMaterial());
-                plano.setMaterialID(materialID);
-                List<String> listaColores = Colores.obtenerListaColoresPorMaterial(conexion, materialID);
-                ObservableList<String> coloresItems = FXCollections.observableArrayList(listaColores);
-                colorCombobox.setItems(coloresItems);
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } finally {
-            cerrarConexion();
-        }
-    }
 
     private void cerrarConexion() {
         try {
@@ -120,21 +94,20 @@ public class CargarPlanoController {
         int ventasID = Integer.parseInt(ventas);
         String codigoPlano = plano.generadorCodigoPlano(ventasID);
         plano.setCodigoPlano(codigoPlano);
-        Material materialSeleccionado = materialComboBox.getValue();
+        String material = materialTextFieldToComplete.getText();
+        String color = colorTextFieldToComplete.getText();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        String fechaTerminacionStr = dateFechaTerminacion.getValue().format(formatter);
 
-        if (materialSeleccionado != null) {
-            String tipoMaterialSeleccionado = materialSeleccionado.getTipoMaterial();
-            int materialID = plano.obtenerMaterial(tipoMaterialSeleccionado);
-            String colorSeleccionado = colorCombobox.getValue();
+        if (material != "" && color != "") {
 
             try {
                 conexion = con.conectar();
 
-                int materialColorPrecioID = Colores.obtenerColoresID(conexion, materialID, colorSeleccionado);
-
                 byte[] imgBytes = obtenerBytesDeImagen(selectedFile);
 
-                plano.cargarPlano(codigoPlano, materialID, materialColorPrecioID, imgBytes, ventasID, "En Producción");
+                plano.cargarPlano(codigoPlano, material, color, imgBytes, ventasID, "En Producción",
+                        fechaTerminacionStr);
 
                 mostrarAlerta("Plano cargado con éxito.", AlertType.INFORMATION);
             } catch (SQLException | IOException e) {
@@ -144,7 +117,9 @@ public class CargarPlanoController {
             } finally {
                 cerrarConexion();
             }
-        } else {
+        } else
+
+        {
             mostrarAlerta("No se ha seleccionado ningún material", AlertType.ERROR);
         }
     }
