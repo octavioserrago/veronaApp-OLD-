@@ -85,7 +85,7 @@ public class CargarPlanoController {
     @FXML
     void btnVolverClicked(ActionEvent event) {
         SceneController sceneController = new SceneController((Stage) btnVolver.getScene().getWindow());
-        sceneController.switchToManagerDashboard();
+        sceneController.switchToVerProduccion();
     }
 
     @FXML

@@ -148,6 +148,30 @@ public class Plano {
         return codigo;
     }
 
+    public int buscarPlano(String codigoPlano) throws SQLException {
+        int planoID = -1;
+        String sql = "SELECT planosID FROM Planos WHERE codigoPlano = ?";
+        try (PreparedStatement preparedStatement = conexion.prepareStatement(sql)) {
+            preparedStatement.setString(1, codigoPlano);
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                if (resultSet.next()) {
+                    planoID = resultSet.getInt("planosID");
+                }
+            }
+        }
+        return planoID;
+    }
+
+    public boolean modificarEstadoPlano(String nuevoEstado, int planosID) throws SQLException {
+        String sql = "UPDATE Planos SET estado = ? WHERE planosID = ?";
+        try (PreparedStatement preparedStatement = conexion.prepareStatement(sql)) {
+            preparedStatement.setString(1, nuevoEstado);
+            preparedStatement.setInt(2, planosID);
+            preparedStatement.executeUpdate();
+        }
+        return true;
+    }
+
     public void cargarPlano(String codigoPlano, String material, String color, byte[] imgBlueprint,
             int ventasID, String estado, String fechaTerminacion) throws SQLException {
         String sql = "INSERT INTO Planos (codigoPlano, material, color, img, ventasID,estado, fechaTerminacion) VALUES (?, ?, ?, ?, ?, ?, ?)";
@@ -186,6 +210,35 @@ public class Plano {
                 }
             }
         } catch (SQLException e) {
+            throw e;
+        }
+
+        System.out.println("Tamaño de la lista de planos: " + listaPlanos.size());
+        return listaPlanos;
+    }
+
+    public List<Plano> obtenerPlanosEnProduccion() throws SQLException {
+        List<Plano> listaPlanos = new ArrayList<>();
+        String sql = "SELECT * FROM Planos WHERE estado = ?";
+
+        try (PreparedStatement preparedStatement = conexion.prepareStatement(sql)) {
+            preparedStatement.setString(1, "En Produccion");
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                while (resultSet.next()) {
+                    Plano plano = new Plano(
+                            resultSet.getString("codigoPlano"),
+                            resultSet.getString("material"),
+                            resultSet.getString("color"),
+                            resultSet.getBytes("img"),
+                            resultSet.getInt("ventasID"),
+                            resultSet.getString("estado"),
+                            resultSet.getString("fechaTerminacion"));
+
+                    listaPlanos.add(plano);
+                }
+            }
+        } catch (SQLException e) {
+            System.err.println("Error al obtener planos en producción: " + e.getMessage());
             throw e;
         }
 

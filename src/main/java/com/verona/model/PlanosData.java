@@ -22,6 +22,8 @@ public class PlanosData {
     private final StringProperty material;
     private final StringProperty color;
     private final StringProperty estado;
+    private final StringProperty ventasIDProperty; // Ahora ventasID será un String
+    private final StringProperty fechaTerminacionProperty;
 
     private final ObjectProperty<Button> verImagenButton;
 
@@ -34,6 +36,9 @@ public class PlanosData {
         Button btnVerImagen = new Button("Ver imagen");
         btnVerImagen.setOnAction(event -> mostrarImagen(imgBytes));
         this.verImagenButton = new SimpleObjectProperty<>(btnVerImagen);
+
+        this.ventasIDProperty = new SimpleStringProperty();
+        this.fechaTerminacionProperty = new SimpleStringProperty();
     }
 
     public String getCodigoPlano() {
@@ -74,6 +79,30 @@ public class PlanosData {
 
     public ObjectProperty<Button> verImagenButtonProperty() {
         return verImagenButton;
+    }
+
+    public String getVentasID() {
+        return ventasIDProperty.get();
+    }
+
+    public void setVentasID(String ventasID) {
+        this.ventasIDProperty.set(ventasID);
+    }
+
+    public StringProperty ventasIDProperty() {
+        return ventasIDProperty;
+    }
+
+    public String getFechaTerminacion() {
+        return fechaTerminacionProperty.get();
+    }
+
+    public void setFechaTerminacion(String fechaTerminacion) {
+        this.fechaTerminacionProperty.set(fechaTerminacion);
+    }
+
+    public StringProperty fechaTerminacionProperty() {
+        return fechaTerminacionProperty;
     }
 
     private void mostrarImagen(byte[] imgBytes) {

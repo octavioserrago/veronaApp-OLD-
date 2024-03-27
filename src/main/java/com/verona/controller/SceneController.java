@@ -96,6 +96,14 @@ public class SceneController {
         switchScene("/com/verona/view/realizarPresupuesto.fxml", "Presupuesto");
     }
 
+    public void switchToModificarPlano() {
+        switchScene("/com/verona/view/modificarPlano.fxml", "Modificar Plano");
+    }
+
+    public void switchToCambiarEstadoPlano() {
+        switchScene("/com/verona/view/modificarEstadoDePlano.fxml", "Modificar Estado de Plano");
+    }
+
     public void switchToVerDetalleCaja() {
         switchScene("/com/verona/view/verDetalleCajas.fxml", "Detalle de Caja)");
     }
