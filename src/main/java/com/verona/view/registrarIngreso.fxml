@@ -6,10 +6,11 @@
 <?import javafx.scene.control.Separator?>
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.effect.DropShadow?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="653.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.verona.controller.common.RegistrarIngresoController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="653.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.verona.controller.common.RegistrarIngresoController">
    <children>
       <Label layoutX="167.0" layoutY="14.0" text="Registrar Entrada de Dinero">
          <font>
@@ -17,23 +18,69 @@
          </font>
       </Label>
       <Label layoutX="255.0" layoutY="37.0" text="(Señas o saldos)" />
-      <Label layoutX="99.0" layoutY="73.0" text="Ingrese el ID o Nombre del Cliente:" />
-      <TextField fx:id="idNombreClienteTextField" layoutX="300.0" layoutY="69.0" />
-      <Separator layoutY="182.0" prefHeight="17.0" prefWidth="600.0" />
-      <Label fx:id="detalleLabel" layoutX="123.0" layoutY="254.0" text="Detalle:" />
-      <Label fx:id="metodoPagoLabel" layoutX="121.0" layoutY="374.0" text="Metodo de Pago:" />
-      <ComboBox fx:id="metodoPagosComboBox" layoutX="225.0" layoutY="369.0" prefWidth="150.0" />
-      <TextArea fx:id="detalleTextArea" layoutX="117.0" layoutY="282.0" prefHeight="73.0" prefWidth="338.0" />
-      <TextField fx:id="importeTextField" layoutX="221.0" layoutY="465.0" />
-      <Label fx:id="importeLabel" layoutX="145.0" layoutY="470.0" text="Importe:" />
-      <Label fx:id="monedasLabel" layoutX="143.0" layoutY="421.0" text="Moneda:" />
-      <ComboBox fx:id="monedasComboBox" layoutX="225.0" layoutY="416.0" prefWidth="150.0" />
-      <Button fx:id="btnRegistrarEntrada" layoutX="245.0" layoutY="511.0" mnemonicParsing="false" onAction="#btnRegistrarEntradaClicked" style="-fx-background-color: ffaa00;" text="Registrar Entrada" />
-      <Button fx:id="btnVolver" layoutX="274.0" layoutY="605.0" mnemonicParsing="false" onAction="#btnVolverClicked" text="Volver" />
-      <Label fx:id="resultadoBusquedaLabel" layoutX="51.0" layoutY="112.0" prefHeight="17.0" prefWidth="501.0" alignment="CENTER"/>
-      <Label fx:id="resultadoRegistroLabel" layoutX="2.0" layoutY="563.0" prefHeight="17.0" prefWidth="594.0" alignment="CENTER"/>
-      <Button fx:id="btnBuscar" layoutX="273.0" layoutY="142.0" mnemonicParsing="false" onAction="#btnBuscarClicked" style="-fx-background-color: FFAA00;" text="Buscar" />
-      <Label fx:id="nombreClienteLabel" layoutX="123.0" layoutY="199.0" text="Nombre del Cliente:" />
-      <Label fx:id="nombreClienteLabelToComplete" layoutX="255.0" layoutY="199.0" prefHeight="17.0" prefWidth="214.0" />
+      <Label layoutX="88.0" layoutY="72.0" text="Ingrese el ID del Cliente:">
+         <font>
+            <Font name="Arial Bold" size="16.0" />
+         </font></Label>
+      <TextField fx:id="idNombreClienteTextField" layoutX="286.0" layoutY="67.0" promptText="ID de cliente">
+         <font>
+            <Font name="Arial" size="17.0" />
+         </font></TextField>
+      <Separator layoutX="-1.0" layoutY="152.0" prefHeight="17.0" prefWidth="600.0" />
+      <Label fx:id="detalleLabel" layoutX="96.0" layoutY="230.0" text="Detalle:">
+         <font>
+            <Font name="Arial Bold" size="20.0" />
+         </font></Label>
+      <Label fx:id="metodoPagoLabel" layoutX="95.0" layoutY="384.0" text="Metodo de Pago:">
+         <font>
+            <Font name="Arial Bold" size="20.0" />
+         </font></Label>
+      <ComboBox fx:id="metodoPagosComboBox" layoutX="264.0" layoutY="375.0" prefHeight="41.0" prefWidth="162.0" promptText="Metodo de Pago" />
+      <TextArea fx:id="detalleTextArea" layoutX="95.0" layoutY="259.0" prefHeight="96.0" prefWidth="467.0" promptText="Detalle del ingreso" wrapText="true">
+         <font>
+            <Font name="Arial" size="13.0" />
+         </font></TextArea>
+      <TextField fx:id="importeTextField" layoutX="219.0" layoutY="474.0" promptText="Ingrese el importe">
+         <font>
+            <Font name="Arial" size="20.0" />
+         </font></TextField>
+      <Label fx:id="importeLabel" layoutX="112.0" layoutY="479.0" text="Importe:">
+         <font>
+            <Font name="Arial Bold" size="24.0" />
+         </font></Label>
+      <Label fx:id="monedasLabel" layoutX="149.0" layoutY="430.0" text="Moneda:">
+         <font>
+            <Font name="Arial Bold" size="20.0" />
+         </font></Label>
+      <ComboBox fx:id="monedasComboBox" layoutX="264.0" layoutY="421.0" prefHeight="41.0" prefWidth="162.0" promptText="Moneda" />
+      <Button fx:id="btnRegistrarEntrada" layoutX="239.0" layoutY="524.0" mnemonicParsing="false" onAction="#btnRegistrarEntradaClicked" style="-fx-background-color: ffaa00;" text="Registrar Entrada">
+         <font>
+            <Font name="Arial Bold" size="13.0" />
+         </font>
+         <effect>
+            <DropShadow />
+         </effect></Button>
+      <Button fx:id="btnVolver" layoutX="274.0" layoutY="605.0" mnemonicParsing="false" onAction="#btnVolverClicked" style="-fx-background-color: Black;" text="Volver" textFill="WHITE">
+         <font>
+            <Font name="Arial Bold" size="13.0" />
+         </font>
+         <effect>
+            <DropShadow />
+         </effect></Button>
+      <Button fx:id="btnBuscar" layoutX="269.0" layoutY="111.0" mnemonicParsing="false" onAction="#btnBuscarClicked" style="-fx-background-color: FFAA00;" text="Buscar">
+         <font>
+            <Font name="Arial Bold" size="14.0" />
+         </font>
+         <effect>
+            <DropShadow />
+         </effect></Button>
+      <Label fx:id="nombreClienteLabel" layoutX="96.0" layoutY="188.0" text="Nombre del Cliente:">
+         <font>
+            <Font name="Arial Bold" size="20.0" />
+         </font></Label>
+      <Label fx:id="nombreClienteLabelToComplete" layoutX="293.0" layoutY="188.0" prefHeight="17.0" prefWidth="214.0">
+         <font>
+            <Font name="Arial" size="20.0" />
+         </font></Label>
    </children>
 </AnchorPane>

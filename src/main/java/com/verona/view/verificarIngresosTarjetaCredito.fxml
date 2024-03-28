@@ -8,12 +8,11 @@
 <?import javafx.scene.paint.Color?>
 <?import javafx.scene.text.Font?>
 
-
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.verona.controller.common.VerificadorIngresosTarjetaCreditoController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="539.0" prefWidth="719.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.verona.controller.common.VerificadorIngresosTarjetaCreditoController">
    <children>
-      <Label layoutX="62.0" layoutY="20.0" text="VERIFICADOR DE INGRESOS CON TARJETA DE CREDITO">
+      <Label layoutX="80.0" layoutY="23.0" text="VERIFICADOR DE INGRESOS CON TARJETA DE CREDITO">
          <font>
-            <Font name="Arial Bold" size="17.0" />
+            <Font name="Arial Bold" size="20.0" />
          </font>
          <effect>
             <DropShadow>
@@ -23,11 +22,11 @@
             </DropShadow>
          </effect>
       </Label>
-      <TableView fx:id="tableVerificadorIngresos" layoutX="35.0" layoutY="69.0" prefHeight="200.0" prefWidth="531.0" />
+      <TableView fx:id="tableVerificadorIngresos" layoutX="-2.0" layoutY="69.0" prefHeight="398.0" prefWidth="719.0" />
 
-      <Button fx:id="btnVolver" layoutX="271.0" layoutY="347.0" mnemonicParsing="false" onAction="#btnVolverClicked" style="-fx-background-color: Black;" text="Volver" textFill="WHITE">
+      <Button fx:id="btnVolver" layoutX="315.0" layoutY="489.0" mnemonicParsing="false" onAction="#btnVolverClicked" style="-fx-background-color: Black;" text="Volver" textFill="WHITE">
          <font>
-            <Font name="Arial Bold" size="13.0" />
+            <Font name="Arial Bold" size="20.0" />
          </font>
          <effect>
             <DropShadow>

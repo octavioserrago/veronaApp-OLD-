@@ -56,9 +56,6 @@ public class RegistrarIngresoController {
     private Label monedasLabel;
 
     @FXML
-    private Label resultadoBusquedaLabel;
-
-    @FXML
     private Label nombreClienteLabel;
 
     @FXML

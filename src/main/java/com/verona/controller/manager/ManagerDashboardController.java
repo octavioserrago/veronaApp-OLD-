@@ -132,7 +132,7 @@ public class ManagerDashboardController {
         ObservableList<String> ventasItems = FXCollections.observableArrayList();
 
         ventasItems.addAll("Crear nueva Venta", "Buscar Venta", "Ver Ventas de Esta Sucursal",
-                "Modificar datos de una venta", "Eliminar una venta");
+                "Modificar estado de una venta", "Eliminar una venta");
 
         int sucursalID = user.getSucursalID();
 
@@ -255,6 +255,8 @@ public class ManagerDashboardController {
             verProduccion();
         } else if ("Ver Ventas de Esta Sucursal".equals(selectedItem)) {
             verVentasDeSucursal();
+        } else if ("Modificar estado de una venta".equals(selectedItem)) {
+            modificarEstadoVenta();
         }
     }
 
@@ -275,6 +277,11 @@ public class ManagerDashboardController {
     private void nuevoIngreso() {
         SceneController sceneController = new SceneController((Stage) btnCerrarSesion.getScene().getWindow());
         sceneController.switchToRegistrarIngreso();
+    }
+
+    private void modificarEstadoVenta() {
+        SceneController sceneController = new SceneController((Stage) btnCerrarSesion.getScene().getWindow());
+        sceneController.switchToModificarEstadoVenta();
     }
 
     private void verSenias() {

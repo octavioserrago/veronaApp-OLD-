@@ -23,18 +23,23 @@
          <buttons>
             <Button fx:id="btnBachas" mnemonicParsing="false" onAction="#btnBachasClicked" style="-fx-background-color: ffaa00;" text="Bachas">
                <font>
-                  <Font name="Arial" size="13.0" />
+                  <Font name="Arial Bold" size="13.0" />
                </font></Button>
-            <Button fx:id="btnPedidos" minWidth="48.0" mnemonicParsing="false" onAction="#btnPedidosClicked" prefHeight="26.0" style="-fx-background-color: ffaa00;" text="Pedidos" />
-            <MenuButton fx:id="btnVentasMenu" mnemonicParsing="false" style="-fx-background-color: FFAA00;" text="Ventas">
+            <MenuButton fx:id="btnVentasMenu" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" style="-fx-background-color: FFAA00;" text="Ventas" textAlignment="CENTER">
               <items>
                 <MenuItem fx:id="btnVentas" mnemonicParsing="false" onAction="#btnVentasClicked" text="Crear Venta" />
                 <MenuItem fx:id="btnVentasBuscar" mnemonicParsing="false" onAction="#btnVentasBuscarClicked" text="Buscar Venta" />
                 <MenuItem fx:id="btnVentasModificarEstado" mnemonicParsing="false" onAction="#btnVentasModificarEstadoClicked" text="Modificar Estado de Venta" />
                   <MenuItem fx:id="btnVerVentasDeEstaSucursal" mnemonicParsing="false" onAction="#btnVentasDeEstaSucursalClicked" text="Ver Ventas de Esta Sucursal" />
               </items>
+               <font>
+                  <Font name="Arial Bold" size="13.0" />
+               </font>
             </MenuButton>
-            <Button fx:id="btnCaja" contentDisplay="CENTER" mnemonicParsing="false" onAction="#btnCajaClicked" style="-fx-background-color: FFAA00;" text="Registrar Entrada de Dinero" />
+            <Button fx:id="btnCaja" contentDisplay="CENTER" mnemonicParsing="false" onAction="#btnCajaClicked" style="-fx-background-color: FFAA00;" text="Registrar Entrada de Dinero">
+               <font>
+                  <Font name="Arial Bold" size="13.0" />
+               </font></Button>
             <Button fx:id="btnCerrarSesion" mnemonicParsing="false" onAction="#btnCerrarSesionClicked" prefHeight="26.0" prefWidth="495.0" style="-fx-background-color: Black;" text="Cerrar Sesion" textFill="WHITE">
                <font>
                   <Font name="Arial Bold" size="13.0" />

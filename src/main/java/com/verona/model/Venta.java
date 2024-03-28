@@ -217,6 +217,42 @@ public class Venta {
 
     PreparedStatement stmt;
 
+    public String obtenerEstadoVenta(int sucursalID, int ventasID) {
+        String estado = null;
+        String sql = "SELECT estado FROM Ventas WHERE ventasID = ? AND sucursalID = ?";
+
+        try (PreparedStatement preparedStatement = conexion.prepareStatement(sql)) {
+            preparedStatement.setInt(1, ventasID);
+            preparedStatement.setInt(2, sucursalID);
+
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                if (resultSet.next()) {
+                    estado = resultSet.getString("estado");
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return estado;
+    }
+
+    public boolean actualizarEstadoVenta(int ventasID, String nuevoEstado) {
+        String sql = "UPDATE Ventas SET estado = ? WHERE ventasID = ?";
+
+        try (PreparedStatement preparedStatement = conexion.prepareStatement(sql)) {
+
+            preparedStatement.setString(1, nuevoEstado);
+            preparedStatement.setInt(2, ventasID);
+
+            int filasActualizadas = preparedStatement.executeUpdate();
+            return filasActualizadas > 0;
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
     public List<Venta> ventasPorSucursalYFecha(int sucursalID, LocalDate fechaDesde, LocalDate fechaHasta)
             throws SQLException {
         List<Venta> ventas = new ArrayList<>();

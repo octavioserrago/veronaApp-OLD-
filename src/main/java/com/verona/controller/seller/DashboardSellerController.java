@@ -143,11 +143,6 @@ public class DashboardSellerController {
     }
 
     @FXML
-    void btnPedidosClicked(ActionEvent event) {
-
-    }
-
-    @FXML
     void btnVentasClicked(ActionEvent event) {
         try {
             MenuItem menuItem = (MenuItem) event.getSource();
@@ -183,19 +178,8 @@ public class DashboardSellerController {
 
     @FXML
     void btnVentasModificarEstadoClicked(ActionEvent event) {
-        try {
-            MenuItem menuItem = (MenuItem) event.getSource();
-            MenuButton menuButton = (MenuButton) menuItem.getParentPopup().getOwnerNode();
-            Stage stage = (Stage) menuButton.getScene().getWindow();
-
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/Resources/Views/modificarEstadoVenta.fxml"));
-            AnchorPane rootPane = loader.load();
-
-            SceneController sceneController = new SceneController(stage);
-            sceneController.switchToVentas(rootPane);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        SceneController sceneController = new SceneController((Stage) btnCaja.getScene().getWindow());
+        sceneController.switchToModificarEstadoVenta();
     }
 
     private void mostrarFechaActual() {
