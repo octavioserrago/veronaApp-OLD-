@@ -3,7 +3,6 @@ package com.verona.controller.common;
 import java.sql.SQLException;
 import com.verona.controller.SceneController;
 import com.verona.model.ApiDolarBlue;
-import com.verona.model.Caja;
 import com.verona.model.Entrada;
 import com.verona.model.Senias;
 import com.verona.model.User;
@@ -72,7 +71,6 @@ public class RegistrarIngresoController {
     private Venta venta = new Venta(0, null, null, null, null, null, 0, 0, 0, null, null, 0, null, null, null, 0, 0);
     private User user = User.getCurrentUser();
     private Senias senia = new Senias(0, 0, 0, 0, 0, 0);
-    private Caja caja = new Caja(0, 0);
     private Entrada entrada = new Entrada(null, null, 0, null, 0, 0, 0, 0, null);
 
     private void buscar() throws SQLException {
@@ -149,49 +147,28 @@ public class RegistrarIngresoController {
                 if (insercionExitosa) {
                     mostrarAlerta("Entrada registrada correctamente", AlertType.INFORMATION);
 
-                    if (importeEnPesos >= precioTotal) {
-                        switch (metodoPagoSeleccionado) {
-                            case "Efectivo":
-                                caja.insertarCajaEfectivo(importeEnPesos, user.getSucursalID());
-                                break;
-                            case "Transferencia":
-                                caja.insertarCajaBanco(importeEnPesos, user.getSucursalID());
-                                break;
-                            case "Tarjeta de débito":
-                                caja.insertarCajaBanco(importeEnPesos, user.getSucursalID());
-                                break;
-                            case "Tarjeta de crédito":
-                                verificadorCredito.insertVerificadorIngresosCredito(importeEnPesos,
-                                        user.getSucursalID(), venta.getVentasID());
-                                break;
-                            case "Cheque":
-                                caja.insertarCajaEfectivo(importeEnPesos, user.getSucursalID());
-                                break;
-                        }
+                    switch (metodoPagoSeleccionado) {
+                        case "Efectivo":
+                            senia.insertarSeniaEfectivo(moneda, importeEnPesos, saldo - importeEnPesos,
+                                    venta.getVentasID(), user.getSucursalID());
+                            break;
+                        case "Transferencia":
+                            senia.insertarSeniaBanco(moneda, importeEnPesos, saldo - importeEnPesos,
+                                    venta.getVentasID(), user.getSucursalID());
+                            break;
+                        case "Tarjeta de débito":
+                            senia.insertarSeniaBanco(moneda, importeEnPesos, saldo - importeEnPesos,
+                                    venta.getVentasID(), user.getSucursalID());
+                            break;
+                        case "Tarjeta de crédito":
+                            verificadorCredito.insertVerificadorIngresosCredito(importeEnPesos,
+                                    user.getSucursalID(), venta.getVentasID());
+                            break;
+                        case "Cheque":
+                            senia.insertarSeniaEfectivo(moneda, importeEnPesos, saldo - importeEnPesos,
+                                    venta.getVentasID(), user.getSucursalID());
+                            break;
 
-                    } else {
-                        switch (metodoPagoSeleccionado) {
-                            case "Efectivo":
-                                senia.insertarSeniaEfectivo(moneda, importeEnPesos, saldo - importeEnPesos,
-                                        venta.getVentasID(), user.getSucursalID());
-                                break;
-                            case "Transferencia":
-                                senia.insertarSeniaBanco(moneda, importeEnPesos, saldo - importeEnPesos,
-                                        venta.getVentasID(), user.getSucursalID());
-                                break;
-                            case "Tarjeta de débito":
-                                senia.insertarSeniaBanco(moneda, importeEnPesos, saldo - importeEnPesos,
-                                        venta.getVentasID(), user.getSucursalID());
-                                break;
-                            case "Tarjeta de crédito":
-                                verificadorCredito.insertVerificadorIngresosCredito(importeEnPesos,
-                                        user.getSucursalID(), venta.getVentasID());
-                                break;
-                            case "Cheque":
-                                senia.insertarSeniaEfectivo(moneda, importeEnPesos, saldo - importeEnPesos,
-                                        venta.getVentasID(), user.getSucursalID());
-                                break;
-                        }
                     }
 
                 } else {

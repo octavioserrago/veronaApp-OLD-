@@ -107,33 +107,50 @@ public class RegistrarPagoController {
         ButtonType result = alert.showAndWait().orElse(ButtonType.CANCEL);
 
         if (result == ButtonType.OK) {
-            int tipoPagoID = tipoPagoSeleccionado.getTiposPagosID();
-            int monedasID = 1;
             double importe = Double.parseDouble(importeTextFieldToComplete.getText());
             double importeEnPesos = Double.parseDouble(importeTextFieldToComplete.getText());
-            int proveedorID = (proveedorSeleccionado != null) ? proveedorSeleccionado.getProveedorID() : 0;
             int sucursalID = user.getSucursalID();
 
             try {
-                Pago pago;
-                if (proveedorSeleccionado == null) {
-                    pago = new Pago(tipoPagoID, monedasID, importe, importeEnPesos, 0, sucursalID);
-                    pago.insertarPagoNoProveedor(sucursalID);
-                } else {
-                    pago = new Pago(tipoPagoID, monedasID, importe, importeEnPesos, proveedorID, sucursalID);
-                    pago.insertarPagoProveedor(sucursalID);
-                }
-
+                double saldoDisponible = 0.0;
                 switch (fondoSeleccionado) {
                     case "Caja Efectivo":
-                        caja.pagoCajaEfectivo(importeEnPesos, sucursalID);
+                        saldoDisponible = caja.obtenerUltimoSaldo(sucursalID, "CajaEfectivo");
                         break;
                     case "Caja Banco":
-                        caja.pagoCajaBanco(importeEnPesos, sucursalID);
+                        saldoDisponible = caja.obtenerUltimoSaldo(sucursalID, "CajaBanco");
                         break;
-                    case "Caja Efectivo y Caja Banco":
-                        // Lógica para el caso de "Caja Efectivo y Caja Banco"
-                        break;
+                }
+
+                if (saldoDisponible >= importeEnPesos) {
+                    int tipoPagoID = tipoPagoSeleccionado.getTiposPagosID();
+                    int monedasID = 1;
+                    int proveedorID = (proveedorSeleccionado != null) ? proveedorSeleccionado.getProveedorID() : 0;
+
+                    Pago pago;
+                    if (proveedorSeleccionado == null) {
+                        pago = new Pago(tipoPagoID, monedasID, importe, importeEnPesos, 0, sucursalID);
+                        pago.insertarPagoNoProveedor(sucursalID);
+                    } else {
+                        pago = new Pago(tipoPagoID, monedasID, importe, importeEnPesos, proveedorID, sucursalID);
+                        pago.insertarPagoProveedor(sucursalID);
+                    }
+
+                    switch (fondoSeleccionado) {
+                        case "Caja Efectivo":
+                            caja.pagoCajaEfectivo(importeEnPesos, sucursalID);
+                            break;
+                        case "Caja Banco":
+                            caja.pagoCajaBanco(importeEnPesos, sucursalID);
+                            break;
+                    }
+                } else {
+
+                    Alert errorAlert = new Alert(Alert.AlertType.ERROR);
+                    errorAlert.setTitle("Error de saldo");
+                    errorAlert.setHeaderText(null);
+                    errorAlert.setContentText("El saldo disponible no es suficiente para realizar este pago.");
+                    errorAlert.showAndWait();
                 }
             } catch (SQLException e) {
                 e.printStackTrace();
