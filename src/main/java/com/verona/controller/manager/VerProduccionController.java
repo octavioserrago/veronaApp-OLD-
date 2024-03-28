@@ -36,6 +36,9 @@ public class VerProduccionController {
     private Button btnVolver;
 
     @FXML
+    private Button btnAsignarBachas;
+
+    @FXML
     private TableView<PlanosData> tablaPlanosProduccion;
 
     @FXML
@@ -75,6 +78,12 @@ public class VerProduccionController {
     void btnCargarPlanosClicked(ActionEvent event) {
         SceneController sceneController = new SceneController((Stage) btnVolver.getScene().getWindow());
         sceneController.switchToCargarPlano();
+    }
+
+    @FXML
+    void btnAsignarBachasClicked(ActionEvent event) {
+        SceneController sceneController = new SceneController((Stage) btnAsignarBachas.getScene().getWindow());
+        sceneController.switchToAsignarBachasPlano();
     }
 
     @FXML
