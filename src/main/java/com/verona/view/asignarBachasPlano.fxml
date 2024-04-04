@@ -21,7 +21,7 @@
             <Font name="Arial Bold" size="18.0" />
          </font>
       </Label>
-      <TextField fx:id="textFieldCodigoPlano" layoutX="281.0" layoutY="47.0" promptText="Codigo de Plano">
+      <TextField fx:id="textFieldCodigoPlano" layoutX="281.0" layoutY="47.0" prefHeight="33.0" prefWidth="293.0" promptText="Codigo de Plano">
          <font>
             <Font name="Arial" size="18.0" />
          </font>
@@ -43,7 +43,7 @@
             <DropShadow />
          </effect>
       </Button>
-      <ComboBox fx:id="comboboxBachas" layoutX="281.0" layoutY="154.0" prefWidth="150.0" promptText="Modelo De Bacha" />
+      <ComboBox fx:id="comboboxBachas" layoutX="281.0" layoutY="154.0" prefHeight="26.0" prefWidth="293.0" promptText="Modelo De Bacha" />
       <Label fx:id="labelIndicativo" layoutX="133.0" layoutY="157.0" text="Bacha a Asignar:">
          <font>
             <Font name="Arial Bold" size="17.0" />
