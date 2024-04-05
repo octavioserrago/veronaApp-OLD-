@@ -51,7 +51,6 @@ public class BachasController {
 
         tablaBachasStock.getColumns().addAll(tipoBachaColumn1, nombreModeloColumn1, medidasColumn1, cantidadColumn1);
 
-        // Columnas para bachasSinStockTable
         TableColumn<Bacha, String> tipoBachaColumn2 = new TableColumn<>("Tipo");
         tipoBachaColumn2.setCellValueFactory(new PropertyValueFactory<>("tipoBacha"));
 
@@ -91,13 +90,9 @@ public class BachasController {
     }
 
     @FXML
-    void btnActualizarCantidadClicked(ActionEvent event) {
-
-    }
-
-    @FXML
     void btnIngresarBachasClicked(ActionEvent event) {
-
+        SceneController sceneController = new SceneController((Stage) btnIngresarBachas.getScene().getWindow());
+        sceneController.switchToIngresarBachas();
     }
 
     @FXML

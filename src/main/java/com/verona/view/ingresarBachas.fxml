@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.effect.DropShadow?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="267.0" prefWidth="772.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.verona.controller.common.IngresarBachasController">
+   <children>
+      <Label layoutX="235.0" layoutY="14.0" text="Ingresar Bachas a Stock">
+         <font>
+            <Font name="Arial Bold" size="26.0" />
+         </font>
+      </Label>
+      <Label layoutX="235.0" layoutY="83.0" text="Indique modelo:">
+         <font>
+            <Font name="Arial Bold" size="16.0" />
+         </font>
+      </Label>
+      <Label layoutX="129.0" layoutY="124.0" text="Indique la cantidad a Agregar:">
+         <font>
+            <Font name="Arial Bold" size="16.0" />
+         </font>
+      </Label>
+      <TextField fx:id="cantidadAAgregarTextField" layoutX="386.0" layoutY="121.0" promptText="Cantiad a Agregar" />
+      <Button fx:id="btnCargar" layoutX="357.0" layoutY="170.0" mnemonicParsing="false" onAction="#btnCargarClicked" style="-fx-background-color: FFAA00;" text="Cargar">
+         <font>
+            <Font name="Arial Bold" size="13.0" />
+         </font>
+         <effect>
+            <DropShadow />
+         </effect>
+      </Button>
+      <Button fx:id="btnVolver" layoutX="359.0" layoutY="228.0" mnemonicParsing="false" onAction="#btnVolverClicked" style="-fx-background-color: Black;" text="Volver" textFill="WHITE">
+         <font>
+            <Font name="Arial Bold" size="13.0" />
+         </font>
+         <effect>
+            <DropShadow />
+         </effect>
+      </Button>
+      <ComboBox fx:id="comboboxModelos" layoutX="386.0" layoutY="80.0" prefHeight="26.0" prefWidth="160.0" promptText="Modelo" />
+      <Label layoutX="308.0" layoutY="51.0" text="(Agregar bachas por modelo)" />
+   </children>
+</AnchorPane>

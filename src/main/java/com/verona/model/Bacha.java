@@ -108,6 +108,30 @@ public class Bacha {
         }
     }
 
+    public void agregarBachas(int bachasID, int cantidadAAgregar) throws SQLException {
+        int cantidadActual = obtenerCantidadBachas(bachasID);
+        int nuevaCantidad = cantidadActual + cantidadAAgregar;
+        String sqlUpdate = "UPDATE Bachas SET cantidad = ? WHERE bachasID = ?";
+        try (PreparedStatement pstmt = conexion.prepareStatement(sqlUpdate)) {
+            pstmt.setInt(1, nuevaCantidad);
+            pstmt.setInt(2, bachasID);
+            pstmt.executeUpdate();
+        }
+    }
+
+    private int obtenerCantidadBachas(int bachasID) throws SQLException {
+        String sql = "SELECT cantidad FROM Bachas WHERE bachasID = ?";
+        int cantidad = 0;
+        try (PreparedStatement pstmt = conexion.prepareStatement(sql)) {
+            pstmt.setInt(1, bachasID);
+            ResultSet resultSet = pstmt.executeQuery();
+            if (resultSet.next()) {
+                cantidad = resultSet.getInt("cantidad");
+            }
+        }
+        return cantidad;
+    }
+
     public List<Bacha> obtenerBachasStock() throws SQLException {
         String sql = "SELECT marcasBachasID, tipoBacha, nombreModelo, medidas, cantidad FROM Bachas WHERE marcasBachasID = 1 AND cantidad > 0";
         List<Bacha> bachasList = new ArrayList<>();
@@ -221,6 +245,32 @@ public class Bacha {
         }
 
         return bachaID;
+    }
+
+    public List<String> obtenerModelos() throws SQLException {
+        List<String> modelos = new ArrayList<>();
+        String sql = "SELECT nombreModelo, medidas FROM Bachas";
+
+        try {
+            stmt = conexion.prepareStatement(sql);
+            ResultSet resultSet = stmt.executeQuery();
+
+            while (resultSet.next()) {
+                String nombreModelo = resultSet.getString("nombreModelo");
+                String medidas = resultSet.getString("medidas");
+
+                String modeloConMedidas = nombreModelo + " - " + medidas;
+                modelos.add(modeloConMedidas);
+            }
+        } catch (Exception e) {
+            throw new SQLException("Error al buscar los modelos de bachas: " + e.getMessage(), e);
+        } finally {
+            if (stmt != null) {
+                stmt.close();
+            }
+        }
+
+        return modelos;
     }
 
 }

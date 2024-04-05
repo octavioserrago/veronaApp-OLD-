@@ -72,6 +72,10 @@ public class SceneController {
         switchScene("/com/verona/view/buscarVentas.fxml", "Buscador de Ventas");
     }
 
+    public void switchToIngresarBachas() {
+        switchScene("/com/verona/view/ingresarBachas.fxml", "Ingresar Bachas a Stock");
+    }
+
     public void switchToModificarEstadoVenta() {
         switchScene("/com/verona/view/modificarEstadoVenta.fxml", "Modificar Estado de Venta");
     }
