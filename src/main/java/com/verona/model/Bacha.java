@@ -109,7 +109,7 @@ public class Bacha {
     }
 
     public List<Bacha> obtenerBachasStock() throws SQLException {
-        String sql = "SELECT marcasBachasID, nombreModelo, medidas, cantidad FROM Bachas WHERE marcasBachasID = 2";
+        String sql = "SELECT marcasBachasID, tipoBacha, nombreModelo, medidas, cantidad FROM Bachas WHERE marcasBachasID = 1 AND cantidad > 0";
         List<Bacha> bachasList = new ArrayList<>();
 
         try {
@@ -118,14 +118,41 @@ public class Bacha {
 
             while (resultSet.next()) {
                 int marcasBachasID = resultSet.getInt("marcasBachasID");
+                String tipoBacha = resultSet.getString("tipoBacha");
                 String nombreModelo = resultSet.getString("nombreModelo");
                 String medidas = resultSet.getString("medidas");
                 int cantidad = resultSet.getInt("cantidad");
 
                 Bacha bacha = new Bacha(marcasBachasID, nombreModelo, medidas, cantidad);
+                bacha.setTipoBacha(tipoBacha);
                 bachasList.add(bacha);
             }
+        } catch (Exception e) {
+            throw new SQLException("Error al buscar bachas: " + e.getMessage(), e);
+        }
 
+        return bachasList;
+    }
+
+    public List<Bacha> obtenerBachasSinStock() throws SQLException {
+        String sql = "SELECT marcasBachasID, tipoBacha, nombreModelo, medidas, cantidad FROM Bachas WHERE marcasBachasID = 1 AND cantidad < 1";
+        List<Bacha> bachasList = new ArrayList<>();
+
+        try {
+            stmt = conexion.prepareStatement(sql);
+            ResultSet resultSet = stmt.executeQuery();
+
+            while (resultSet.next()) {
+                int marcasBachasID = resultSet.getInt("marcasBachasID");
+                String tipoBacha = resultSet.getString("tipoBacha");
+                String nombreModelo = resultSet.getString("nombreModelo");
+                String medidas = resultSet.getString("medidas");
+                int cantidad = resultSet.getInt("cantidad");
+
+                Bacha bacha = new Bacha(marcasBachasID, nombreModelo, medidas, cantidad);
+                bacha.setTipoBacha(tipoBacha);
+                bachasList.add(bacha);
+            }
         } catch (Exception e) {
             throw new SQLException("Error al buscar bachas: " + e.getMessage(), e);
         }

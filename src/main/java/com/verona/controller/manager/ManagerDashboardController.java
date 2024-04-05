@@ -114,9 +114,15 @@ public class ManagerDashboardController {
     void initialize() throws SQLException {
 
         ObservableList<String> bachasItems = FXCollections.observableArrayList("Ver Stock de Bachas",
-                "Agregar cantidad de Bachas", "Modificar Cantidad de bachas", "Agregar modelo nuevo",
-                "Modificar modelo");
+                "Agregar modelo nuevo", "Modificar modelo");
         comboboxBachas.setItems(bachasItems);
+
+        comboboxBachas.setOnAction(event -> {
+            String selectedItem = comboboxBachas.getSelectionModel().getSelectedItem();
+            if (selectedItem != null) {
+                handleBachasItemSelected(selectedItem);
+            }
+        });
 
         ObservableList<String> cajaItems = FXCollections.observableArrayList("Ver Balances", "Registrar Nuevo Ingreso",
                 "Ver Señas", "Registrar Nueva Salida", "Verificar ingresos con tarjetas de crédito");
@@ -274,6 +280,12 @@ public class ManagerDashboardController {
         }
     }
 
+    private void handleBachasItemSelected(String selectedItem) {
+        if ("Ver Stock de Bachas".equals(selectedItem)) {
+            verStockBachas();
+        }
+    }
+
     private void nuevoIngreso() {
         SceneController sceneController = new SceneController((Stage) btnCerrarSesion.getScene().getWindow());
         sceneController.switchToRegistrarIngreso();
@@ -282,6 +294,11 @@ public class ManagerDashboardController {
     private void modificarEstadoVenta() {
         SceneController sceneController = new SceneController((Stage) btnCerrarSesion.getScene().getWindow());
         sceneController.switchToModificarEstadoVenta();
+    }
+
+    private void verStockBachas() {
+        SceneController sceneController = new SceneController((Stage) btnCerrarSesion.getScene().getWindow());
+        sceneController.switchToBachas();
     }
 
     private void verSenias() {

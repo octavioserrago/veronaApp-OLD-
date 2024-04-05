@@ -55,7 +55,6 @@ public class VerDetalleCajaController {
 
         transaccionesFinancieras = new TransaccionesFinancieras(null, 0, 0);
 
-        // Cargar las transacciones al inicializar
         cargarTransacciones();
     }
 
