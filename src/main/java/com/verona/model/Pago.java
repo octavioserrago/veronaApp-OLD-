@@ -102,6 +102,14 @@ public class Pago {
             }
         } catch (SQLException e) {
             e.printStackTrace();
+        } finally {
+            try {
+                if (stmt != null) {
+                    stmt.close();
+                }
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
         }
         return sumaImporteEnPesos;
     }
@@ -118,6 +126,10 @@ public class Pago {
                 if (resultSet.next()) {
                     totalSalidasEnPesos = resultSet.getDouble("total");
                 }
+            }
+        } finally {
+            if (stmt != null) {
+                stmt.close();
             }
         }
         return totalSalidasEnPesos;
@@ -136,6 +148,10 @@ public class Pago {
             preparedStatement.setInt(6, sucursalID);
 
             preparedStatement.executeUpdate();
+        } finally {
+            if (stmt != null) {
+                stmt.close();
+            }
         }
     }
 
@@ -151,6 +167,10 @@ public class Pago {
             preparedStatement.setInt(5, sucursalID);
 
             preparedStatement.executeUpdate();
+        } finally {
+            if (stmt != null) {
+                stmt.close();
+            }
         }
     }
 

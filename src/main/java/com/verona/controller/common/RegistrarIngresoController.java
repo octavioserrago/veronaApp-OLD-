@@ -142,6 +142,7 @@ public class RegistrarIngresoController {
                 boolean insercionExitosa = entrada.insertarEntradaPesos();
 
                 if (insercionExitosa) {
+                    btnRegistrarEntrada.setDisable(true);
                     mostrarAlerta("Entrada registrada correctamente", AlertType.INFORMATION);
 
                     switch (metodoPagoSeleccionado) {
@@ -191,7 +192,7 @@ public class RegistrarIngresoController {
                 boolean insercionExitosa = entrada.insertarEntrada();
 
                 if (insercionExitosa) {
-
+                    btnRegistrarEntrada.setDisable(true);
                     mostrarAlerta("Entrada registrada correctamente", AlertType.INFORMATION);
                     senia.insertarSeniaEfectivo(moneda, importeEnPesos, saldo - importeEnPesos,
                             venta.getVentasID(), user.getSucursalID());

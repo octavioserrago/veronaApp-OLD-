@@ -84,6 +84,18 @@ public class SceneController {
         switchScene("/com/verona/view/asignarBachasPlano.fxml", "Asignar Bacha a Plano");
     }
 
+    public void switchToVerPrecioBachas() {
+        switchScene("/com/verona/view/verPrecioBachas.fxml", "Precio de Bachas");
+    }
+
+    public void switchToVerPrecioManoObra() {
+        switchScene("/com/verona/view/verPrecioManoObra.fxml", "Precio de Mano de Obra");
+    }
+
+    public void switchToVerPrecioMateriales() {
+        switchScene("/com/verona/view/verPrecioMaterial.fxml", "Precio de Materiales");
+    }
+
     public void switchToVerBalances() {
         switchScene("/com/verona/view/verBalances.fxml", "Balance - Gerente");
     }

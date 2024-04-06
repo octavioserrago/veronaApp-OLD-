@@ -210,17 +210,13 @@ public class CargarVentasController {
 
     private void llenarComboBoxColocadores() {
         Colocador colocador = new Colocador(null, null, null, null);
-        try {
-            List<String> nombresColocadores = colocador.obtenerNombresColocadores();
+        List<String> nombresColocadores = colocador.obtenerNombresColocadores();
 
-            colocadorOptions.getItems().clear();
-            colocadorOptions.getItems().addAll(nombresColocadores);
+        colocadorOptions.getItems().clear();
+        colocadorOptions.getItems().addAll(nombresColocadores);
 
-            if (!nombresColocadores.isEmpty()) {
-                colocadorOptions.setValue(nombresColocadores.get(0));
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
+        if (!nombresColocadores.isEmpty()) {
+            colocadorOptions.setValue(nombresColocadores.get(0));
         }
     }
 

@@ -71,7 +71,7 @@ public class Colocador {
     Connection conexion = con.conectar();
     PreparedStatement stmt;
 
-    public String obtenerNombresPorID(int colocadorid) throws SQLException {
+    public String obtenerNombresPorID(int colocadorid) {
         String sql = "SELECT nombreApellido FROM Colocadores WHERE colocadoresID = ?";
         String nombreApellido = null;
 
@@ -84,14 +84,22 @@ public class Colocador {
                 nombreApellido = resultSet.getString("nombreApellido");
             }
 
-        } catch (Exception e) {
-            throw new SQLException("Error al buscar colocadores: " + e.getMessage(), e);
+        } catch (SQLException e) {
+            throw new RuntimeException("Error al buscar colocadores: " + e.getMessage(), e);
+        } finally {
+            if (stmt != null) {
+                try {
+                    stmt.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
         }
 
         return nombreApellido;
     }
 
-    public List<String> obtenerNombresColocadores() throws SQLException {
+    public List<String> obtenerNombresColocadores() {
         String sql = "SELECT nombreApellido FROM Colocadores";
         List<String> nombresColocadores = new ArrayList<>();
 
@@ -104,14 +112,22 @@ public class Colocador {
                 nombresColocadores.add(nombreApellido);
             }
 
-        } catch (Exception e) {
-            throw new SQLException("Error al buscar colocadores: " + e.getMessage(), e);
+        } catch (SQLException e) {
+            throw new RuntimeException("Error al buscar colocadores: " + e.getMessage(), e);
+        } finally {
+            if (stmt != null) {
+                try {
+                    stmt.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
         }
 
         return nombresColocadores;
     }
 
-    public int obtenerIDPorNombre(String nombreColocador) throws SQLException {
+    public int obtenerIDPorNombre(String nombreColocador) {
         int colocadorID = -1;
         String sql = "SELECT colocadoresID FROM Colocadores WHERE nombreApellido = ?";
 
@@ -123,11 +139,18 @@ public class Colocador {
             while (resultSet.next()) {
                 colocadorID = resultSet.getInt("colocadoresID");
             }
-        } catch (Exception e) {
-            throw new SQLException("Error al buscar colocadores: " + e.getMessage(), e);
+        } catch (SQLException e) {
+            throw new RuntimeException("Error al buscar colocadores: " + e.getMessage(), e);
+        } finally {
+            if (stmt != null) {
+                try {
+                    stmt.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
         }
 
         return colocadorID;
     }
-
 }

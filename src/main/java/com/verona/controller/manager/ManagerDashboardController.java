@@ -71,23 +71,22 @@ public class ManagerDashboardController {
     private Label entradasDiaLabel;
 
     @FXML
-    private Button btnRealizarPrespuesto;
+    private Button btnActualizarCotizacionDolarBlue;
 
     @FXML
-    private Button btnActualizarCotizacionDolarBlue;
+    private Button btnVerPrecioBachas;
+
+    @FXML
+    private Button btnVerPrecioManoObra;
+
+    @FXML
+    private Button btnVerPrecioMateriales;
 
     @FXML
     void btnActualizarCotizacionDolarBlueClicked(ActionEvent event) {
         SceneController sceneController = new SceneController(
                 (Stage) btnActualizarCotizacionDolarBlue.getScene().getWindow());
         sceneController.switchToCotizaciones();
-    }
-
-    @FXML
-    void btnRealizarPresupuestoClicked(ActionEvent event) {
-        SceneController sceneController = new SceneController(
-                (Stage) btnRealizarPrespuesto.getScene().getWindow());
-        sceneController.switchToPresupuesto();
     }
 
     @FXML
@@ -378,6 +377,24 @@ public class ManagerDashboardController {
             e.printStackTrace();
             return null;
         }
+    }
+
+    @FXML
+    void btnVerPrecioBachasClicked(ActionEvent event) {
+        SceneController sceneController = new SceneController((Stage) btnVerPrecioBachas.getScene().getWindow());
+        sceneController.switchToVerPrecioBachas();
+    }
+
+    @FXML
+    void btnVerPrecioManoObraClicked(ActionEvent event) {
+        SceneController sceneController = new SceneController((Stage) btnVerPrecioManoObra.getScene().getWindow());
+        sceneController.switchToVerPrecioManoObra();
+    }
+
+    @FXML
+    void btnVerPrecioMaterialesClicked(ActionEvent event) {
+        SceneController sceneController = new SceneController((Stage) btnVerPrecioMateriales.getScene().getWindow());
+        sceneController.switchToVerPrecioMateriales();
     }
 
 }

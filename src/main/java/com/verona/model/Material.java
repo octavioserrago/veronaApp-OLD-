@@ -36,7 +36,7 @@ public class Material {
         return tipoMaterial;
     }
 
-    DatabaseConnection con = new DatabaseConnection();
+    static DatabaseConnection con = new DatabaseConnection();
 
     Connection conexion = con.conectar();
 
@@ -55,6 +55,8 @@ public class Material {
             }
         } catch (SQLException e) {
             e.printStackTrace();
+        } finally {
+            con.close();
         }
 
         return listaMateriales;
@@ -74,6 +76,8 @@ public class Material {
             }
         } catch (SQLException e) {
             e.printStackTrace();
+        } finally {
+            con.close();
         }
 
         return materialID;
@@ -92,6 +96,8 @@ public class Material {
             }
         } catch (SQLException e) {
             e.printStackTrace();
+        } finally {
+            con.close();
         }
 
         return material;

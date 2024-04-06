@@ -634,11 +634,7 @@ public class BuscarVentasController {
         Colocador colocador = new Colocador("", "", "", "");
         String nombreApellido = "";
 
-        try {
-            nombreApellido = colocador.obtenerNombresPorID(colocadorid);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+        nombreApellido = colocador.obtenerNombresPorID(colocadorid);
         colocadorLabelToComplete.setText(nombreApellido);
         colorLabelToComplete.setText(venta.getColor());
         descripcionLabelToComplete.setText(venta.getDescripcion());

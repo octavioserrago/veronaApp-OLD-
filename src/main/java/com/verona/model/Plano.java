@@ -1,7 +1,6 @@
 package com.verona.model;
 
 import java.sql.Connection;
-
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -144,6 +143,14 @@ public class Plano {
             }
         } catch (SQLException e) {
             e.printStackTrace();
+        } finally {
+            try {
+                if (stmt != null) {
+                    stmt.close();
+                }
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
         }
         return codigo;
     }
@@ -158,6 +165,14 @@ public class Plano {
                     planoID = resultSet.getInt("planosID");
                 }
             }
+        } finally {
+            try {
+                if (stmt != null) {
+                    stmt.close();
+                }
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
         }
         return planoID;
     }
@@ -168,6 +183,14 @@ public class Plano {
             preparedStatement.setString(1, nuevoEstado);
             preparedStatement.setInt(2, planosID);
             preparedStatement.executeUpdate();
+        } finally {
+            try {
+                if (stmt != null) {
+                    stmt.close();
+                }
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
         }
         return true;
     }
@@ -185,6 +208,14 @@ public class Plano {
             preparedStatement.setString(6, estado);
             preparedStatement.setString(7, fechaTerminacion);
             preparedStatement.executeUpdate();
+        } finally {
+            try {
+                if (stmt != null) {
+                    stmt.close();
+                }
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
         }
     }
 
@@ -209,11 +240,16 @@ public class Plano {
                     listaPlanos.add(plano);
                 }
             }
-        } catch (SQLException e) {
-            throw e;
+        } finally {
+            try {
+                if (stmt != null) {
+                    stmt.close();
+                }
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
         }
 
-        System.out.println("Tamaño de la lista de planos: " + listaPlanos.size());
         return listaPlanos;
     }
 
@@ -240,9 +276,15 @@ public class Plano {
         } catch (SQLException e) {
             System.err.println("Error al obtener planos en producción: " + e.getMessage());
             throw e;
+        } finally {
+            try {
+                if (stmt != null) {
+                    stmt.close();
+                }
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
         }
-
-        System.out.println("Tamaño de la lista de planos: " + listaPlanos.size());
         return listaPlanos;
     }
 

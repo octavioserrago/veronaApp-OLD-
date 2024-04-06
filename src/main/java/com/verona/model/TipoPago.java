@@ -59,8 +59,17 @@ public class TipoPago {
 
         } catch (SQLException e) {
             e.printStackTrace();
+        } finally {
+            try {
+                if (conexion != null) {
+                    conexion.close();
+                }
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
         }
 
         return tiposDePago;
     }
+
 }

@@ -7,6 +7,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import javafx.scene.control.Alert;
+
 public class Bacha {
 
     private int bachasID;
@@ -16,6 +18,7 @@ public class Bacha {
     private String medidas;
     private int cantidad;
     public String tipoBacha;
+    public double precio;
 
     public Bacha(int marcasBachasID, String nombreModelo, String medidas, int cantidad) {
         this.marcasBachasID = marcasBachasID;
@@ -30,6 +33,14 @@ public class Bacha {
 
     public void setNombreMarca(String nombreMarca) {
         this.nombreMarca = nombreMarca;
+    }
+
+    public double getPrecio() {
+        return precio;
+    }
+
+    public void setPrecio(double precio) {
+        this.precio = precio;
     }
 
     public int getBachasID() {
@@ -94,17 +105,37 @@ public class Bacha {
 
     public void descontarCantidad(int bachasID, int cantidadADescontar, int idPlano) throws SQLException {
         String sqlUpdate = "UPDATE Bachas SET cantidad = ? WHERE bachasID = ?";
-        try (PreparedStatement pstmt = conexion.prepareStatement(sqlUpdate)) {
-            pstmt.setInt(1, cantidadADescontar);
-            pstmt.setInt(2, bachasID);
-            pstmt.executeUpdate();
-        }
+        PreparedStatement pstmtUpdate = null;
+        PreparedStatement pstmtInsert = null;
+        try {
+            pstmtUpdate = conexion.prepareStatement(sqlUpdate);
+            pstmtUpdate.setInt(1, cantidadADescontar);
+            pstmtUpdate.setInt(2, bachasID);
+            pstmtUpdate.executeUpdate();
 
-        String sqlInsert = "INSERT INTO BachaPlanos (bachasID, planosID) VALUES (?, ?)";
-        try (PreparedStatement pstmt = conexion.prepareStatement(sqlInsert)) {
-            pstmt.setInt(1, bachasID);
-            pstmt.setInt(2, idPlano);
-            pstmt.executeUpdate();
+            String sqlInsert = "INSERT INTO BachaPlanos (bachasID, planosID) VALUES (?, ?)";
+            pstmtInsert = conexion.prepareStatement(sqlInsert);
+            pstmtInsert.setInt(1, bachasID);
+            pstmtInsert.setInt(2, idPlano);
+            pstmtInsert.executeUpdate();
+        } catch (SQLException e) {
+            mostrarAlerta("Error al descontar cantidad", e.getMessage());
+            throw new SQLException("Error al descontar cantidad: " + e.getMessage(), e);
+        } finally {
+            if (pstmtUpdate != null) {
+                try {
+                    pstmtUpdate.close();
+                } catch (SQLException e) {
+                    mostrarAlerta("Error al cerrar la conexión", e.getMessage());
+                }
+            }
+            if (pstmtInsert != null) {
+                try {
+                    pstmtInsert.close();
+                } catch (SQLException e) {
+                    mostrarAlerta("Error al cerrar la conexión", e.getMessage());
+                }
+            }
         }
     }
 
@@ -112,24 +143,65 @@ public class Bacha {
         int cantidadActual = obtenerCantidadBachas(bachasID);
         int nuevaCantidad = cantidadActual + cantidadAAgregar;
         String sqlUpdate = "UPDATE Bachas SET cantidad = ? WHERE bachasID = ?";
-        try (PreparedStatement pstmt = conexion.prepareStatement(sqlUpdate)) {
+        PreparedStatement pstmt = null;
+        try {
+            pstmt = conexion.prepareStatement(sqlUpdate);
             pstmt.setInt(1, nuevaCantidad);
             pstmt.setInt(2, bachasID);
             pstmt.executeUpdate();
+        } catch (SQLException e) {
+            mostrarAlerta("Error al agregar bachas", e.getMessage());
+            throw new SQLException("Error al agregar bachas: " + e.getMessage(), e);
+        } finally {
+            if (pstmt != null) {
+                try {
+                    pstmt.close();
+                } catch (SQLException e) {
+                    mostrarAlerta("Error al cerrar la conexión", e.getMessage());
+                }
+            }
         }
     }
 
     private int obtenerCantidadBachas(int bachasID) throws SQLException {
         String sql = "SELECT cantidad FROM Bachas WHERE bachasID = ?";
         int cantidad = 0;
-        try (PreparedStatement pstmt = conexion.prepareStatement(sql)) {
+        PreparedStatement pstmt = null;
+        ResultSet resultSet = null;
+        try {
+            pstmt = conexion.prepareStatement(sql);
             pstmt.setInt(1, bachasID);
-            ResultSet resultSet = pstmt.executeQuery();
+            resultSet = pstmt.executeQuery();
             if (resultSet.next()) {
                 cantidad = resultSet.getInt("cantidad");
             }
+        } catch (SQLException e) {
+            throw new SQLException("Error al obtener la cantidad de bachas: " + e.getMessage(), e);
+        } finally {
+            if (resultSet != null) {
+                try {
+                    resultSet.close();
+                } catch (SQLException e) {
+                    mostrarAlerta("Error al cerrar el ResultSet", e.getMessage());
+                }
+            }
+            if (pstmt != null) {
+                try {
+                    pstmt.close();
+                } catch (SQLException e) {
+                    mostrarAlerta("Error al cerrar el PreparedStatement", e.getMessage());
+                }
+            }
         }
         return cantidad;
+    }
+
+    private void mostrarAlerta(String titulo, String mensaje) {
+        Alert alerta = new Alert(Alert.AlertType.ERROR);
+        alerta.setTitle("Error");
+        alerta.setHeaderText(titulo);
+        alerta.setContentText(mensaje);
+        alerta.showAndWait();
     }
 
     public List<Bacha> obtenerBachasStock() throws SQLException {
@@ -153,8 +225,11 @@ public class Bacha {
             }
         } catch (Exception e) {
             throw new SQLException("Error al buscar bachas: " + e.getMessage(), e);
+        } finally {
+            if (stmt != null) {
+                stmt.close();
+            }
         }
-
         return bachasList;
     }
 
@@ -179,8 +254,11 @@ public class Bacha {
             }
         } catch (Exception e) {
             throw new SQLException("Error al buscar bachas: " + e.getMessage(), e);
+        } finally {
+            if (stmt != null) {
+                stmt.close();
+            }
         }
-
         return bachasList;
     }
 
@@ -273,4 +351,48 @@ public class Bacha {
         return modelos;
     }
 
+    public List<Bacha> obtenerModelosConPrecio() throws SQLException {
+        List<Bacha> bachas = new ArrayList<>();
+        String sql = "SELECT tipoBacha, nombreModelo, medidas, cantidad, precio FROM Bachas";
+
+        PreparedStatement stmt = null;
+        ResultSet resultSet = null;
+
+        try {
+            stmt = conexion.prepareStatement(sql);
+            resultSet = stmt.executeQuery();
+
+            while (resultSet.next()) {
+                String tipoBacha = resultSet.getString("tipoBacha");
+                String nombreModelo = resultSet.getString("nombreModelo");
+                String medidas = resultSet.getString("medidas");
+                int cantidad = resultSet.getInt("cantidad");
+                double precio = resultSet.getDouble("precio");
+
+                Bacha bacha = new Bacha(0, nombreModelo, medidas, cantidad);
+                bacha.setTipoBacha(tipoBacha);
+                bacha.setPrecio(precio);
+                bachas.add(bacha);
+            }
+        } catch (Exception e) {
+            throw new SQLException("Error al buscar los modelos de bachas: " + e.getMessage(), e);
+        } finally {
+            if (resultSet != null) {
+                try {
+                    resultSet.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+            if (stmt != null) {
+                try {
+                    stmt.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+
+        return bachas;
+    }
 }

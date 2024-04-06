@@ -84,6 +84,14 @@ public class VerificadorIngresosCredito {
             }
         } catch (SQLException e) {
             throw e;
+        } finally {
+            try {
+                if (conexion != null) {
+                    conexion.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
     }
 
@@ -104,6 +112,14 @@ public class VerificadorIngresosCredito {
             }
         } catch (Exception e) {
             e.printStackTrace();
+        } finally {
+            try {
+                if (conexion != null) {
+                    conexion.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
         return ingresos;
     }
@@ -118,7 +134,14 @@ public class VerificadorIngresosCredito {
         } catch (SQLException e) {
             e.printStackTrace();
             return false;
+        } finally {
+            try {
+                if (conexion != null) {
+                    conexion.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
     }
-
 }

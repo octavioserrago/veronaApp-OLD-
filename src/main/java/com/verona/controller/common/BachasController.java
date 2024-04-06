@@ -36,7 +36,6 @@ public class BachasController {
     @SuppressWarnings("unchecked")
     @FXML
     void initialize() {
-        // Columnas para tablaBachasStock
         TableColumn<Bacha, String> tipoBachaColumn1 = new TableColumn<>("Tipo");
         tipoBachaColumn1.setCellValueFactory(new PropertyValueFactory<>("tipoBacha"));
 

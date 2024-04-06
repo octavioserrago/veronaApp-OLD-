@@ -163,6 +163,10 @@ public class Entrada {
             int filasAfectadas = preparedStatement.executeUpdate();
 
             return filasAfectadas > 0;
+        } finally {
+            if (conexion != null) {
+                conexion.close();
+            }
         }
     }
 
@@ -182,6 +186,10 @@ public class Entrada {
             int filasAfectadas = preparedStatement.executeUpdate();
 
             return filasAfectadas > 0;
+        } finally {
+            if (conexion != null) {
+                conexion.close();
+            }
         }
     }
 
@@ -216,7 +224,10 @@ public class Entrada {
 
                     entradasPorCliente.add(entrada);
                 }
-
+            }
+        } finally {
+            if (conexion != null) {
+                conexion.close();
             }
         }
 

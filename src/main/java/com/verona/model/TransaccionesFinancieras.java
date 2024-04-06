@@ -70,6 +70,14 @@ public class TransaccionesFinancieras {
 
             int filasInsertadas = insertStatement.executeUpdate();
             return filasInsertadas > 0;
+        } finally {
+            try {
+                if (conexion != null) {
+                    conexion.close();
+                }
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
         }
     }
 
@@ -90,6 +98,14 @@ public class TransaccionesFinancieras {
                     transaccion.setFecha(fecha);
                     transacciones.add(transaccion);
                 }
+            }
+        } finally {
+            try {
+                if (conexion != null) {
+                    conexion.close();
+                }
+            } catch (SQLException ex) {
+                ex.printStackTrace();
             }
         }
 
@@ -117,6 +133,14 @@ public class TransaccionesFinancieras {
                     transaccion.setFecha(fecha);
                     transacciones.add(transaccion);
                 }
+            }
+        } finally {
+            try {
+                if (conexion != null) {
+                    conexion.close();
+                }
+            } catch (SQLException ex) {
+                ex.printStackTrace();
             }
         }
 

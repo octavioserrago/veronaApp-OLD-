@@ -27,12 +27,11 @@ public class ApiDolarOficial {
 
             con.disconnect();
 
-            // Analizar la respuesta manualmente
             String jsonResponse = response.toString();
-            int index = jsonResponse.indexOf("venta\":") + 7; // Buscar el índice del valor de venta
-            int endIndex = jsonResponse.indexOf(",", index); // Buscar el índice del final del número
-            String ventaStr = jsonResponse.substring(index, endIndex); // Obtener el número como una cadena
-            double venta = Double.parseDouble(ventaStr); // Convertir la cadena a double
+            int index = jsonResponse.indexOf("venta\":") + 7;
+            int endIndex = jsonResponse.indexOf(",", index);
+            String ventaStr = jsonResponse.substring(index, endIndex);
+            double venta = Double.parseDouble(ventaStr);
 
             return venta;
 

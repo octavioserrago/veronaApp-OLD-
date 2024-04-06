@@ -5,6 +5,9 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
+
 public class Caja {
     private double importe;
     private int sucursalID;
@@ -53,12 +56,31 @@ public class Caja {
                 return transaccion.agregarTransaccionFinanciera("Ingreso a caja efectivo", importeTransaccion,
                         sucursalID);
             }
+        } catch (SQLException e) {
+            mostrarAlerta("Error al insertar en CajaEfectivo", e.getMessage());
+            throw new SQLException("Error al insertar en CajaEfectivo: " + e.getMessage(), e);
+        } finally {
+            if (conexion != null) {
+                try {
+                    conexion.close();
+                } catch (SQLException e) {
+                    mostrarAlerta("Error al cerrar la conexión", e.getMessage());
+                }
+            }
         }
         return false;
     }
 
-    public boolean insertarCajaBanco(double importeTransaccion, int sucursalID) throws SQLException {
-        String sqlInsert = "INSERT INTO CajaBanco (importeTransaccion, saldoActual ,sucursalID) VALUES (?, ?, ?)";
+    public void mostrarAlerta(String titulo, String mensaje) {
+        Alert alerta = new Alert(AlertType.ERROR);
+        alerta.setTitle(titulo);
+        alerta.setHeaderText(null);
+        alerta.setContentText(mensaje);
+        alerta.showAndWait();
+    }
+
+    public boolean insertarCajaBanco(double importeTransaccion, int sucursalID) {
+        String sqlInsert = "INSERT INTO CajaBanco (importeTransaccion, saldoActual, sucursalID) VALUES (?, ?, ?)";
 
         try (PreparedStatement preparedStatement = conexion.prepareStatement(sqlInsert)) {
             double saldoAnterior = obtenerUltimoSaldo(sucursalID, "CajaBanco");
@@ -71,11 +93,21 @@ public class Caja {
             if (filasAfectadas > 0) {
                 return transaccion.agregarTransaccionFinanciera("Ingreso a caja banco", importeTransaccion, sucursalID);
             }
+        } catch (SQLException e) {
+            mostrarAlerta("Error de SQL", "Error al intentar insertar en la tabla CajaBanco: " + e.getMessage());
+        } finally {
+            if (conexion != null) {
+                try {
+                    conexion.close();
+                } catch (SQLException e) {
+                    mostrarAlerta("Error de SQL", "Error al intentar cerrar la conexión: " + e.getMessage());
+                }
+            }
         }
         return false;
     }
 
-    public boolean pagoCajaEfectivo(double importeTransaccion, int sucursalID) throws SQLException {
+    public boolean pagoCajaEfectivo(double importeTransaccion, int sucursalID) {
         String sqlInsert = "INSERT INTO CajaEfectivo (importeTransaccion, saldoActual, sucursalID) VALUES (?, ?, ?)";
 
         try (PreparedStatement preparedStatement = conexion.prepareStatement(sqlInsert)) {
@@ -88,15 +120,25 @@ public class Caja {
             int filasAfectadas = preparedStatement.executeUpdate();
             if (filasAfectadas > 0) {
                 return transaccion.agregarTransaccionFinanciera(
-                        "Se realizo un pago de $" + importeTransaccion + " desde los fondos en efectivo",
+                        "Se realizó un pago de $" + importeTransaccion + " desde los fondos en efectivo",
                         importeTransaccion,
                         sucursalID);
+            }
+        } catch (SQLException e) {
+            mostrarAlerta("Error de SQL", "Error al intentar insertar en la tabla CajaEfectivo: " + e.getMessage());
+        } finally {
+            if (conexion != null) {
+                try {
+                    conexion.close();
+                } catch (SQLException e) {
+                    mostrarAlerta("Error de SQL", "Error al intentar cerrar la conexión: " + e.getMessage());
+                }
             }
         }
         return false;
     }
 
-    public boolean pagoCajaBanco(double importeTransaccion, int sucursalID) throws SQLException {
+    public boolean pagoCajaBanco(double importeTransaccion, int sucursalID) {
         String sqlInsert = "INSERT INTO CajaBanco (importeTransaccion, saldoActual, sucursalID) VALUES (?, ?, ?)";
 
         try (PreparedStatement preparedStatement = conexion.prepareStatement(sqlInsert)) {
@@ -109,15 +151,25 @@ public class Caja {
             int filasAfectadas = preparedStatement.executeUpdate();
             if (filasAfectadas > 0) {
                 return transaccion.agregarTransaccionFinanciera(
-                        "Se realizo un pago de $" + importeTransaccion + " desde los fondos en Banco",
+                        "Se realizó un pago de $" + importeTransaccion + " desde los fondos en Banco",
                         importeTransaccion,
                         sucursalID);
+            }
+        } catch (SQLException e) {
+            mostrarAlerta("Error de SQL", "Error al intentar insertar en la tabla CajaBanco: " + e.getMessage());
+        } finally {
+            if (conexion != null) {
+                try {
+                    conexion.close();
+                } catch (SQLException e) {
+                    mostrarAlerta("Error de SQL", "Error al intentar cerrar la conexión: " + e.getMessage());
+                }
             }
         }
         return false;
     }
 
-    public double obtenerUltimoSaldo(int sucursalID, String tableName) throws SQLException {
+    public double obtenerUltimoSaldo(int sucursalID, String tableName) {
         String sql = "SELECT saldoActual FROM " + tableName + " WHERE sucursalID = ? ORDER BY fecha DESC LIMIT 1";
         try (PreparedStatement preparedStatement = conexion.prepareStatement(sql)) {
             preparedStatement.setInt(1, sucursalID);
@@ -127,7 +179,18 @@ public class Caja {
                 }
                 return 0;
             }
+        } catch (SQLException e) {
+            mostrarAlerta("Error de SQL", "Error al intentar obtener el último saldo: " + e.getMessage());
+        } finally {
+            if (conexion != null) {
+                try {
+                    conexion.close();
+                } catch (SQLException e) {
+                    mostrarAlerta("Error de SQL", "Error al intentar cerrar la conexión: " + e.getMessage());
+                }
+            }
         }
+        return 0;
     }
 
 }

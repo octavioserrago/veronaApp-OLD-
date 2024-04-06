@@ -289,6 +289,8 @@ public class Venta {
 
                 ventas.add(venta);
             }
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
 
         return ventas;
@@ -319,6 +321,8 @@ public class Venta {
             preparedStatement.setInt(16, usersID);
 
             preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
     }
 
@@ -352,6 +356,8 @@ public class Venta {
 
                 ventas.add(venta);
             }
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
 
         return ventas;
@@ -368,6 +374,8 @@ public class Venta {
             if (resultSet.next()) {
                 fechaVenta = resultSet.getString("fecha");
             }
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
 
         return fechaVenta;
@@ -410,8 +418,9 @@ public class Venta {
 
                 ventas.add(venta);
             }
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
-
         return ventas;
     }
 
