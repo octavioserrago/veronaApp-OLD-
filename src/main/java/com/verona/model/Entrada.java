@@ -269,6 +269,25 @@ public class Entrada {
         return totalEntradasEnPesos;
     }
 
+    public double calcularTotalEntradasEnPesosPorSucursalYMesDiscriminado(int sucursalID, int month)
+            throws SQLException {
+        double totalEntradasEnPesos = 0;
+        String sql = "SELECT SUM(importeEnPesos) AS total FROM Entradas WHERE sucursalID = ? AND MONTH(fecha) = ?";
+
+        try (PreparedStatement preparedStatement = conexion.prepareStatement(sql)) {
+            preparedStatement.setInt(1, sucursalID);
+            preparedStatement.setInt(2, month);
+
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                if (resultSet.next()) {
+                    totalEntradasEnPesos = resultSet.getDouble("total");
+                }
+            }
+        }
+
+        return totalEntradasEnPesos;
+    }
+
     public double calcularTotalEntradasEnPesosPorSucursalYDia(int sucursalID) throws SQLException {
         double totalEntradasEnPesos = 0;
         String sql = "SELECT SUM(importeEnPesos) AS total " +

@@ -83,6 +83,9 @@ public class ManagerDashboardController {
     private Button btnVerPrecioMateriales;
 
     @FXML
+    private Button btnPrecioEngroses;
+
+    @FXML
     void btnActualizarCotizacionDolarBlueClicked(ActionEvent event) {
         SceneController sceneController = new SceneController(
                 (Stage) btnActualizarCotizacionDolarBlue.getScene().getWindow());
@@ -112,8 +115,7 @@ public class ManagerDashboardController {
     @FXML
     void initialize() throws SQLException {
 
-        ObservableList<String> bachasItems = FXCollections.observableArrayList("Ver Stock de Bachas",
-                "Agregar modelo nuevo", "Modificar modelo");
+        ObservableList<String> bachasItems = FXCollections.observableArrayList("Ver Stock de Bachas");
         comboboxBachas.setItems(bachasItems);
 
         comboboxBachas.setOnAction(event -> {
@@ -395,6 +397,12 @@ public class ManagerDashboardController {
     void btnVerPrecioMaterialesClicked(ActionEvent event) {
         SceneController sceneController = new SceneController((Stage) btnVerPrecioMateriales.getScene().getWindow());
         sceneController.switchToVerPrecioMateriales();
+    }
+
+    @FXML
+    void btnPrecioEngrosesClicked(ActionEvent event) {
+        SceneController sceneController = new SceneController((Stage) btnPrecioEngroses.getScene().getWindow());
+        sceneController.switchToVerPrecioRegruesos();
     }
 
 }

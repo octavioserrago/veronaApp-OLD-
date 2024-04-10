@@ -25,6 +25,9 @@ import javafx.stage.Stage;
 public class DashboardSellerController {
 
     @FXML
+    private Button btnPrecioDeRegruesos;
+
+    @FXML
     private Button btnBachas;
 
     @FXML
@@ -193,6 +196,12 @@ public class DashboardSellerController {
         SceneController sceneController = new SceneController((Stage) btnVerPrecioMateriales.getScene().getWindow());
         sceneController.switchToVerPrecioMateriales();
         ;
+    }
+
+    @FXML
+    void btnPrecioDeRegruesosClicked(ActionEvent event) {
+        SceneController sceneController = new SceneController((Stage) btnPrecioDeRegruesos.getScene().getWindow());
+        sceneController.switchToVerPrecioRegruesos();
     }
 
 }

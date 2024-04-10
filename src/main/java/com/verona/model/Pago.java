@@ -174,4 +174,21 @@ public class Pago {
         }
     }
 
+    public double calcularTotalPagosEnPesosPorSucursalYMes(int sucursalID, int month) throws SQLException {
+        double totalPagosEnPesos = 0;
+        String sql = "SELECT SUM(importeEnPesos) AS total FROM Pagos WHERE sucursalID = ? AND MONTH(fecha) = ?";
+
+        try (PreparedStatement preparedStatement = conexion.prepareStatement(sql)) {
+            preparedStatement.setInt(1, sucursalID);
+            preparedStatement.setInt(2, month);
+
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                if (resultSet.next()) {
+                    totalPagosEnPesos = resultSet.getDouble("total");
+                }
+            }
+        }
+        return totalPagosEnPesos;
+    }
+
 }

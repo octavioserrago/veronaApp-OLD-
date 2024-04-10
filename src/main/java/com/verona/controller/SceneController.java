@@ -100,6 +100,10 @@ public class SceneController {
         switchScene("/com/verona/view/verBalances.fxml", "Balance - Gerente");
     }
 
+    public void switchToVerPrecioRegruesos() {
+        switchScene("/com/verona/view/precioRegruesos.fxml", "Precio de Regruesos por Metro Lineal");
+    }
+
     public void switchToNegocio() {
         switchScene("/com/verona/view/negocio.fxml", "Negocio | Estadisitcas - Gerente");
     }

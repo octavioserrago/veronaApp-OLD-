@@ -144,8 +144,8 @@ public class RegistrarPagoController {
                             caja.pagoCajaBanco(importeEnPesos, sucursalID);
                             break;
                     }
+                    btnCargar.setDisable(true);
                 } else {
-
                     Alert errorAlert = new Alert(Alert.AlertType.ERROR);
                     errorAlert.setTitle("Error de saldo");
                     errorAlert.setHeaderText(null);

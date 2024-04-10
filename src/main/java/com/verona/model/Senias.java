@@ -113,19 +113,11 @@ public class Senias {
         } catch (SQLException e) {
             e.printStackTrace();
             return false;
-        } finally {
-            try {
-                if (conexion != null) {
-                    conexion.close();
-                }
-            } catch (SQLException ex) {
-                ex.printStackTrace();
-            }
         }
     }
 
     public boolean insertarSeniaBanco(int monedasID, double importeBanco, double saldo, int ventasID, int sucursalID) {
-        String descripcionMovimiento = "Se agrego seña por Banco de" + importeBanco + ". Pertenece al ID de venta: "
+        String descripcionMovimiento = "Se agrego seña por Banco de " + importeBanco + ". Pertenece al ID de venta: "
                 + ventasID;
         String sql = "INSERT INTO senias (monedasID, importeBanco, saldo, ventasID, sucursalID) VALUES (?, ?, ?, ?, ?)";
 
@@ -143,14 +135,6 @@ public class Senias {
         } catch (SQLException e) {
             e.printStackTrace();
             return false;
-        } finally {
-            try {
-                if (conexion != null) {
-                    conexion.close();
-                }
-            } catch (SQLException ex) {
-                ex.printStackTrace();
-            }
         }
     }
 
@@ -183,14 +167,6 @@ public class Senias {
             }
         } catch (SQLException e) {
             e.printStackTrace();
-        } finally {
-            try {
-                if (conexion != null) {
-                    conexion.close();
-                }
-            } catch (SQLException ex) {
-                ex.printStackTrace();
-            }
         }
 
         return senias;
@@ -260,14 +236,6 @@ public class Senias {
             } else {
                 return false;
             }
-        } finally {
-            try {
-                if (conexion != null) {
-                    conexion.close();
-                }
-            } catch (SQLException ex) {
-                ex.printStackTrace();
-            }
         }
     }
 
@@ -280,14 +248,6 @@ public class Senias {
 
             if (resultSet.next()) {
                 return resultSet.getDouble("total");
-            }
-        } finally {
-            try {
-                if (conexion != null) {
-                    conexion.close();
-                }
-            } catch (SQLException ex) {
-                ex.printStackTrace();
             }
         }
         return 0.0;

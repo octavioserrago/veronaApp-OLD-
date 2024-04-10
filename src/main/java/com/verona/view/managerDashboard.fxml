@@ -169,7 +169,7 @@
             <Font name="Arial Bold" size="28.0" />
          </font>
       </Label>
-      <Button fx:id="btnVerPrecioManoObra" layoutX="506.0" layoutY="417.0" mnemonicParsing="false" onAction="#btnVerPrecioManoObraClicked" style="-fx-background-color: FFAA00;" text="Ver Precios Mano de Obra">
+      <Button fx:id="btnVerPrecioManoObra" layoutX="409.0" layoutY="413.0" mnemonicParsing="false" onAction="#btnVerPrecioManoObraClicked" style="-fx-background-color: FFAA00;" text="Precios Mano de Obra">
          <font>
             <Font name="Arial Bold" size="13.0" />
          </font>
@@ -177,7 +177,7 @@
             <DropShadow />
          </effect>
       </Button>
-      <Button fx:id="btnVerPrecioMateriales" layoutX="405.0" layoutY="461.0" mnemonicParsing="false" onAction="#btnVerPrecioMaterialesClicked" prefHeight="24.0" prefWidth="150.0" style="-fx-background-color: FFAA00;" text="Ver Precio Materiales">
+      <Button fx:id="btnVerPrecioMateriales" layoutX="405.0" layoutY="461.0" mnemonicParsing="false" onAction="#btnVerPrecioMaterialesClicked" prefHeight="24.0" prefWidth="150.0" style="-fx-background-color: FFAA00;" text="Precio Materiales">
          <font>
             <Font name="Arial Bold" size="13.0" />
          </font>
@@ -185,7 +185,15 @@
             <DropShadow />
          </effect>
       </Button>
-      <Button fx:id="btnVerPrecioBachas" layoutX="630.0" layoutY="461.0" mnemonicParsing="false" onAction="#btnVerPrecioBachasClicked" style="-fx-background-color: FFAA00;" text="Ver Precio Bachas">
+      <Button fx:id="btnVerPrecioBachas" layoutX="630.0" layoutY="461.0" mnemonicParsing="false" onAction="#btnVerPrecioBachasClicked" style="-fx-background-color: FFAA00;" text="Precio Bachas">
+         <font>
+            <Font name="Arial Bold" size="13.0" />
+         </font>
+         <effect>
+            <DropShadow />
+         </effect>
+      </Button>
+      <Button fx:id="btnPrecioEngroses" layoutX="624.0" layoutY="413.0" mnemonicParsing="false" onAction="#btnPrecioEngrosesClicked" style="-fx-background-color: FFAA00;" text="Precio Engroses">
          <font>
             <Font name="Arial Bold" size="13.0" />
          </font>

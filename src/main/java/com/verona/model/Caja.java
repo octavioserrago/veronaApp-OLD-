@@ -59,14 +59,6 @@ public class Caja {
         } catch (SQLException e) {
             mostrarAlerta("Error al insertar en CajaEfectivo", e.getMessage());
             throw new SQLException("Error al insertar en CajaEfectivo: " + e.getMessage(), e);
-        } finally {
-            if (conexion != null) {
-                try {
-                    conexion.close();
-                } catch (SQLException e) {
-                    mostrarAlerta("Error al cerrar la conexión", e.getMessage());
-                }
-            }
         }
         return false;
     }
@@ -95,14 +87,6 @@ public class Caja {
             }
         } catch (SQLException e) {
             mostrarAlerta("Error de SQL", "Error al intentar insertar en la tabla CajaBanco: " + e.getMessage());
-        } finally {
-            if (conexion != null) {
-                try {
-                    conexion.close();
-                } catch (SQLException e) {
-                    mostrarAlerta("Error de SQL", "Error al intentar cerrar la conexión: " + e.getMessage());
-                }
-            }
         }
         return false;
     }
@@ -126,14 +110,6 @@ public class Caja {
             }
         } catch (SQLException e) {
             mostrarAlerta("Error de SQL", "Error al intentar insertar en la tabla CajaEfectivo: " + e.getMessage());
-        } finally {
-            if (conexion != null) {
-                try {
-                    conexion.close();
-                } catch (SQLException e) {
-                    mostrarAlerta("Error de SQL", "Error al intentar cerrar la conexión: " + e.getMessage());
-                }
-            }
         }
         return false;
     }
@@ -157,14 +133,6 @@ public class Caja {
             }
         } catch (SQLException e) {
             mostrarAlerta("Error de SQL", "Error al intentar insertar en la tabla CajaBanco: " + e.getMessage());
-        } finally {
-            if (conexion != null) {
-                try {
-                    conexion.close();
-                } catch (SQLException e) {
-                    mostrarAlerta("Error de SQL", "Error al intentar cerrar la conexión: " + e.getMessage());
-                }
-            }
         }
         return false;
     }
@@ -181,14 +149,6 @@ public class Caja {
             }
         } catch (SQLException e) {
             mostrarAlerta("Error de SQL", "Error al intentar obtener el último saldo: " + e.getMessage());
-        } finally {
-            if (conexion != null) {
-                try {
-                    conexion.close();
-                } catch (SQLException e) {
-                    mostrarAlerta("Error de SQL", "Error al intentar cerrar la conexión: " + e.getMessage());
-                }
-            }
         }
         return 0;
     }
