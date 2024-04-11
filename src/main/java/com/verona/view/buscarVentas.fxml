@@ -12,7 +12,7 @@
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="744.0" prefWidth="872.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.verona.controller.common.BuscarVentasController">
    <children>
-      <Label layoutX="306.0" layoutY="14.0" text="BUSCAR VENTA">
+      <Label layoutX="306.0" layoutY="14.0" text="BUSCAR VENTA" AnchorPane.leftAnchor="306.0" AnchorPane.rightAnchor="359.0">
          <font>
             <Font name="Arial Bold" size="26.0" />
          </font>
@@ -24,11 +24,11 @@
             </DropShadow>
          </effect>
       </Label>
-      <Label layoutX="260.0" layoutY="66.0" text="Ingrese ID de Cliente:">
+      <Label layoutX="290.0" layoutY="66.0" text="Ingrese ID de Cliente:" AnchorPane.leftAnchor="290.0" AnchorPane.rightAnchor="449.0">
          <font>
             <Font name="Arial Bold" size="13.0" />
          </font></Label>
-      <TextField fx:id="idClienteTextField" layoutX="413.0" layoutY="61.0" prefHeight="26.0" prefWidth="186.0">
+      <TextField fx:id="idClienteTextField" layoutX="438.0" layoutY="61.0" prefHeight="26.0" prefWidth="186.0" AnchorPane.leftAnchor="438.0">
          <effect>
             <DropShadow>
                <color>
@@ -36,7 +36,7 @@
                </color>
             </DropShadow>
          </effect></TextField>
-      <Button fx:id="btnBuscar" layoutX="384.0" layoutY="98.0" mnemonicParsing="false" onAction="#btnBuscarClicked" style="-fx-background-color: FFAA00;" text="Buscar">
+      <Button fx:id="btnBuscar" layoutX="403.0" layoutY="97.0" mnemonicParsing="false" onAction="#btnBuscarClicked" style="-fx-background-color: FFAA00;" text="Buscar">
          <font>
             <Font name="Arial Bold" size="13.0" />
          </font>
@@ -94,7 +94,7 @@
          </font>
       </Label>
 
-      <TableView fx:id="tablaCobros" layoutX="10.0" layoutY="479.0" prefHeight="216.0" prefWidth="848.0" />
+      <TableView fx:id="tablaCobros" layoutX="10.0" layoutY="479.0" prefHeight="216.0" prefWidth="848.0" AnchorPane.leftAnchor="10.0" />
       
       <Label fx:id="saldoLabel" layoutX="486.0" layoutY="276.0" text="Saldo:">
          <font>
@@ -129,7 +129,7 @@
       <Label fx:id="idLabelToComplete" layoutX="40.0" layoutY="148.0" prefHeight="17.0" prefWidth="186.0" />
       <Label fx:id="nombreLabelToComplete" layoutX="80.0" layoutY="175.0" prefHeight="17.0" prefWidth="246.0" />
       <Label fx:id="descripcionLabelToComplete" layoutX="11.0" layoutY="215.0" prefHeight="79.0" prefWidth="376.0" wrapText="true" />
-      <Button fx:id="btnVolver" layoutX="385.0" layoutY="704.0" mnemonicParsing="false" onAction="#btnVolverClicked" style="-fx-background-color: Black;" text="Volver" textFill="WHITE">
+      <Button fx:id="btnVolver" layoutX="406.0" layoutY="706.0" mnemonicParsing="false" onAction="#btnVolverClicked" style="-fx-background-color: Black;" text="Volver" textFill="WHITE">
          <font>
             <Font name="Arial Bold" size="13.0" />
          </font>

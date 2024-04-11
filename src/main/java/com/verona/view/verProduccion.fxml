@@ -11,7 +11,7 @@
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="635.0" prefWidth="833.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.verona.controller.manager.VerProduccionController">
    <children>
-      <Button fx:id="btnVolver" layoutX="388.0" layoutY="602.0" mnemonicParsing="false" onAction="#btnVolverClicked" style="-fx-background-color: Black;" text="Volver" textFill="WHITE">
+      <Button fx:id="btnVolver" layoutX="388.0" layoutY="602.0" mnemonicParsing="false" onAction="#btnVolverClicked" style="-fx-background-color: Black;" text="Volver" textFill="WHITE" AnchorPane.leftAnchor="388.0" AnchorPane.rightAnchor="387.0">
          <font>
             <Font name="Arial Bold" size="13.0" />
          </font>
@@ -22,7 +22,7 @@
                </color>
             </DropShadow>
          </effect></Button>
-      <TableView fx:id="tablaPlanosProduccion" layoutY="53.0" prefHeight="535.0" prefWidth="833.0">
+      <TableView fx:id="tablaPlanosProduccion" layoutY="53.0" prefHeight="535.0" prefWidth="833.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
         <columns>
           <TableColumn fx:id="colCodigoPlano" prefWidth="103.0" text="Codigo de Plano" />
           <TableColumn fx:id="colMaterial" prefWidth="57.0" text="Material" />
@@ -33,15 +33,8 @@
           <TableColumn fx:id="colFechaTerminacion" prefWidth="200.0" text="Fecha de Terminacion" />
         </columns>
       </TableView>
-      <ButtonBar nodeOrientation="RIGHT_TO_LEFT" prefHeight="53.0" prefWidth="833.0">
+      <ButtonBar nodeOrientation="RIGHT_TO_LEFT" prefHeight="53.0" prefWidth="833.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
         <buttons>
-            <Button fx:id="btnBorrarPlano" mnemonicParsing="false" onAction="#btnBorrarPlanoClicked" prefHeight="25.0" style="-fx-background-color: FFAA00;" text="Borrar Plano">
-               <font>
-                  <Font name="Arial Bold" size="13.0" />
-               </font>
-               <effect>
-                  <DropShadow />
-               </effect></Button>
             <Button fx:id="btnModificarPlano" mnemonicParsing="false" onAction="#btnModificarPlanoClicked" style="-fx-background-color: FFAA00;" text="Modificar Plano">
                <font>
                   <Font name="Arial Bold" size="13.0" />

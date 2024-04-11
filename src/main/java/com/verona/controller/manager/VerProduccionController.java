@@ -21,9 +21,6 @@ import javafx.stage.Stage;
 public class VerProduccionController {
 
     @FXML
-    private Button btnBorrarPlano;
-
-    @FXML
     private Button btnCargarPlanos;
 
     @FXML
@@ -67,11 +64,6 @@ public class VerProduccionController {
     @FXML
     public void initialize() {
         cargarLosPlanosTabla();
-    }
-
-    @FXML
-    void btnBorrarPlanoClicked(ActionEvent event) {
-
     }
 
     @FXML

@@ -1,11 +1,15 @@
 package com.verona.model;
 
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 
 public class Plano {
     private int planoID;
@@ -183,6 +187,79 @@ public class Plano {
             preparedStatement.setString(1, nuevoEstado);
             preparedStatement.setInt(2, planosID);
             preparedStatement.executeUpdate();
+        } finally {
+            try {
+                if (stmt != null) {
+                    stmt.close();
+                }
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
+        }
+        return true;
+    }
+
+    public boolean actualizarMaterialColor(String material, String color, int planosID) throws SQLException {
+        String sql = "UPDATE Planos SET material = ?, color = ? WHERE planosID = ?";
+        try (PreparedStatement preparedStatement = conexion.prepareStatement(sql)) {
+            preparedStatement.setString(1, material);
+            preparedStatement.setString(2, color);
+            preparedStatement.setInt(3, planosID);
+            preparedStatement.executeUpdate();
+
+            Alert alert = new Alert(AlertType.INFORMATION);
+            alert.setTitle("Plano actualizado");
+            alert.setHeaderText(null);
+            alert.setContentText("Plano actualizado correctamente.");
+            alert.showAndWait();
+        } finally {
+            try {
+                if (stmt != null) {
+                    stmt.close();
+                }
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
+        }
+        return true;
+    }
+
+    public boolean cambiarFechaTerminacion(Date fechaTerminacion, int planosID) throws SQLException {
+        String sql = "UPDATE Planos SET fechaTerminacion = ? WHERE planosID = ?";
+        try (PreparedStatement preparedStatement = conexion.prepareStatement(sql)) {
+            preparedStatement.setDate(1, fechaTerminacion);
+            preparedStatement.setInt(2, planosID);
+            preparedStatement.executeUpdate();
+
+            Alert alert = new Alert(AlertType.INFORMATION);
+            alert.setTitle("Plano actualizado");
+            alert.setHeaderText(null);
+            alert.setContentText("Plano actualizado correctamente.");
+            alert.showAndWait();
+        } finally {
+            try {
+                if (stmt != null) {
+                    stmt.close();
+                }
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
+        }
+        return true;
+    }
+
+    public boolean cambiarImagenPlano(byte[] img, int planosID) throws SQLException {
+        String sql = "UPDATE Planos SET img = ? WHERE planosID = ?";
+        try (PreparedStatement preparedStatement = conexion.prepareStatement(sql)) {
+            preparedStatement.setBytes(1, img);
+            preparedStatement.setInt(2, planosID);
+            preparedStatement.executeUpdate();
+
+            Alert alert = new Alert(AlertType.INFORMATION);
+            alert.setTitle("Plano actualizado");
+            alert.setHeaderText(null);
+            alert.setContentText("Plano actualizado correctamente.");
+            alert.showAndWait();
         } finally {
             try {
                 if (stmt != null) {
