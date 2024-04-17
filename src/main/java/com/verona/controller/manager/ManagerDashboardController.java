@@ -44,9 +44,6 @@ public class ManagerDashboardController {
     private Button btnNegocio;
 
     @FXML
-    private Button btnActualizarPrecios;
-
-    @FXML
     private ComboBox<String> comboboxVentas;
 
     @FXML
@@ -56,7 +53,10 @@ public class ManagerDashboardController {
     private LineChart<String, Integer> graphVentasPorMes;
 
     @FXML
-    private ComboBox<?> proveedoresCombobox;
+    private Button btnProveedores;
+
+    @FXML
+    private Button btnEmpleados;
 
     @FXML
     private Label dolarBlueLabelToComplete;
@@ -90,11 +90,6 @@ public class ManagerDashboardController {
         SceneController sceneController = new SceneController(
                 (Stage) btnActualizarCotizacionDolarBlue.getScene().getWindow());
         sceneController.switchToCotizaciones();
-    }
-
-    @FXML
-    void btnActualizarPreciosClicked(ActionEvent event) {
-
     }
 
     private Venta ventaModel = new Venta(0, null, null, null, null, null, 0, 0, 0, null, null, 0, null, null, null, 0,
@@ -139,7 +134,7 @@ public class ManagerDashboardController {
         ObservableList<String> ventasItems = FXCollections.observableArrayList();
 
         ventasItems.addAll("Crear nueva Venta", "Buscar Venta", "Ver Ventas de Esta Sucursal",
-                "Modificar estado de una venta", "Eliminar una venta");
+                "Modificar estado de una venta");
 
         int sucursalID = user.getSucursalID();
 
@@ -203,8 +198,6 @@ public class ManagerDashboardController {
                     ? entradaModel.calcularTotalEntradasEnPesosPorSucursalYMes(user.getSucursalID())
                     : pagoModel.obtenerSumaImporteEnPesosPorSucursalYMesVigente(user.getSucursalID());
 
-            System.out.println("Total de salidas: " + total);
-
             String totalFormateado = formatearComoDinero(total);
             mostrarAlert(categoria, totalFormateado);
         }
@@ -249,8 +242,15 @@ public class ManagerDashboardController {
     }
 
     @FXML
-    void btnEmpleadosClicked(ActionEvent event) {
+    void btnProveedoresClicked(ActionEvent event) {
+        SceneController sceneController = new SceneController((Stage) btnNegocio.getScene().getWindow());
+        sceneController.switchToProveedoresPagos();
+    }
 
+    @FXML
+    void btnEmpleadosClicked(ActionEvent event) {
+        SceneController sceneController = new SceneController((Stage) btnEmpleados.getScene().getWindow());
+        sceneController.switchToEmpleados();
     }
 
     private void handleVentasItemSelected(String selectedItem) {

@@ -14,9 +14,9 @@
 <?import javafx.scene.paint.Color?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="520.0" prefWidth="797.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.verona.controller.manager.ManagerDashboardController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="520.0" prefWidth="817.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.verona.controller.manager.ManagerDashboardController">
    <children>
-      <ButtonBar prefHeight="40.0" prefWidth="782.0">
+      <ButtonBar prefHeight="40.0" prefWidth="817.0">
         <buttons>
             <ComboBox fx:id="comboboxVentas" prefHeight="26.0" prefWidth="160.0" promptText="Ventas" style="-fx-background-color: FFAA00;">
                <effect>
@@ -42,15 +42,6 @@
                      </color>
                   </DropShadow>
                </effect></ComboBox>
-            <ComboBox fx:id="proveedoresCombobox" minWidth="-Infinity" prefHeight="26.0" promptText="Proveedores" style="-fx-background-color: FFAA00;">
-               <effect>
-                  <DropShadow>
-                     <color>
-                        <Color opacity="0.6000000238418579" />
-                     </color>
-                  </DropShadow>
-               </effect>
-            </ComboBox>
             <Button fx:id="btnNegocio" mnemonicParsing="false" onAction="#btnNegocioClicked" prefHeight="26.0" style="-fx-background-color: ffaa00;" text="Negocio">
                <effect>
                   <DropShadow>
@@ -58,7 +49,15 @@
                         <Color opacity="0.6800000071525574" />
                      </color>
                   </DropShadow>
-               </effect></Button>
+               </effect>
+               <font>
+                  <Font name="Arial Bold" size="13.0" />
+               </font></Button>
+            <Button fx:id="btnEmpleados" mnemonicParsing="false" onAction="#btnEmpleadosClicked" style="-fx-background-color: FFAA00;" text="Empleados">
+               <font>
+                  <Font name="Arial Bold" size="13.0" />
+               </font>
+            </Button>
           <Button fx:id="btnCerrarSesion" mnemonicParsing="false" onAction="#btnCerrarSesionClicked" prefHeight="26.0" style="-fx-background-color: black;" text="Cerrar Sesion" textFill="WHITE">
                <effect>
                   <DropShadow>
@@ -66,7 +65,10 @@
                         <Color opacity="0.6405353546142578" />
                      </color>
                   </DropShadow>
-               </effect></Button>
+               </effect>
+               <font>
+                  <Font name="Arial Bold" size="13.0" />
+               </font></Button>
         </buttons>
       </ButtonBar>
       <PieChart fx:id="graficoEntradasYSalidas" layoutX="75.0" layoutY="40.0" prefHeight="220.0" prefWidth="247.0" />
@@ -86,7 +88,7 @@
                </color>
             </DropShadow>
          </effect></Separator>
-      <Separator layoutY="255.0" prefHeight="11.0" prefWidth="797.0">
+      <Separator layoutY="255.0" prefHeight="11.0" prefWidth="817.0">
          <effect>
             <DropShadow>
                <color>
@@ -128,7 +130,7 @@
             <Font name="Arial Bold" size="13.0" />
          </font>
       </Label>
-      <Separator layoutX="399.0" layoutY="359.0" prefHeight="11.0" prefWidth="400.0">
+      <Separator layoutX="399.0" layoutY="359.0" prefHeight="11.0" prefWidth="414.0">
          <effect>
             <DropShadow>
                <color>
@@ -139,18 +141,6 @@
       </Separator>
       <Label fx:id="entradasDiaLabel" layoutX="585.0" layoutY="285.0" prefHeight="17.0" prefWidth="126.0" />
       <Label fx:id="salidasDiaLabel" layoutX="578.0" layoutY="322.0" prefHeight="17.0" prefWidth="126.0" />
-      <Button fx:id="btnActualizarPrecios" layoutX="534.0" layoutY="370.0" mnemonicParsing="false" onAction="#btnActualizarPreciosClicked" style="-fx-background-color: Black;" text="Actualizar Precios" textFill="WHITE">
-         <effect>
-            <DropShadow>
-               <color>
-                  <Color opacity="0.6000000238418579" />
-               </color>
-            </DropShadow>
-         </effect>
-         <font>
-            <Font name="Arial Bold" size="13.0" />
-         </font>
-      </Button>
       <Separator layoutX="596.0" layoutY="47.0" orientation="VERTICAL" prefHeight="213.0" prefWidth="3.0" />
       <Label layoutX="648.0" layoutY="60.0" text="Dolar Blue" textFill="#06b900">
          <font>
@@ -169,7 +159,7 @@
             <Font name="Arial Bold" size="28.0" />
          </font>
       </Label>
-      <Button fx:id="btnVerPrecioManoObra" layoutX="409.0" layoutY="413.0" mnemonicParsing="false" onAction="#btnVerPrecioManoObraClicked" style="-fx-background-color: FFAA00;" text="Precios Mano de Obra">
+      <Button fx:id="btnVerPrecioManoObra" layoutX="415.0" layoutY="426.0" mnemonicParsing="false" onAction="#btnVerPrecioManoObraClicked" style="-fx-background-color: FFAA00;" text="Precios Mano de Obra">
          <font>
             <Font name="Arial Bold" size="13.0" />
          </font>
@@ -177,7 +167,7 @@
             <DropShadow />
          </effect>
       </Button>
-      <Button fx:id="btnVerPrecioMateriales" layoutX="405.0" layoutY="461.0" mnemonicParsing="false" onAction="#btnVerPrecioMaterialesClicked" prefHeight="24.0" prefWidth="150.0" style="-fx-background-color: FFAA00;" text="Precio Materiales">
+      <Button fx:id="btnVerPrecioMateriales" layoutX="411.0" layoutY="474.0" mnemonicParsing="false" onAction="#btnVerPrecioMaterialesClicked" prefHeight="24.0" prefWidth="150.0" style="-fx-background-color: FFAA00;" text="Precio Materiales">
          <font>
             <Font name="Arial Bold" size="13.0" />
          </font>
@@ -185,7 +175,7 @@
             <DropShadow />
          </effect>
       </Button>
-      <Button fx:id="btnVerPrecioBachas" layoutX="630.0" layoutY="461.0" mnemonicParsing="false" onAction="#btnVerPrecioBachasClicked" style="-fx-background-color: FFAA00;" text="Precio Bachas">
+      <Button fx:id="btnVerPrecioBachas" layoutX="631.0" layoutY="474.0" mnemonicParsing="false" onAction="#btnVerPrecioBachasClicked" style="-fx-background-color: FFAA00;" text="Precio Bachas">
          <font>
             <Font name="Arial Bold" size="13.0" />
          </font>
@@ -193,7 +183,7 @@
             <DropShadow />
          </effect>
       </Button>
-      <Button fx:id="btnPrecioEngroses" layoutX="624.0" layoutY="413.0" mnemonicParsing="false" onAction="#btnPrecioEngrosesClicked" style="-fx-background-color: FFAA00;" text="Precio Engroses">
+      <Button fx:id="btnPrecioEngroses" layoutX="630.0" layoutY="426.0" mnemonicParsing="false" onAction="#btnPrecioEngrosesClicked" style="-fx-background-color: FFAA00;" text="Precio Engroses">
          <font>
             <Font name="Arial Bold" size="13.0" />
          </font>
@@ -201,5 +191,22 @@
             <DropShadow />
          </effect>
       </Button>
+      <Button fx:id="btnProveedores" layoutX="411.0" layoutY="377.0" mnemonicParsing="false" onAction="#btnProveedoresClicked" style="-fx-background-color: FFAA00;" text="Historial Pago Proveedores">
+         <font>
+            <Font name="Arial Bold" size="13.0" />
+         </font>
+         <effect>
+            <DropShadow />
+         </effect>
+      </Button>
+      <Separator layoutX="402.0" layoutY="406.0" prefHeight="11.0" prefWidth="414.0">
+         <effect>
+            <DropShadow>
+               <color>
+                  <Color opacity="0.20000000298023224" />
+               </color>
+            </DropShadow>
+         </effect>
+      </Separator>
    </children>
 </AnchorPane>

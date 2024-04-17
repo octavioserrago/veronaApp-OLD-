@@ -62,16 +62,19 @@ public class LoginController {
 
             switch (roleID) {
                 case 1:
-                    System.out.println("Switching to Dashboard Manager");
                     if (sceneController != null) {
                         sceneController.switchToManagerDashboard();
                     }
                     break;
 
                 case 2:
-                    System.out.println("Switching to Dashboard Seller");
                     if (sceneController != null) {
                         sceneController.switchToDashboardSeller();
+                    }
+                    break;
+                case 3:
+                    if (sceneController != null) {
+                        sceneController.switchToAdminDashboard();
                     }
                     break;
 

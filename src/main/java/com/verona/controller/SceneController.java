@@ -36,6 +36,18 @@ public class SceneController {
         switchScene("/com/verona/view/cargarPlano.fxml", "Cargar Plano");
     }
 
+    public void switchToEmpleados() {
+        switchScene("/com/verona/view/empleados.fxml", "Empleados");
+    }
+
+    public void switchToProveedoresPagos() {
+        switchScene("/com/verona/view/pagoProveedoresView.fxml", "Historial de Pagos a Proveedores");
+    }
+
+    public void switchToAdminDashboard() {
+        switchScene("/com/verona/view/adminDashboard.fxml", "Administrador | Marmoleria Verona");
+    }
+
     public void switchToVerProduccion() {
         switchScene("/com/verona/view/verProduccion.fxml", "Produccion");
     }

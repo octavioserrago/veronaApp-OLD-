@@ -57,16 +57,27 @@ public class Proveedor {
 
         } catch (SQLException e) {
             e.printStackTrace();
-        } finally {
-            try {
-                if (conexion != null && !conexion.isClosed()) {
-                    conexion.close();
-                }
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
         }
 
         return proveedores;
     }
+
+    public String obtenerNombreProveedor(int proveedorID) {
+        String empresa = null;
+        String consulta = "SELECT empresa FROM Proveedores WHERE proveedorID = ?";
+        DatabaseConnection con = new DatabaseConnection();
+        Connection conexion = con.conectar();
+        try (PreparedStatement stmt = conexion.prepareStatement(consulta)) {
+            stmt.setInt(1, proveedorID);
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    empresa = rs.getString("empresa");
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return empresa;
+    }
+
 }

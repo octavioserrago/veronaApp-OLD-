@@ -11,6 +11,7 @@ module com.verona {
     opens com.verona.controller to javafx.fxml;
     opens com.verona.controller.seller to javafx.fxml;
     opens com.verona.controller.manager to javafx.fxml;
+    opens com.verona.controller.adm to javafx.fxml;
     opens com.verona.controller.common to javafx.fxml;
 
     exports com.verona;
@@ -18,4 +19,5 @@ module com.verona {
     exports com.verona.controller;
     exports com.verona.controller.seller to javafx.fxml;
     exports com.verona.controller.manager to javafx.fxml;
+    exports com.verona.controller.adm to javafx.fxml;
 }

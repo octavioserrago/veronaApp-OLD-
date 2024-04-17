@@ -5,8 +5,11 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Pago {
+    private LocalDate fecha;
     private int tiposPagosID;
     private int monedasID;
     private double importe;
@@ -22,6 +25,14 @@ public class Pago {
         this.importeEnPesos = importeEnPesos;
         this.proveedorID = proveedorID;
         this.sucursalID = sucursalID;
+    }
+
+    public LocalDate getFecha() {
+        return fecha;
+    }
+
+    public void setFecha(LocalDate fecha) {
+        this.fecha = fecha;
     }
 
     public int getTiposPagosID() {
@@ -189,6 +200,63 @@ public class Pago {
             }
         }
         return totalPagosEnPesos;
+    }
+
+    public List<Pago> obtenerPagosAProveedoresPorSucursal(int sucursalID) {
+        List<Pago> pagosAProveedores = new ArrayList<>();
+        String consulta = "SELECT * FROM Pagos WHERE proveedorID IS NOT NULL AND sucursalID = ?";
+
+        try (PreparedStatement stmt = conexion.prepareStatement(consulta)) {
+            stmt.setInt(1, sucursalID);
+
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    int tiposPagosID = rs.getInt("tiposPagosID");
+                    int monedasID = rs.getInt("monedasID");
+                    double importe = rs.getDouble("importe");
+                    double importeEnPesos = rs.getDouble("importeEnPesos");
+                    int proveedorID = rs.getInt("proveedorID");
+
+                    Pago pago = new Pago(tiposPagosID, monedasID, importe, importeEnPesos, proveedorID, sucursalID);
+                    LocalDate fechaPago = rs.getDate("fecha").toLocalDate();
+                    pago.setFecha(fechaPago);
+                    pagosAProveedores.add(pago);
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return pagosAProveedores;
+    }
+
+    public List<Pago> obtenerPagosAProveedoresPorFechaYSucursal(LocalDate fechaInicio, LocalDate fechaFin,
+            int sucursalID) {
+        List<Pago> pagosAProveedores = new ArrayList<>();
+        String consulta = "SELECT * FROM Pagos WHERE proveedorID IS NOT NULL AND sucursalID = ? AND fecha BETWEEN ? AND ?";
+
+        try (PreparedStatement stmt = conexion.prepareStatement(consulta)) {
+            stmt.setInt(1, sucursalID);
+            stmt.setDate(2, java.sql.Date.valueOf(fechaInicio));
+            stmt.setDate(3, java.sql.Date.valueOf(fechaFin));
+
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    int tiposPagosID = rs.getInt("tiposPagosID");
+                    int monedasID = rs.getInt("monedasID");
+                    double importe = rs.getDouble("importe");
+                    double importeEnPesos = rs.getDouble("importeEnPesos");
+                    int proveedorID = rs.getInt("proveedorID");
+
+                    Pago pago = new Pago(tiposPagosID, monedasID, importe, importeEnPesos, proveedorID, sucursalID);
+                    LocalDate fechaPago = rs.getDate("fecha").toLocalDate();
+                    pago.setFecha(fechaPago);
+                    pagosAProveedores.add(pago);
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return pagosAProveedores;
     }
 
 }
